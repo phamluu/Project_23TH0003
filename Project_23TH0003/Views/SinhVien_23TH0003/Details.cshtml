@@ -1,0 +1,44 @@
+﻿@model Project_23TH0003.Models.Student
+
+@{
+    ViewBag.Title = "Xem thông tin sinh viên";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div>
+    <h4 class="title">Thông tin sinh viên</h4>
+    <div class="form-group row mt-2">
+        <div class="col-md-2"><b>Họ tên</b></div>
+        <div class="col-md-10"> @Html.DisplayFor(model => model.FullName)</div>
+    </div>
+    <div class="form-group row mt-2">
+        <div class="col-md-2"><b>Ngày sinh</b></div>
+        <div class="col-md-10">@Html.DisplayFor(model => model.DateOfBirth)</div>
+    </div>
+    <div class="form-group row mt-2">
+        <div class="col-md-2"><b>Giới tính</b></div>
+        <div class="col-md-10"> @Html.DisplayFor(model => model.Gender)</div>
+    </div>
+    <div class="form-group row mt-2">
+        <div class="col-md-2"><b>Email</b></div>
+        <div class="col-md-10"> @Html.DisplayFor(model => model.Email)</div>
+    </div>
+    <div class="form-group row mt-2">
+        <div class="col-md-2"><b>Điện thoại</b></div>
+        <div class="col-md-10">  @Html.DisplayFor(model => model.Phone)</div>
+    </div>
+    <div class="form-group row mt-2">
+        <div class="col-md-2"><b>Địa chỉ</b></div>
+        <div class="col-md-10"> @Html.DisplayFor(model => model.Address)</div>
+    </div>
+    <div class="form-group row mt-2">
+        <div class="col-md-2"><b>Tài khoản đăng nhập</b></div>
+        <div class="col-md-10"> @Html.DisplayFor(model => model.User.Username)</div>
+    </div>
+    <div class="form-group mt-3">
+            @Html.ActionLink("Sửa", "Edit", new { id = Model.StudentID }, new { @class = "btn btn-default" }) |
+            @Html.ActionLink("Quay lại danh sách", "Index", "", new { @class = "btn btn-default" })
+        
+    </div>
+</div>
+

@@ -1,0 +1,59 @@
+﻿@model Project_23TH0003.Models.Class
+
+@{
+    ViewBag.Title = "Thêm lớp học";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+@using (Html.BeginForm()) 
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        <h4 class="title">Thêm lớp học</h4>
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group row mt-2">
+            @Html.LabelFor(model => model.CourseID, "Thuộc khóa học", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("CourseID", null, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.CourseID, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group row mt-2">
+            @Html.LabelFor(model => model.InstructorID, "Giảng viên", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("InstructorID", null, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.InstructorID, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group row mt-2">
+            @Html.LabelFor(model => model.Semester, "Học kì", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Semester, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Semester, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group row mt-2">
+            @Html.LabelFor(model => model.Year, "Năm học", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Year, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Year, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group row mt-2">
+            <div class="col-md-2"></div>
+            <div class="col-md-10">
+                <input type="submit" value="Thêm mới" class="btn btn-default" />
+                @Html.ActionLink("Quay lại danh sách", "Index", "", new {@class="btn btn-default"})
+            </div>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

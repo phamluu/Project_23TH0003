@@ -1,0 +1,40 @@
+﻿@model Project_23TH0003.Models.User
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h4 class="title">Xóa người dùng</h4>
+
+<h6 class="alert-danger">Bạn có muốn xóa người dùng này không?</h6>
+<div>
+    <dl class="dl-horizontal">
+        <dt>
+            Tên đăng nhập
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Username)
+        </dd>
+
+
+        <dt>
+           Chức vụ
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Role.RoleName)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Quay lại danh sách", "Index", "", new {@class="btn"})
+        </div>
+    }
+</div>

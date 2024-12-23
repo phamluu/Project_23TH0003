@@ -1,0 +1,47 @@
+﻿@model Project_23TH0003.Models.Cours
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h4 class="title">Xóa Khóa học</h4>
+
+<h5>Bạn có muốn xóa khóa học này ?</h5>
+<div>
+    <dl class="dl-horizontal">
+        <dt>
+            Tên khóa học
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CourseName)
+        </dd>
+
+        <dt>
+            Số tín chỉ
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Credits)
+        </dd>
+
+        <dt>
+           Thuộc khoa
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Department.DepartmentName)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Quay lại danh sách", "Index", "", new {@class="btn btn-default"})
+        </div>
+    }
+</div>

@@ -1,0 +1,21 @@
+﻿@using Microsoft.AspNet.Identity
+@using System.Security.Claims
+@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    ViewBag.Title = "Home Page";
+
+
+}
+<main>
+    @if (Request.IsAuthenticated && User.Identity != null)
+    {
+        var userClaims = User.Identity as ClaimsIdentity;  // Lấy ClaimsIdentity
+        if (userClaims != null)
+        {
+            foreach (var claim in userClaims.Claims)
+            {
+                <div>type: @claim.Type value: @claim.Value</div>
+            }
+        }
+    }
+</main>

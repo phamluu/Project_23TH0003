@@ -1,0 +1,49 @@
+﻿@model Project_23TH0003.Models.Class
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+
+<div>
+    <h4 class="title">Xem thông tin lớp học</h4>
+    <dl class="dl-horizontal">
+        <dt>
+           Học kì:
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Semester)
+        </dd>
+
+        <dt>
+            Năm học:
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Year)
+        </dd>
+
+        <dt>
+            Khóa học:
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Cours.CourseName)
+        </dd>
+
+        <dt>
+            Giảng viên:
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Instructor.FullName)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Sửa", "Edit", new { id = Model.ClassID }, new {@class = "btn btn-default"}) |
+    @Html.ActionLink("Quay lại danh sách", "Index", "", new {@class="btn btn-default"})
+</p>

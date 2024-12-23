@@ -1,0 +1,38 @@
+﻿@model Project_23TH0003.Models.Instructor
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+
+<div>
+    <h4>Xem hồ sơ giảng viên</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <div class="form-group row mt-2">
+            <div class="col-md-2">Họ tên</div>
+            <div class="col-md-10">@Html.DisplayFor(model => model.FullName)</div>
+        </div>
+        <div class="form-group row mt-2">
+            <div class="col-md-2">Email</div>
+            <div class="col-md-10">@Html.DisplayFor(model => model.Email)</div>
+        </div>
+        <div class="form-group row mt-2">
+            <div class="col-md-2">Điện thoại</div>
+            <div class="col-md-10">@Html.DisplayFor(model => model.Phone)</div>
+        </div>
+        <div class="form-group row mt-2">
+            <div class="col-md-2">Khoa</div>
+            <div class="col-md-10"> @Html.DisplayFor(model => model.Department.DepartmentName)</div>
+        </div>
+        <div class="form-group row mt-2">
+            <div class="col-md-2">UserName</div>
+            <div class="col-md-10"> @Html.DisplayFor(model => model.User.Username)</div>
+        </div>
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Cập  nhật", "Edit", new { id = Model.InstructorID }, new {@class="btn btn-default"}) |
+    @Html.ActionLink("Quay lại danh sách", "Index", "", new { @class = "btn btn-default" })
+</p>
