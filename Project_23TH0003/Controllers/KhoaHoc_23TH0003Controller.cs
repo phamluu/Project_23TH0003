@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
 using System.Web;
@@ -10,20 +11,27 @@ using Project_23TH0003.Models;
 
 namespace Project_23TH0003.Controllers
 {
+    [Authorize(Roles = "admin")]
     public class KhoaHoc_23TH0003Controller : Controller
     {
         private Project_23TH0003Entities db = new Project_23TH0003Entities();
 
         [HttpGet]
 
-        public ActionResult TimKiemNC(string CourseName = "", string DepartmentID = "")
+        public ActionResult TimKiemNC(string CourseName = "", int? DepartmentID = null, int? Credits = null)
         {
             ViewBag.CourseName = CourseName;
-            ViewBag.DepartmentID = new SelectList(db.Departments, "DepartmentID", "DepartmentName");
-            var nhanViens = db.Departments.SqlQuery("KhoaHoc_TimKiem'" + CourseName + "','" + DepartmentID);
-            if (nhanViens.Count() == 0)
+            ViewBag.Credits = Credits;
+            ViewBag.DepartmentID = new SelectList(db.Departments, "DepartmentID", "DepartmentName", DepartmentID);
+
+            var khoahocs = db.Courses.SqlQuery("EXEC KhoaHoc_TimKiem @CourseName, @DepartmentID, @Credits",
+                new SqlParameter("@CourseName", (object)CourseName ?? DBNull.Value),
+                new SqlParameter("@DepartmentID", (object)DepartmentID ?? DBNull.Value),
+                new SqlParameter("@Credits", (object)Credits ?? DBNull.Value)).ToList();
+
+            if (khoahocs.Count() == 0)
                 ViewBag.TB = "Không có thông tin tìm kiếm.";
-            return View("Index",nhanViens.ToList());
+            return View("Index", khoahocs);
         }
         public ActionResult Index()
         {
