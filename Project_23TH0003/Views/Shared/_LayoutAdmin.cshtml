@@ -20,13 +20,11 @@
                 <ul class="navbar-nav flex-grow-1">
                     @if (User.Identity.IsAuthenticated)
                     {
-                        
                             <li>@Html.ActionLink("Khoa", "Index", "Khoa_23TH0003", new { area = "" }, new { @class = "nav-link" })</li>
                             <li>@Html.ActionLink("Môn học", "Index", "KhoaHoc_23TH0003", new { area = "" }, new { @class = "nav-link" })</li>
                             <li>@Html.ActionLink("Người dùng", "Index", "Users_23TH0003", new { area = "" }, new { @class = "nav-link" })</li>
                             <li>@Html.ActionLink("Giảng viên", "Index", "GiangVien_23TH0003", new { area = "" }, new { @class = "nav-link" })</li>
                             <li>@Html.ActionLink("Sinh viên", "Index", "SinhVien_23TH0003", new { area = "" }, new { @class = "nav-link" })</li>
-                        
 
                         if (User.Identity.IsAuthenticated && User.IsInRole("admin") || User.IsInRole("giangvien"))
                         {
