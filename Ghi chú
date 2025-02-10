@@ -24,3 +24,4 @@ app.CreatePerOwinContext<ApplicationUserManager>((options, context) =>
     return userManager;
 });
 
+3. Khi đăng ký tài khoản mới: Dữ liệu sẽ hiển thị trong table AspNetUser
