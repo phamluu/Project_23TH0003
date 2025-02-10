@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Web;
 using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using Microsoft.Owin.Security.Cookies;
@@ -20,6 +21,22 @@ namespace Project_23TH0003
             app.CreatePerOwinContext<ApplicationUserManager>(ApplicationUserManager.Create);
             app.CreatePerOwinContext<ApplicationSignInManager>(ApplicationSignInManager.Create);
 
+            app.CreatePerOwinContext<ApplicationUserManager>((options, context) =>
+            {
+                var userManager = new ApplicationUserManager(new UserStore<ApplicationUser>(context.Get<ApplicationDbContext>()));
+
+                // Cấu hình PasswordValidator mới
+                userManager.PasswordValidator = new PasswordValidator
+                {
+                    RequireDigit = false,              // Không yêu cầu chữ số
+                    RequireLowercase = false,          // Không yêu cầu chữ cái viết thường
+                    RequireUppercase = false,          // Không yêu cầu chữ cái viết hoa
+                    RequireNonLetterOrDigit = false,    // Không yêu cầu ký tự đặc biệt
+                    RequiredLength = 6                 // Độ dài mật khẩu tối thiểu (có thể thay đổi)
+                };
+
+                return userManager;
+            });
             // Enable the application to use a cookie to store information for the signed in user
             // and to use a cookie to temporarily store information about a user logging in with a third party login provider
             // Configure the sign in cookie

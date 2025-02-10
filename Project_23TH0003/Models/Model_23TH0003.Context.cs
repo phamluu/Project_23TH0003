@@ -29,9 +29,9 @@ namespace Project_23TH0003.Models
         public virtual DbSet<Department> Departments { get; set; }
         public virtual DbSet<Enrollment> Enrollments { get; set; }
         public virtual DbSet<Cours> Courses { get; set; }
-        public virtual DbSet<Instructor> Instructors { get; set; }
-        public virtual DbSet<Student> Students { get; set; }
         public virtual DbSet<Role> Roles { get; set; }
+        public virtual DbSet<Instructor> Instructors { get; set; }
         public virtual DbSet<User> Users { get; set; }
+        public virtual DbSet<Student> Students { get; set; }
     }
 }

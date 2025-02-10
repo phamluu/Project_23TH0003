@@ -23,21 +23,6 @@ namespace Project_23TH0003
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
             AntiForgeryConfig.UniqueClaimTypeIdentifier = ClaimTypes.NameIdentifier;
-            //// Cấu hình Identity
-            //var context = new ApplicationDbContext();
-            //var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(context));
-            //var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(context));
-
-            //// Tạo role nếu chưa có (ví dụ: "Admin")
-            //var role = new IdentityRole("Admin");
-            //if (!roleManager.RoleExists("Admin"))
-            //{
-            //    roleManager.Create(role);
-            //}
-
-            //// Tiếp tục với các cấu hình khác của ứng dụng
-            //AreaRegistration.RegisterAllAreas();
-            //RouteConfig.RegisterRoutes(RouteTable.Routes);
         }
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
 using System.Web;
@@ -10,6 +11,7 @@ using Project_23TH0003.Models;
 
 namespace Project_23TH0003.Controllers
 {
+    [Authorize(Roles = "admin")]
     public class Khoa_23TH0003Controller : Controller
     {
         private Project_23TH0003Entities db = new Project_23TH0003Entities();
@@ -18,10 +20,12 @@ namespace Project_23TH0003.Controllers
         public ActionResult TimKiemNC(string DepartmentName = "")
         {
             ViewBag.DepartmentName = DepartmentName;
-            var khoas = db.Departments.SqlQuery("Khoa_TimKiem'" + DepartmentName + "'");
+            var khoas = db.Departments.SqlQuery("EXEC Khoa_TimKiem @DepartmentName",
+                new SqlParameter("@DepartmentName", (object)DepartmentName ?? DBNull.Value)).ToList();
+
             if (khoas.Count() == 0)
                 ViewBag.TB = "Không có thông tin tìm kiếm.";
-            return View("Index", khoas.ToList());
+            return View("Index", khoas);
         }
         public ActionResult Index()
         {

@@ -1,38 +1,38 @@
 ﻿@model Project_23TH0003.Models.RegisterViewModel
 @{
-    ViewBag.Title = "Register";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    ViewBag.Title = "Đăng ký";
 }
 
-<main aria-labelledby="title">
+<main aria-labelledby="title" style="max-width:500px; margin:0 auto">
     <h2 id="title">@ViewBag.Title.</h2>
 
     @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { role = "form" }))
     {
         @Html.AntiForgeryToken()
-        <h4>Create a new account.</h4>
         <hr />
         @Html.ValidationSummary("", new { @class = "text-danger" })
-        <div class="row">
-            @Html.LabelFor(m => m.Email, new { @class = "col-md-2 col-form-label" })
-            <div class="col-md-10">
+        <div class="row mt-2">
+            @Html.LabelFor(m => m.Email, new { @class = "col-md-3 col-form-label" })
+            <div class="col-md-9">
                 @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
             </div>
         </div>
-        <div class="row">
-            @Html.LabelFor(m => m.Password, new { @class = "col-md-2 col-form-label" })
-            <div class="col-md-10">
+        <div class="row mt-2">
+            @Html.LabelFor(m => m.Password, "Mật khẩu", new { @class = "col-md-3 col-form-label" })
+            <div class="col-md-9">
                 @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
             </div>
         </div>
-        <div class="row">
-            @Html.LabelFor(m => m.ConfirmPassword, new { @class = "col-md-2 col-form-label" })
-            <div class="col-md-10">
+        <div class="row mt-2">
+            @Html.LabelFor(m => m.ConfirmPassword, "Xác nhận mật khẩu", new { @class = "col-md-3 col-form-label" })
+            <div class="col-md-9">
                 @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
             </div>
         </div>
-        <div class="row">
-            <div class="offset-md-2 col-md-10">
-                <input type="submit" value="Register" class="btn btn-outline-dark" />
+        <div class="row mt-3">
+            <div class="offset-md-3 col-md-9">
+                <input type="submit" value="Đăng ký" class="btn btn-outline-dark" />
             </div>
         </div>
     }

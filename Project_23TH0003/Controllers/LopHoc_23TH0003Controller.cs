@@ -2,24 +2,61 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using Microsoft.AspNet.Identity;
 using Project_23TH0003.Models;
 
 namespace Project_23TH0003.Controllers
 {
+    [Authorize(Roles = "admin,giangvien")]
     public class LopHoc_23TH0003Controller : Controller
     {
         private Project_23TH0003Entities db = new Project_23TH0003Entities();
 
-        // GET: LopHoc_23TH0003
+        [HttpGet]
+        public ActionResult TimKiemNC(int? CourseID = null, int? InstructorID = null, int? Semester = null, int? Year = null)
+        {
+            ViewBag.CourseID = new SelectList(db.Courses, "CourseID", "CourseName", CourseID);
+            ViewBag.InstructorID = new SelectList(db.Instructors, "InstructorID", "FullName", InstructorID);
+            ViewBag.Semester = Semester;
+            ViewBag.Year = Year;
+
+            var classs = db.Classes.SqlQuery("EXEC Class_TimKiem @CourseID, @InstructorID, @Semester, @Year",
+                new SqlParameter("@CourseID", (object)CourseID ?? DBNull.Value),
+                new SqlParameter("@InstructorID", (object)InstructorID ?? DBNull.Value),
+                new SqlParameter("@Semester", (object)Semester ?? DBNull.Value),
+                new SqlParameter("@Year", (object)Year ?? DBNull.Value)
+                ).ToList();
+
+            if (classs.Count() == 0)
+                ViewBag.TB = "Không có thông tin tìm kiếm.";
+            return View("Index", classs);
+        }
         public ActionResult Index()
         {
-            var classes = db.Classes.Include(c => c.Cours).Include(c => c.Instructor);
-            ViewBag.CourseID = new SelectList(db.Courses, "CourseID", "CourseName");
-            ViewBag.InstructorID = new SelectList(db.Instructors, "InstructorID", "FullName");
+            List<Class> classes = new List<Class>();
+            string UserID = User.Identity.GetUserId();
+            if (User.IsInRole("giangvien"))
+            {
+                 classes = db.Classes.Include(c => c.Cours).Include(c => c.Instructor)
+                    .Where(c => c.Instructor.UserID.ToString() == UserID).ToList();
+
+                var coures = db.Classes.Include(e => e.Cours).Include(e => e.Instructor)
+                    .Where(e => e.Instructor.UserID.ToString() == UserID).Select(e => e.Cours).Distinct().ToList();
+                ViewBag.CourseID = new SelectList(coures, "CourseID", "CourseName");
+
+                var instructors = db.Instructors.Where(x => x.UserID.ToString() == UserID);
+                ViewBag.InstructorID = new SelectList(instructors, "InstructorID", "FullName");
+            }
+            else {
+                 classes = db.Classes.Include(c => c.Cours).Include(c => c.Instructor).ToList();
+                ViewBag.CourseID = new SelectList(db.Courses, "CourseID", "CourseName");
+                ViewBag.InstructorID = new SelectList(db.Instructors, "InstructorID", "FullName");
+            }
             return View(classes.ToList());
         }
 
@@ -41,8 +78,17 @@ namespace Project_23TH0003.Controllers
         // GET: LopHoc_23TH0003/Create
         public ActionResult Create()
         {
+            string UserID = User.Identity.GetUserId();
+            if (User.IsInRole("giangvien"))
+            {
+                var instructors = db.Instructors.Where(x => x.UserID.ToString() == UserID);
+                ViewBag.InstructorID = new SelectList(instructors, "InstructorID", "FullName");
+            }
+            else
+            {
+                ViewBag.InstructorID = new SelectList(db.Instructors, "InstructorID", "FullName");
+            }
             ViewBag.CourseID = new SelectList(db.Courses, "CourseID", "CourseName");
-            ViewBag.InstructorID = new SelectList(db.Instructors, "InstructorID", "FullName");
             return View();
         }
 
@@ -65,7 +111,6 @@ namespace Project_23TH0003.Controllers
             return View(@class);
         }
 
-        // GET: LopHoc_23TH0003/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -77,8 +122,18 @@ namespace Project_23TH0003.Controllers
             {
                 return HttpNotFound();
             }
+            string UserID = User.Identity.GetUserId();
+            if (User.IsInRole("giangvien"))
+            {
+                var instructors = db.Instructors.Where(x => x.UserID.ToString() == UserID);
+                ViewBag.InstructorID = new SelectList(instructors, "InstructorID", "FullName", @class.InstructorID);
+            }
+            else
+            {
+                ViewBag.InstructorID = new SelectList(db.Instructors, "InstructorID", "FullName", @class.InstructorID);
+            }
             ViewBag.CourseID = new SelectList(db.Courses, "CourseID", "CourseName", @class.CourseID);
-            ViewBag.InstructorID = new SelectList(db.Instructors, "InstructorID", "FullName", @class.InstructorID);
+            
             return View(@class);
         }
 

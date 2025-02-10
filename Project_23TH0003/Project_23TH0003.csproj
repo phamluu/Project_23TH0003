@@ -171,6 +171,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\DangKyHoc_23TH0003Controller.cs" />
     <Compile Include="Controllers\GiangVien_23TH0003Controller.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\KhoaHoc_23TH0003Controller.cs" />
@@ -353,6 +354,14 @@
     <Content Include="Views\Users_23TH0003\Details.cshtml" />
     <Content Include="Views\Users_23TH0003\Edit.cshtml" />
     <Content Include="Views\Users_23TH0003\Index.cshtml" />
+    <Content Include="Views\DangKyHoc_23TH0003\Create.cshtml" />
+    <Content Include="Views\DangKyHoc_23TH0003\Delete.cshtml" />
+    <Content Include="Views\DangKyHoc_23TH0003\Details.cshtml" />
+    <Content Include="Views\DangKyHoc_23TH0003\Edit.cshtml" />
+    <Content Include="Views\DangKyHoc_23TH0003\Index.cshtml" />
+    <Content Include="Views\Manage\StudentProfile.cshtml" />
+    <Content Include="Views\GiangVien_23TH0003\Profile.cshtml" />
+    <Content Include="Views\SinhVien_23TH0003\Profile.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

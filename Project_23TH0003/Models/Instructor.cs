@@ -24,7 +24,6 @@ namespace Project_23TH0003.Models
         public int InstructorID { get; set; }
         public int UserID { get; set; }
         public string FullName { get; set; }
-        public string Email { get; set; }
         public string Phone { get; set; }
         public Nullable<int> DepartmentID { get; set; }
     

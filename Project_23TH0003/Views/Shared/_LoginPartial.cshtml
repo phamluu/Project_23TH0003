@@ -8,10 +8,24 @@
     {
         @Html.AntiForgeryToken()
 
-        <ul class="navbar-nav navbar-right">
-            <li>
-                @Html.ActionLink("Hello " + User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage", @class = "nav-link" })
-            </li>
+
+
+<ul class="navbar-nav navbar-right">
+    <li>
+        @if (User.IsInRole("sinhvien"))
+        {
+            @Html.ActionLink("Hello " + User.Identity.GetUserName() + "!", "Profile", "SinhVien_23TH0003", routeValues: null, htmlAttributes: new { title = "Manage", @class = "nav-link" })
+        }
+        @if (User.IsInRole("giangvien"))
+        {
+            @Html.ActionLink("Hello " + User.Identity.GetUserName() + "!", "Profile", "GiangVien_23TH0003", routeValues: null, htmlAttributes: new { title = "Manage", @class = "nav-link" })
+        }
+        @if (User.IsInRole("admin"))
+        {
+            @Html.ActionLink("Hello " + User.Identity.GetUserName() + "!", "Edit", "Users_23TH0003", new {id = int.Parse(User.Identity.GetUserId())}, htmlAttributes: new { title = "Manage", @class = "nav-link" })
+        }
+
+    </li>
             <li><a class="nav-link" href="javascript:document.getElementById('logoutForm').submit()">Đăng xuất</a></li>
         </ul>
     }

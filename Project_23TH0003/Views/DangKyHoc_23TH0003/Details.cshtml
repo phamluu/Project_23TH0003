@@ -1,0 +1,36 @@
+﻿@model Project_23TH0003.Models.Enrollment
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div>
+    <h4 class="title">Xem thông tin đăng ký</h4>
+    <div class="form-group row mt-2">
+        <div class="col-md-2">Sinh viên:</div>
+        <div class="col-md-10">@Html.DisplayFor(model => model.Student.FullName)</div>
+    </div>
+    <div class="form-group row mt-2">
+        <div class="col-md-2">Lớp: </div>
+        <div class="col-md-10">@Html.DisplayFor(model => model.Class.ClassID)</div>
+    </div>
+    <div class="form-group row mt-2">
+        <div class="col-md-2">Điểm giữa kì</div>
+        <div class="col-md-10"> @Html.DisplayFor(model => model.Midterm)</div>
+    </div>
+    <div class="form-group row mt-2">
+        <div class="col-md-2">Điểm cuối kì</div>
+        <div class="col-md-10"> @Html.DisplayFor(model => model.Final)</div>
+    </div>
+    <div class="form-group row mt-3">
+        <div class="col-md-2"></div>
+        <div class="col-md-10">
+            @Html.ActionLink("Cập nhật", "Edit", new { id = Model.EnrollmentID }, new {@class="btn btn-default"}) |
+            @Html.ActionLink("Quay lại danh sách", "Index", "", new {@class = "btn btn-default"})
+        </div>
+    </div>
+</div>
+<p>
+   
+</p>

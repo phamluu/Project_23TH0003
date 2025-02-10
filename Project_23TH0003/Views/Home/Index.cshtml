@@ -6,16 +6,8 @@
 
 
 }
-<main>
-    @if (Request.IsAuthenticated && User.Identity != null)
-    {
-        var userClaims = User.Identity as ClaimsIdentity;  // Lấy ClaimsIdentity
-        if (userClaims != null)
-        {
-            foreach (var claim in userClaims.Claims)
-            {
-                <div>type: @claim.Type value: @claim.Value</div>
-            }
-        }
-    }
+<main style="text-align: center; color: green; font-weight: 700; font-size: 50px; ">
+    <p>ỨNG DỤNG</p>
+    <p style="color: red; font-size: 70px;">QUẢN LÝ ĐIỂM</p>
+    <p>MÔN HỌC</p>
 </main>

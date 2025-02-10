@@ -11,6 +11,7 @@
 <p>
     @Html.ActionLink("Thêm mới", "Create", "", new {@class="btn btn-default"})
 </p>
+@if (User.IsInRole("admin")) {
 <div class="form-search">
     @using (Html.BeginForm("TimKiemNC", "LopHoc_23TH0003", FormMethod.Get))
     {
@@ -31,18 +32,19 @@
         <div class="col-md-4">
             <div class="d-flex">
                 <label><b>Học kì</b></label>
-                <input type="number" name="CourseName" value="" class="form-control" />
+                <input type="number" name="Semester" value="@ViewBag.Semester" class="form-control" />
                 <label style="margin-left:7px;"><b>Năm học</b></label>
-                <input type="number" name="CourseName" value="" class="form-control" />
+                <input type="number" name="Year" value="@ViewBag.Year" class="form-control" />
             </div>
         </div>
         <div class="col-md-3 mt-3">
             <input type="submit" name="submit" value="Tìm kiếm" class="btn btn-default bg-success" />
-            <input type="button" name="Nhapmoi" value="Nhập mới" class="btn btn-default bg-secondary" onclick="location.href='@Url.Action("TimKiemNC", "NhanViens/TimKiemNC")'" />
+            <input type="button" name="Nhapmoi" value="Nhập mới" class="btn btn-default bg-secondary" onclick="location.href='@Url.Action("TimKiemNC", "LopHoc_23TH0003")'" />
         </div>
     </div>
     }
 </div>
+}
 <div id="gridContent">
     @ViewBag.TB
     @grid.GetHtml(

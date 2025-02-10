@@ -24,8 +24,7 @@ namespace Project_23TH0003.Models
         public int UserID { get; set; }
         public string FullName { get; set; }
         public Nullable<System.DateTime> DateOfBirth { get; set; }
-        public string Gender { get; set; }
-        public string Email { get; set; }
+        public Nullable<bool> Gender { get; set; }
         public string Phone { get; set; }
         public string Address { get; set; }
     

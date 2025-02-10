@@ -70,104 +70,41 @@ namespace Project_23TH0003.Controllers
         // POST: /Account/LogOff
         [HttpPost]
         [AllowAnonymous]
-        //[ValidateAntiForgeryToken]
+        [ValidateAntiForgeryToken]
         public ActionResult LogOff()
         {
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
             return RedirectToAction("Index", "Home");
         }
 
-
-        //
-        // POST: /Account/Login
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Login(string UserName, string PassWord, string returnUrl)
+        public async Task<ActionResult> Login(LoginViewModel model, string returnUrl)
         {
-            try
+            if (!ModelState.IsValid)
             {
-                if (string.IsNullOrWhiteSpace(UserName))
-                {
-                    ModelState.AddModelError("UserName", "Tên đăng nhập không được bỏ trống");
-                    return View();
-                }
-                if (string.IsNullOrWhiteSpace(PassWord))
-                {
-                    ModelState.AddModelError("PassWord", "Tên đăng nhập không được bỏ trống");
-                    return View();
-                }
-                var user =  db.Users.AsNoTracking().SingleOrDefault(x => x.Username == UserName);
-                if (user == null) {
-                    ModelState.AddModelError("", "Sai tên đăng nhập");
-                    return View();
-                }
-                if (!Crypto.VerifyHashedPassword(user.Password, PassWord)){
-                    ModelState.AddModelError("", "Sai mật khẩu đăng nhập ");
-                    return View();
-                }
+                return View(model);
+            }
 
-                ClaimsIdentity identity = new ClaimsIdentity(DefaultAuthenticationTypes.ApplicationCookie);
-                identity.AddClaim(new Claim(ClaimTypes.Name, user.Username));
-                identity.AddClaim(new Claim(ClaimTypes.Role, user.RoleID));
-                identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, user.UserID.ToString()));
-                var principal = new ClaimsPrincipal(identity);
+            // This doesn't count login failures towards account lockout
+            // To enable password failures to trigger account lockout, change to shouldLockout: true
+            var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
+            switch (result)
+            {
+                case SignInStatus.Success:
 
-                // Đảm bảo rằng bạn gọi SignInAsync, không phải SignIn
-                HttpContext.GetOwinContext().Authentication.SignIn(new AuthenticationProperties(), identity);
-            
-
-                //ClaimsIdentity claimsIdentity = new ClaimsIdentity("TwoFactorCookie");
-                //claimsIdentity.AddClaim(new Claim(ClaimTypes.NameIdentifier, user.Username));
-                //claimsIdentity.AddClaim(new Claim(ClaimTypes.Role, user.RoleID));
-                //claimsIdentity.AddClaim(new Claim(ClaimTypes.Name, user.Username));
-                //HttpContext.GetOwinContext().Authentication.SignIn(claimsIdentity);
-                //AuthenticationManager.SignIn(claimsIdentity);
-
-
-                if (!string.IsNullOrEmpty(returnUrl))
-                {
-                    return Redirect(returnUrl);
-                }
-                else
-                {
                     return RedirectToLocal(returnUrl);
-                }
+                case SignInStatus.LockedOut:
+                    return View("Lockout");
+                case SignInStatus.RequiresVerification:
+                    return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
+                case SignInStatus.Failure:
+                default:
+                    ModelState.AddModelError("", "Invalid login attempt.");
+                    return View(model);
             }
-            catch (Exception ex)
-            {
-                ModelState.AddModelError("", "Có lỗi xa: "+ ex.Message);
-            }
-            return View();
         }
-        //[HttpPost]
-        //[AllowAnonymous]
-        //[ValidateAntiForgeryToken]
-        //public async Task<ActionResult> Login(LoginViewModel model, string returnUrl)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return View(model);
-        //    }
-
-        //    // This doesn't count login failures towards account lockout
-        //    // To enable password failures to trigger account lockout, change to shouldLockout: true
-         //   var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
-        //    switch (result)
-        //    {
-        //        case SignInStatus.Success:
-
-        //            return RedirectToLocal(returnUrl);
-        //        case SignInStatus.LockedOut:
-        //            return View("Lockout");
-        //        case SignInStatus.RequiresVerification:
-        //            return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
-        //        case SignInStatus.Failure:
-        //        default:
-        //            ModelState.AddModelError("", "Invalid login attempt.");
-        //            return View(model);
-        //    }
-        //}
 
         //
         // GET: /Account/VerifyCode

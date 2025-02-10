@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
+using System.Web.Helpers;
 using System.Web.Mvc;
 using System.Web.UI.WebControls;
 using Microsoft.AspNet.Identity;
@@ -14,6 +16,7 @@ namespace Project_23TH0003.Controllers
     [Authorize]
     public class ManageController : Controller
     {
+        private Project_23TH0003Entities db = new Project_23TH0003Entities();
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
 

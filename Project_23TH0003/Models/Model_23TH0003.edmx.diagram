@@ -12,17 +12,17 @@
         <EntityTypeShape EntityType="Project_23TH0003Model.Cours" Width="1.5" PointX="9.75" PointY="8.125" />
         <AssociationConnector Association="Project_23TH0003Model.FK__Classes__CourseI__5CD6CB2B" />
         <AssociationConnector Association="Project_23TH0003Model.FK__Courses__Departm__5812160E" />
-        <EntityTypeShape EntityType="Project_23TH0003Model.Instructor" Width="1.5" PointX="9.75" PointY="4" />
-        <EntityTypeShape EntityType="Project_23TH0003Model.Student" Width="1.5" PointX="5.25" PointY="8" />
+        <EntityTypeShape EntityType="Project_23TH0003Model.Role" Width="1.5" PointX="0.75" PointY="6.625" />
+        <EntityTypeShape EntityType="Project_23TH0003Model.Instructor" Width="1.5" PointX="9.75" PointY="3.875" />
+        <EntityTypeShape EntityType="Project_23TH0003Model.User" Width="1.5" PointX="3" PointY="6.125" />
         <AssociationConnector Association="Project_23TH0003Model.FK__Classes__Instruc__5DCAEF64" />
         <AssociationConnector Association="Project_23TH0003Model.FK__Departmen__DeanI__5441852A" />
         <AssociationConnector Association="Project_23TH0003Model.FK__Instructo__Depar__693CA210" />
-        <AssociationConnector Association="Project_23TH0003Model.FK__Enrollmen__Stude__6754599E" />
-        <EntityTypeShape EntityType="Project_23TH0003Model.Role" Width="1.5" PointX="0.75" PointY="6.625" />
-        <EntityTypeShape EntityType="Project_23TH0003Model.User" Width="1.5" PointX="3" PointY="6.25" />
         <AssociationConnector Association="Project_23TH0003Model.FK__Instructo__UserI__5165187F" />
         <AssociationConnector Association="Project_23TH0003Model.FK__Users__RoleID__4D94879B" />
-        <AssociationConnector Association="Project_23TH0003Model.FK__Students__UserID__628FA481" />
+        <EntityTypeShape EntityType="Project_23TH0003Model.Student" Width="1.5" PointX="5.25" PointY="6" />
+        <AssociationConnector Association="Project_23TH0003Model.FK__Enrollmen__Stude__6754599E" />
+        <AssociationConnector Association="Project_23TH0003Model.FK_Students_Users" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

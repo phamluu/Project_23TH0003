@@ -3,7 +3,7 @@
 @{
     ViewBag.Title = "Khóa học";
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
-    var grid = new WebGrid(Model, canPage: true, defaultSort: "CourseName", rowsPerPage: 10);
+    var grid = new WebGrid(Model, canPage: false, defaultSort: "CourseName", rowsPerPage: 10);
 }
 <h4 class="title">Quản lý khóa học</h4>
 <p>
@@ -14,21 +14,26 @@
     {
         @Html.AntiForgeryToken()
     <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-3">
             <div class="d-flex">
                 <label><b>Tên khóa học</b></label>
-                <input type="text" name="CourseName" value="" class="form-control" />
+                <input type="text" name="CourseName" value="@ViewBag.CourseNam" class="form-control" />
             </div>
-            
         </div>
-        <div class="col-md-4">
+        <div class="col-md-3">
             <div class="d-flex">
                 <label><b>Thuộc khoa</b></label>
                 @Html.DropDownList("DepartmentID", null, "Tất cả", htmlAttributes: new { @class = "form-control" })
             </div>
         </div>
         <div class="col-md-3">
-            <input type="submit" name="submit" value="Tìm kiếm" class="btn btn-default"/>
+            <div class="d-flex">
+                <label><b>Số tín chỉ</b></label>
+                <input type="number" name="Credits" value="@ViewBag.Credits" class="form-control" />
+            </div>
+        </div>
+        <div class="col-md-3">
+            <input type="submit" name="submit" value="Tìm kiếm" class="btn btn-default" />
             <input type="button" name="Nhapmoi" value="Nhập mới" class="btn btn-default" onclick="location.href='@Url.Action("TimKiemNC", "KhoaHoc_23TH0003")'" />
         </div>
     </div>
