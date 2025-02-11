@@ -11,7 +11,8 @@
 
 
 <ul class="navbar-nav navbar-right">
-    <li>
+    <li><a href="" class = "nav-link">Hello @User.Identity.GetUserName() !</a></li>
+    @*<li>
         @if (User.IsInRole("sinhvien"))
         {
             @Html.ActionLink("Hello " + User.Identity.GetUserName() + "!", "Profile", "SinhVien_23TH0003", routeValues: null, htmlAttributes: new { title = "Manage", @class = "nav-link" })
@@ -22,10 +23,10 @@
         }
         @if (User.IsInRole("admin"))
         {
-            @Html.ActionLink("Hello " + User.Identity.GetUserName() + "!", "Edit", "Users_23TH0003", new {id = int.Parse(User.Identity.GetUserId())}, htmlAttributes: new { title = "Manage", @class = "nav-link" })
+            @Html.ActionLink("Hello " + User.Identity.GetUserName() + "!", "Index", "Manage", new {id = int.Parse(User.Identity.GetUserId())}, htmlAttributes: new { title = "Manage", @class = "nav-link" })
         }
 
-    </li>
+    </li>*@
             <li><a class="nav-link" href="javascript:document.getElementById('logoutForm').submit()">Đăng xuất</a></li>
         </ul>
     }

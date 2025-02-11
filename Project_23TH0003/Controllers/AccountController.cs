@@ -15,6 +15,7 @@ using System.Security.Policy;
 using System.Collections.Generic;
 using System.Security.Principal;
 using Microsoft.Owin.Security.Cookies;
+using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace Project_23TH0003.Controllers
 {
@@ -167,9 +168,21 @@ namespace Project_23TH0003.Controllers
             if (ModelState.IsValid)
             {
                 var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                // Kiểm tra nếu đăng ký lần đầu thì khởi tạo tài khoản admin
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
+                    var userCount = UserManager.Users.Count();
+                    if (userCount == 1)
+                    {
+                        var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(new ApplicationDbContext()));
+                        var roleExist = await roleManager.RoleExistsAsync("admin");
+                        if (!roleExist)
+                        {
+                            await roleManager.CreateAsync(new IdentityRole("admin"));
+                        }
+                        await UserManager.AddToRoleAsync(user.Id, "admin");
+                    }
                     await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
 
                     // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771

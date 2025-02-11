@@ -44,10 +44,10 @@ namespace Project_23TH0003
             {
                 AuthenticationType = DefaultAuthenticationTypes.ApplicationCookie,
                 LoginPath = new PathString("/Account/Login"),
-                CookieSecure = CookieSecureOption.SameAsRequest, // Lưu bổ sung
-                CookieName = ".AspNet.Cookies", // Lưu bổ sung
-                SlidingExpiration = true, // Lưu bổ sung
-                ExpireTimeSpan = TimeSpan.FromDays(30),  // Lưu bổ sung
+                CookieSecure = CookieSecureOption.SameAsRequest, 
+                CookieName = ".AspNet.Cookies", 
+                SlidingExpiration = true, 
+                ExpireTimeSpan = TimeSpan.FromDays(30), 
                 Provider = new CookieAuthenticationProvider
                 {
                     // Enables the application to validate the security stamp when the user logs in.
