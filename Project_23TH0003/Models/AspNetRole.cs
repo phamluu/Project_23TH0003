@@ -12,23 +12,18 @@ namespace Project_23TH0003.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Class
+    public partial class AspNetRole
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Class()
+        public AspNetRole()
         {
-            this.Enrollments = new HashSet<Enrollment>();
+            this.AspNetUsers = new HashSet<AspNetUser>();
         }
     
-        public int ClassID { get; set; }
-        public int CourseID { get; set; }
-        public int InstructorID { get; set; }
-        public byte Semester { get; set; }
-        public int Year { get; set; }
+        public string Id { get; set; }
+        public string Name { get; set; }
     
-        public virtual Cours Cours { get; set; }
-        public virtual Instructor Instructor { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Enrollment> Enrollments { get; set; }
+        public virtual ICollection<AspNetUser> AspNetUsers { get; set; }
     }
 }

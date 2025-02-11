@@ -106,7 +106,7 @@ namespace Project_23TH0003.Controllers
         public ActionResult Create()
         {
             ViewBag.DepartmentID = new SelectList(db.Departments, "DepartmentID", "DepartmentName");
-            ViewBag.UserID = new SelectList(db.Users, "UserID", "Username");
+            ViewBag.UserID = new SelectList(db.AspNetUsers, "UserID", "UserName");
             return View();
         }
 
@@ -123,7 +123,7 @@ namespace Project_23TH0003.Controllers
             }
 
             ViewBag.DepartmentID = new SelectList(db.Departments, "DepartmentID", "DepartmentName", instructor.DepartmentID);
-            ViewBag.UserID = new SelectList(db.Users, "UserID", "Username", instructor.UserID);
+            ViewBag.UserID = new SelectList(db.AspNetUsers, "UserID", "UserName", instructor.UserID);
             return View(instructor);
         }
 
@@ -134,13 +134,13 @@ namespace Project_23TH0003.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Instructor instructor = db.Instructors.Include(i => i.User).FirstOrDefault(i => i.InstructorID == id);
+            Instructor instructor = db.Instructors.Include(i => i.AspNetUser).FirstOrDefault(i => i.InstructorID == id);
             if (instructor == null)
             {
                 return HttpNotFound();
             }
             ViewBag.DepartmentID = new SelectList(db.Departments, "DepartmentID", "DepartmentName", instructor.DepartmentID);
-            ViewBag.UserID = new SelectList(db.Users, "UserID", "Username", instructor.UserID);
+            ViewBag.UserID = new SelectList(db.AspNetUsers, "UserID", "UserName", instructor.UserID);
             return View(instructor);
         }
 
@@ -162,13 +162,13 @@ namespace Project_23TH0003.Controllers
                     ModelState.AddModelError("", "Có lỗi xảy ra: " + ex.Message);
                 }
             }
-            var user = db.Users.Find(instructor.UserID);
+            var user = db.AspNetUsers.Find(instructor.UserID);
             if (user != null)
             {
-                instructor.User = db.Users.Find(instructor.UserID);
+                instructor.AspNetUser = db.AspNetUsers.Find(instructor.UserID);
             }
             ViewBag.DepartmentID = new SelectList(db.Departments, "DepartmentID", "DepartmentName", instructor.DepartmentID);
-            ViewBag.UserID = new SelectList(db.Users, "UserID", "Username", instructor.UserID);
+            ViewBag.UserID = new SelectList(db.AspNetUsers, "UserID", "UserName", instructor.UserID);
             return View(instructor);
         }
 

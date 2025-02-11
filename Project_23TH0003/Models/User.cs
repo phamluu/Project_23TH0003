@@ -21,7 +21,7 @@ namespace Project_23TH0003.Models
             this.Students = new HashSet<Student>();
         }
     
-        public int UserID { get; set; }
+        public string UserID { get; set; }
         public string Username { get; set; }
         public string Password { get; set; }
         public string RoleID { get; set; }

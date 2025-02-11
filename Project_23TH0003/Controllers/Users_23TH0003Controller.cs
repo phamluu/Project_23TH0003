@@ -9,7 +9,12 @@ using System.Web;
 using System.Web.Helpers;
 using System.Web.Mvc;
 using Microsoft.Ajax.Utilities;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
 using Project_23TH0003.Models;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
+using Microsoft.AspNet.Identity.Owin;
 
 namespace Project_23TH0003.Controllers
 {
@@ -17,6 +22,9 @@ namespace Project_23TH0003.Controllers
     public class Users_23TH0003Controller : Controller
     {
         private Project_23TH0003Entities db = new Project_23TH0003Entities();
+        private ApplicationDbContext _context;
+        private UserManager<ApplicationUser> _userManager;
+        private RoleManager<IdentityRole> _roleManager;
         [HttpGet]
         public ActionResult TimKiemNC(string RoleID = "", string Email = "", string Username = "")
         {
@@ -35,9 +43,18 @@ namespace Project_23TH0003.Controllers
         }
         public ActionResult Index()
         {
-            var users = db.Users.Include(u => u.Role);
-            ViewBag.RoleID = new SelectList(db.Roles, "RoleID", "RoleName");
-            return View(users.ToList());
+            var users = _userManager.Users.ToList();
+            var roles = _roleManager.Roles.ToList();
+            var model = users.Select(user => new UserRolesViewModel
+            {
+                UserId = user.Id,
+                UserName = user.UserName,
+                Email = user.Email,
+                PhoneNumber = user.PhoneNumber,
+                Roles = (List<string>)_userManager.GetRoles(user.Id)
+            }).ToList();
+
+            return View(model);
         }
         public ActionResult Details(int? id)
         {

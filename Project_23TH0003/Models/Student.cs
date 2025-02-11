@@ -21,13 +21,14 @@ namespace Project_23TH0003.Models
         }
     
         public int StudentID { get; set; }
-        public int UserID { get; set; }
+        public string UserID { get; set; }
         public string FullName { get; set; }
         public Nullable<System.DateTime> DateOfBirth { get; set; }
         public Nullable<bool> Gender { get; set; }
         public string Phone { get; set; }
         public string Address { get; set; }
     
+        public virtual AspNetUser AspNetUser { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Enrollment> Enrollments { get; set; }
         public virtual User User { get; set; }

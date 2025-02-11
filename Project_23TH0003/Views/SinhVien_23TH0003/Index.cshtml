@@ -77,9 +77,9 @@
          grid.Column("DateOfBirth","Ngày sinh", format: (@item)=> item.DateOfBirth != null?  item.DateOfBirth.ToString("dd/MM/yyy") : ""),
          grid.Column("Phone","Điện thoại"),
          grid.Column("Gender","Giới tính", format: (@item)=> item.Gender != null ? (item.Gender == true ? "Name" : "Nữ"): ""),
-         grid.Column("User.Email","Email"),
+         grid.Column("AspNetUser.Email","Email"),
          grid.Column("Address","Địa chỉ"),
-         grid.Column("User.Username","Tên đăng nhập"),
+         grid.Column("AspNetUser.UserName","Tên đăng nhập"),
          grid.Column("Chức năng", format: @<text>
     <a href="@Url.Action("Edit", new { id = item.StudentID})" class="edit-btn"><abbr title="Cập nhật"><img src="~/Content/img/edit.png" width="20" height="20" /></abbr></a>
     <a href="@Url.Action("Details",new { id = item.StudentID})" class="edit-btn"><abbr title="Xem chi tiết"><img src="~/Content/img/details.png" width="20" height="20" /></abbr></a>

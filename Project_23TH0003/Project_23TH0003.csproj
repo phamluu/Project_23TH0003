@@ -171,6 +171,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\AspNetUsers_23TH0003Controller.cs" />
     <Compile Include="Controllers\DangKyHoc_23TH0003Controller.cs" />
     <Compile Include="Controllers\GiangVien_23TH0003Controller.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -184,6 +185,18 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\AspNetRole.cs">
+      <DependentUpon>Model_23TH0003.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\AspNetUser.cs">
+      <DependentUpon>Model_23TH0003.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\AspNetUserClaim.cs">
+      <DependentUpon>Model_23TH0003.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\AspNetUserLogin.cs">
+      <DependentUpon>Model_23TH0003.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Class.cs">
       <DependentUpon>Model_23TH0003.tt</DependentUpon>
     </Compile>
@@ -220,6 +233,9 @@
       <DependentUpon>Model_23TH0003.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Student.cs">
+      <DependentUpon>Model_23TH0003.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\sysdiagram.cs">
       <DependentUpon>Model_23TH0003.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\User.cs">
@@ -362,6 +378,12 @@
     <Content Include="Views\Manage\StudentProfile.cshtml" />
     <Content Include="Views\GiangVien_23TH0003\Profile.cshtml" />
     <Content Include="Views\SinhVien_23TH0003\Profile.cshtml" />
+    <Content Include="Views\AspNetUsers_23TH0003\Create.cshtml" />
+    <Content Include="Views\AspNetUsers_23TH0003\Delete.cshtml" />
+    <Content Include="Views\AspNetUsers_23TH0003\Details.cshtml" />
+    <Content Include="Views\AspNetUsers_23TH0003\Edit.cshtml" />
+    <Content Include="Views\AspNetUsers_23TH0003\Index.cshtml" />
+    <Content Include="Views\AspNetUsers_23TH0003\AssignRole.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

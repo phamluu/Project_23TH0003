@@ -1,8 +1,36 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Drawing.Printing;
+using System.Web.Mvc;
 
 namespace Project_23TH0003.Models
 {
+    public class ChangePassword
+    {
+        public string CurrentPassword { get; set; }
+        public string NewPassword { get; set; }
+        public string ConfirmPassword { get; set; }
+    }
+    public class CreatePassword
+    {
+        public string UserId { get; set; }
+        public string Password { get; set; }
+    }
+    public class AssignRoleViewModel
+    {
+        public string UserId { get; set; }
+        public string UserName { get; set; }
+        public List<SelectListItem> Roles { get; set; }
+        public List<string> SelectedRoles { get; set; }
+    }
+    public class UserRolesViewModel
+    {
+        public string UserId { get; set; }
+        public string UserName { get; set; }
+        public string Email { get; set; }
+        public string PhoneNumber { get; set; }
+        public List<string> Roles { get; set; }
+    }
     public class ExternalLoginConfirmationViewModel
     {
         [Required]
@@ -84,7 +112,7 @@ namespace Project_23TH0003.Models
 
         [DataType(DataType.Password)]
         [Display(Name = "Confirm password")]
-        [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+        [System.Web.Mvc.Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
     }
 
@@ -103,7 +131,7 @@ namespace Project_23TH0003.Models
 
         [DataType(DataType.Password)]
         [Display(Name = "Confirm password")]
-        [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+        [System.ComponentModel.DataAnnotations.Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
 
         public string Code { get; set; }

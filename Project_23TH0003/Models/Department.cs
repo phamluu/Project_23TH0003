@@ -24,6 +24,8 @@ namespace Project_23TH0003.Models
         public int DepartmentID { get; set; }
         public string DepartmentName { get; set; }
         public Nullable<int> DeanID { get; set; }
+        public Nullable<System.DateTime> Created_at { get; set; }
+        public Nullable<System.DateTime> Updated_at { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Cours> Courses { get; set; }

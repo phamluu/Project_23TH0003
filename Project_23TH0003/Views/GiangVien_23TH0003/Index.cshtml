@@ -56,8 +56,8 @@
          grid.Column("FullName","Họ tên"),
          grid.Column("Phone","Điện thoại"),
          grid.Column("Department.DepartmentName", "Khoa", format: (@item)=> item.Department != null?  item.Department.DepartmentName : "" ),
-         grid.Column("User.Email","Email"),
-         grid.Column("User.Username","Tên đăng nhập"),
+         grid.Column("AspNetUser.Email","Email"),
+         grid.Column("AspNetUser.UserName","Tên đăng nhập"),
          grid.Column("Chức năng", format: @<text>
     <a href="@Url.Action("Edit", new { id = item.InstructorID})" class="edit-btn"><abbr title="Cập nhật"><img src="~/Content/img/edit.png" width="20" height="20" /></abbr></a>
     <a href="@Url.Action("Details",new { id = item.InstructorID})" class="edit-btn"><abbr title="Xem chi tiết"><img src="~/Content/img/details.png" width="20" height="20" /></abbr></a>

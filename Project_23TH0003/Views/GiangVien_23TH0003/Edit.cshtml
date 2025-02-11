@@ -18,14 +18,14 @@
         @Html.LabelFor(model => model.UserID, "Tài khoản", htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
             @Html.HiddenFor(x => x.UserID)
-            @Html.DisplayFor(model => model.User.Username)
+            @Html.DisplayFor(model => model.AspNetUser.UserName)
             @Html.ValidationMessageFor(model => model.UserID, "", new { @class = "text-danger" })
         </div>
     </div>
     <div class="form-group row mt-2">
         @Html.LabelFor(model => model.UserID, "Email", htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            @Html.DisplayFor(model => model.User.Email)
+            @Html.DisplayFor(model => model.AspNetUser.Email)
         </div>
     </div>
     <div class="form-group row mt-2">

@@ -29,7 +29,7 @@ namespace Project_23TH0003.Controllers
         }
         public ActionResult Index()
         {
-            var departments = db.Departments.Include(d => d.Instructor);
+            var departments = db.Departments.Include(d => d.Instructor).OrderByDescending(d => d.Created_at);
             return View(departments.ToList());
         }
 
@@ -64,6 +64,7 @@ namespace Project_23TH0003.Controllers
         {
             if (ModelState.IsValid)
             {
+                department.Created_at = DateTime.Now;
                 db.Departments.Add(department);
                 db.SaveChanges();
                 return RedirectToAction("Index");
