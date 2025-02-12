@@ -40,7 +40,13 @@ namespace Project_23TH0003.Controllers
         {
             List<Class> classes = new List<Class>();
             string UserID = User.Identity.GetUserId();
-            if (User.IsInRole("giangvien"))
+            if (User.IsInRole("admin"))
+            {
+                classes = db.Classes.Include(c => c.Cours).Include(c => c.Instructor).ToList();
+                ViewBag.CourseID = new SelectList(db.Courses, "CourseID", "CourseName");
+                ViewBag.InstructorID = new SelectList(db.Instructors, "InstructorID", "FullName");
+            }
+            else if (User.IsInRole("giangvien"))
             {
                  classes = db.Classes.Include(c => c.Cours).Include(c => c.Instructor)
                     .Where(c => c.Instructor.UserID.ToString() == UserID).ToList();
@@ -51,11 +57,6 @@ namespace Project_23TH0003.Controllers
 
                 var instructors = db.Instructors.Where(x => x.UserID.ToString() == UserID);
                 ViewBag.InstructorID = new SelectList(instructors, "InstructorID", "FullName");
-            }
-            else {
-                 classes = db.Classes.Include(c => c.Cours).Include(c => c.Instructor).ToList();
-                ViewBag.CourseID = new SelectList(db.Courses, "CourseID", "CourseName");
-                ViewBag.InstructorID = new SelectList(db.Instructors, "InstructorID", "FullName");
             }
             return View(classes.ToList());
         }
@@ -76,19 +77,33 @@ namespace Project_23TH0003.Controllers
         }
 
         // GET: LopHoc_23TH0003/Create
+        private List<Instructor> GetInstructors(int CourseID)
+        {
+            var course = db.Courses.Find(CourseID);
+            if (course != null)
+            {
+                var instructors = db.Instructors.Where(i => i.DepartmentID == course.DepartmentID).ToList();
+                return instructors;
+            }
+            return new List<Instructor>();
+        }
         public ActionResult Create()
         {
             string UserID = User.Identity.GetUserId();
-            if (User.IsInRole("giangvien"))
-            {
-                var instructors = db.Instructors.Where(x => x.UserID.ToString() == UserID);
-                ViewBag.InstructorID = new SelectList(instructors, "InstructorID", "FullName");
-            }
-            else
-            {
-                ViewBag.InstructorID = new SelectList(db.Instructors, "InstructorID", "FullName");
-            }
+            //if (User.IsInRole("giangvien"))
+            //{
+            //    var instructors = db.Instructors.Where(x => x.UserID.ToString() == UserID);
+            //    ViewBag.InstructorID = new SelectList(instructors, "InstructorID", "FullName");
+            //}
+            //else
+            //{
+            //    ViewBag.InstructorID = new SelectList(db.Instructors, "InstructorID", "FullName");
+            //}
+            
             ViewBag.CourseID = new SelectList(db.Courses, "CourseID", "CourseName");
+            var courseFirst = db.Courses.FirstOrDefault();
+            var Instructor = new List <Instructor>();
+            ViewBag.InstructorID = new SelectList(Instructor, "InstructorID", "FullName");
             return View();
         }
 
@@ -107,7 +122,8 @@ namespace Project_23TH0003.Controllers
             }
 
             ViewBag.CourseID = new SelectList(db.Courses, "CourseID", "CourseName", @class.CourseID);
-            ViewBag.InstructorID = new SelectList(db.Instructors, "InstructorID", "FullName", @class.InstructorID);
+            var instructor = GetInstructors(@class.CourseID);
+            ViewBag.InstructorID = new SelectList(instructor, "InstructorID", "FullName", @class.InstructorID);
             return View(@class);
         }
 
@@ -123,17 +139,10 @@ namespace Project_23TH0003.Controllers
                 return HttpNotFound();
             }
             string UserID = User.Identity.GetUserId();
-            if (User.IsInRole("giangvien"))
-            {
-                var instructors = db.Instructors.Where(x => x.UserID.ToString() == UserID);
-                ViewBag.InstructorID = new SelectList(instructors, "InstructorID", "FullName", @class.InstructorID);
-            }
-            else
-            {
-                ViewBag.InstructorID = new SelectList(db.Instructors, "InstructorID", "FullName", @class.InstructorID);
-            }
-            ViewBag.CourseID = new SelectList(db.Courses, "CourseID", "CourseName", @class.CourseID);
-            
+            ViewBag.CourseID = new SelectList(db.Courses, "CourseID", "CourseName");
+            var instructor = GetInstructors(@class.CourseID);
+            ViewBag.InstructorID = new SelectList(instructor, "InstructorID", "FullName", @class.InstructorID);
+
             return View(@class);
         }
 
@@ -151,7 +160,8 @@ namespace Project_23TH0003.Controllers
                 return RedirectToAction("Index");
             }
             ViewBag.CourseID = new SelectList(db.Courses, "CourseID", "CourseName", @class.CourseID);
-            ViewBag.InstructorID = new SelectList(db.Instructors, "InstructorID", "FullName", @class.InstructorID);
+            var instructor = GetInstructors(@class.CourseID);
+            ViewBag.InstructorID = new SelectList(instructor, "InstructorID", "FullName", @class.InstructorID);
             return View(@class);
         }
 

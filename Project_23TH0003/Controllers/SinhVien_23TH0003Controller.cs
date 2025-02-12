@@ -17,6 +17,13 @@ namespace Project_23TH0003.Controllers
     public class SinhVien_23TH0003Controller : Controller
     {
         private Project_23TH0003Entities db = new Project_23TH0003Entities();
+
+        public ActionResult GetStudents()
+        {
+            var students = db.Students.ToList();
+            return PartialView("_StudentList", students); 
+        }
+
         [Authorize(Roles = "sinhvien")]
         public ActionResult Profile()
         {

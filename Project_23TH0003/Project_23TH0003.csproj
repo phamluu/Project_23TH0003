@@ -342,11 +342,6 @@
     <Content Include="Views\Khoa_23TH0003\Details.cshtml" />
     <Content Include="Views\Khoa_23TH0003\Edit.cshtml" />
     <Content Include="Views\Khoa_23TH0003\Index.cshtml" />
-    <Content Include="Views\LopHoc_23TH0024\Create.cshtml" />
-    <Content Include="Views\LopHoc_23TH0024\Delete.cshtml" />
-    <Content Include="Views\LopHoc_23TH0024\Details.cshtml" />
-    <Content Include="Views\LopHoc_23TH0024\Edit.cshtml" />
-    <Content Include="Views\LopHoc_23TH0024\Index.cshtml" />
     <Content Include="Views\KhoaHoc_23TH0003\Create.cshtml" />
     <Content Include="Views\KhoaHoc_23TH0003\Delete.cshtml" />
     <Content Include="Views\KhoaHoc_23TH0003\Details.cshtml" />
@@ -378,6 +373,8 @@
     <Content Include="Views\AspNetUsers_23TH0003\Index.cshtml" />
     <Content Include="Views\AspNetUsers_23TH0003\AssignRole.cshtml" />
     <Content Include="Web.config" />
+    <Content Include="Views\DangKyHoc_23TH0003\List.cshtml" />
+    <Content Include="Views\SinhVien_23TH0003\_StudentList.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

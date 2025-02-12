@@ -15,7 +15,7 @@
         <div class="form-group row mt-2">
             @Html.LabelFor(model => model.CourseID, "Thuộc khóa học", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownList("CourseID", null, htmlAttributes: new { @class = "form-control" })
+                @Html.DropDownList("CourseID", null, "Chọn khóa học", htmlAttributes: new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.CourseID, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -53,6 +53,33 @@
         </div>
     </div>
 }
+
+<script type="text/javascript">
+    $("#CourseID").change(function () {
+        var courseID = $(this).val();
+            if (courseID) {
+                $.ajax({
+                    url: '@Url.Action("GetInstructorsByCourse", "GiangVien_23TH0003")',
+                    data: { courseID: courseID },
+                    type: 'GET',
+                    success: function (data) {
+                        if (data.success) {
+                            var instructorDropdown = $('#InstructorID');
+                            instructorDropdown.empty();
+                            instructorDropdown.append('<option value="">Chọn giảng viên</option>');
+                            $.each(data.instructors, function (i, instructor) {
+                                instructorDropdown.append('<option value="' + instructor.InstructorID + '">' + instructor.FullName + '</option>');
+                            });
+                        } else {
+                            alert(data.message);
+                        }
+                    }
+                });
+            } else {
+                $('#InstructorID').empty().append('<option value="">Chọn giảng viên</option>');
+            }
+        });
+</script>
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")

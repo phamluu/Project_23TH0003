@@ -7,6 +7,7 @@
     @Styles.Render("~/Content/css")
 <link href="~/Content/style.css" rel="stylesheet" />
     @Scripts.Render("~/bundles/modernizr")
+<script src="~/Scripts/jquery-3.7.0.min.js"></script>
 </head>
 <body>
     <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-primary">
@@ -24,14 +25,10 @@
                         {
                             <li>@Html.ActionLink("Khoa", "Index", "Khoa_23TH0003", new { area = "" }, new { @class = "nav-link" })</li>
                             <li>@Html.ActionLink("Môn học", "Index", "KhoaHoc_23TH0003", new { area = "" }, new { @class = "nav-link" })</li>
+                            <li>@Html.ActionLink("Lớp học", "Index", "LopHoc_23TH0003", new { area = "" }, new { @class = "nav-link" })</li>
                             <li>@Html.ActionLink("Người dùng", "Index", "AspNetUsers_23TH0003", new { area = "" }, new { @class = "nav-link" })</li>
                             <li>@Html.ActionLink("Giảng viên", "Index", "GiangVien_23TH0003", new { area = "" }, new { @class = "nav-link" })</li>
                             <li>@Html.ActionLink("Sinh viên", "Index", "SinhVien_23TH0003", new { area = "" }, new { @class = "nav-link" })</li>
-                        }
-
-                        if (User.IsInRole("admin") || User.IsInRole("giangvien"))
-                        {
-                            <li>@Html.ActionLink("Lớp học", "Index", "LopHoc_23TH0003", new { area = "" }, new { @class = "nav-link" })</li>
                         }
 
                         <li>@Html.ActionLink("Xem điểm", "Index", "DangKyHoc_23TH0003", new { area = "" }, new { @class = "nav-link" })</li>
@@ -52,5 +49,9 @@
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
+
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+
+    
 </body>
 </html>

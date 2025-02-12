@@ -15,6 +15,20 @@ namespace Project_23TH0003.Controllers
     public class GiangVien_23TH0003Controller : Controller
     {
         private Project_23TH0003Entities db = new Project_23TH0003Entities();
+        public ActionResult GetInstructorsByCourse(int courseID)
+        {
+            var course = db.Courses.Find(courseID);
+            if (course == null)
+            {
+                return Json(new { success = false, message = "Course not found." }, JsonRequestBehavior.AllowGet);
+            }
+            var instructors = db.Instructors.Where(i => i.DepartmentID == course.DepartmentID)
+                                             .Select(i => new { i.InstructorID, i.FullName })
+                                             .ToList();
+            return Json(new { success = true, instructors = instructors }, JsonRequestBehavior.AllowGet);
+        }
+
+        [Authorize(Roles = "giangvien")]
         [Authorize(Roles = "giangvien")]
         public ActionResult Profile()
         {

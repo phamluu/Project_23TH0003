@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.Data.SqlTypes;
 using System.Linq;
 using System.Net;
 using System.Web;
@@ -16,6 +17,55 @@ namespace Project_23TH0003.Controllers
     {
         private Project_23TH0003Entities db = new Project_23TH0003Entities();
 
+        // Danh sách sinh viên đã đăng ký môn học
+        public ActionResult List(int ClassID)
+        {
+            var Classes = db.Classes.Find(ClassID);
+            var enrollments = db.Enrollments.Include(e => e.Class).Include(e => e.Student).Where(e => e.ClassID == ClassID);
+            ViewBag.Classes = Classes;
+            return View(enrollments);
+        }
+        [HttpPost]
+        public ActionResult UpdateScores(int classID, Dictionary<int, int> Midterm, Dictionary<int, int> Final)
+        {
+            if (Midterm == null || Final == null || !Midterm.Any() || !Final.Any())
+            {
+                return RedirectToAction("List", new { ClassID = classID });
+            }
+            foreach (var EnrollmentID in Midterm.Keys)
+            {
+                var enrollment = db.Enrollments
+                                   .FirstOrDefault(e => e.EnrollmentID == EnrollmentID);
+
+                if (enrollment != null)
+                {
+                    enrollment.Midterm = Midterm[EnrollmentID];
+                    enrollment.Final = Final[EnrollmentID];
+                    db.SaveChanges();
+                }
+            }
+            return RedirectToAction("List", new { ClassID = classID });
+        }
+        [HttpPost]
+        public ActionResult List(int ClassID, List<int> StudentID)
+        {
+            if (StudentID == null)
+            {
+                return RedirectToAction("List", new { ClassID = ClassID });
+            }
+            foreach (var item in StudentID)
+            {
+                if(db.Enrollments.Any(e => e.ClassID == ClassID && e.StudentID == item )) continue;
+                var enrollment = new Enrollment
+                {
+                    ClassID = ClassID,
+                    StudentID = item
+                };
+                db.Enrollments.Add(enrollment);
+                db.SaveChanges();
+            }
+            return RedirectToAction("List", new { ClassID = ClassID });
+        }
         [Authorize(Roles = "admin,sinhvien,giangvien")]
         public ActionResult Index()
         {

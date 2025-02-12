@@ -60,8 +60,9 @@
          grid.Column("Instructor.FullName","Giảng viên"),
          grid.Column("Semester","Học kì"),
          grid.Column("Year","Năm học"),
+         grid.Column("Sinh viên", format: @<text><a href="@Url.Action("List", "DangKyHoc_23TH0003", new { ClassID = item.ClassID})" class="edit-btn"><abbr title="Xem">Xem</abbr></a></text>),
          grid.Column("Chức năng", format: @<text>
-    <a href="@Url.Action("Edit", new { id = item.ClassID})" class="edit-btn"><abbr title="Cập nhật"><img src="~/Content/img/edit.png" width="20" height="20" /></abbr></a>
+    <a href="@Url.Action("Edit", new { id = item.ClassID})" class="detail-btn"><abbr title="Sửa"><img src="~/Content/img/edit.png" width="20" height="20" /></abbr></a>
     <a href="@Url.Action("Details",new { id = item.ClassID})" class="edit-btn"><abbr title="Xem chi tiết"><img src="~/Content/img/details.png" width="20" height="20" /></abbr></a>
     <a href="@Url.Action("Delete", new { id = item.ClassID})" class="edit-btn"><abbr title="Xóa dữ liệu"><img src="~/Content/img/delete.png" width="20" height="20" /></abbr> </a>
         </text>),
