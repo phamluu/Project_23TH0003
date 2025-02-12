@@ -26,8 +26,8 @@ namespace Project_23TH0003.Controllers
             {
                 return HttpNotFound();
             }
-            var user = db.Users.Where(d => d.UserID == student.UserID).ToList();
-            ViewBag.UserID = new SelectList(user, "UserID", "Username", int.Parse(UserID));
+            var user = db.AspNetUsers.Where(d => d.Id == student.UserID).ToList();
+            ViewBag.UserID = new SelectList(user, "UserID", "UserName", int.Parse(UserID));
             return View(student);
         }
         [Authorize(Roles = "sinhvien")]
@@ -54,8 +54,8 @@ namespace Project_23TH0003.Controllers
                     }
                 }
             }
-            var user = db.Users.Where(d => d.UserID == student.UserID).ToList();
-            ViewBag.UserID = new SelectList(user, "UserID", "Username", student.UserID);
+            var user = db.AspNetUsers.Where(d => d.Id == student.UserID).ToList();
+            ViewBag.UserID = new SelectList(user, "UserID", "UserName", student.UserID);
             return View(student);
         }
 
@@ -87,7 +87,7 @@ namespace Project_23TH0003.Controllers
         [Authorize(Roles = "admin")]
         public ActionResult Index()
         {
-            var students = db.Students.Include(s => s.User);
+            var students = db.Students.Include(s => s.AspNetUser);
             return View(students.ToList());
         }
 
@@ -141,7 +141,7 @@ namespace Project_23TH0003.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.UserID = new SelectList(db.Users, "UserID", "Username", student.UserID);
+            ViewBag.UserID = new SelectList(db.AspNetUsers, "UserID", "UserName", student.UserID);
             return View(student);
         }
 
@@ -168,7 +168,7 @@ namespace Project_23TH0003.Controllers
                     }
                 }
             }
-            ViewBag.UserID = new SelectList(db.Users, "UserID", "Username", student.UserID);
+            ViewBag.UserID = new SelectList(db.AspNetUsers, "UserID", "UserName", student.UserID);
             return View(student);
         }
 

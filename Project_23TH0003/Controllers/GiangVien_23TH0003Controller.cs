@@ -26,7 +26,7 @@ namespace Project_23TH0003.Controllers
             }
             var department = db.Departments.Where(d => d.DepartmentID == instructor.DepartmentID).ToList();
             ViewBag.DepartmentID = new SelectList(department, "DepartmentID", "DepartmentName", instructor.DepartmentID);
-            var user = db.Users.Where(d => d.UserID == instructor.UserID).ToList();
+            var user = db.AspNetUsers.Where(d => d.Id == instructor.UserID).ToList();
             ViewBag.UserID = new SelectList(user, "UserID", "Username", instructor.UserID);
             return View(instructor);
         }
@@ -55,7 +55,7 @@ namespace Project_23TH0003.Controllers
             }
             var department = db.Departments.Where(d => d.DepartmentID == instructor.DepartmentID).ToList();
             ViewBag.DepartmentID = new SelectList(department, "DepartmentID", "DepartmentName", instructor.DepartmentID);
-            var user = db.Users.Where(d => d.UserID == instructor.UserID).ToList();
+            var user = db.AspNetUsers.Where(d => d.Id == instructor.UserID).ToList();
             ViewBag.UserID =  new SelectList(user, "UserID", "Username", instructor.UserID);
             return View(instructor);
         }
@@ -81,9 +81,9 @@ namespace Project_23TH0003.Controllers
         [Authorize(Roles = "admin")]
         public ActionResult Index()
         {
-            var instructors = db.Instructors.Include(i => i.Department).Include(i => i.User);
+            var instructors = db.Instructors.Include(i => i.Department).Include(i => i.AspNetUser);
             ViewBag.DepartmentID = new SelectList(db.Departments, "DepartmentID", "DepartmentName");
-            ViewBag.UserID = new SelectList(db.Users, "UserID", "Username");
+            ViewBag.UserID = new SelectList(db.AspNetUsers, "UserID", "UserName");
             return View(instructors.ToList());
         }
 
