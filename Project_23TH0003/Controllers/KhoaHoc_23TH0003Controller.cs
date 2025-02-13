@@ -11,7 +11,7 @@ using Project_23TH0003.Models;
 
 namespace Project_23TH0003.Controllers
 {
-    [Authorize(Roles = "admin")]
+    
     public class KhoaHoc_23TH0003Controller : Controller
     {
         private Project_23TH0003Entities db = new Project_23TH0003Entities();
@@ -40,7 +40,7 @@ namespace Project_23TH0003.Controllers
             return View(courses.ToList());
         }
 
-        // GET: KhoaHoc_23TH0003/Details/5
+        [Authorize(Roles = "admin")]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -55,16 +55,14 @@ namespace Project_23TH0003.Controllers
             return View(cours);
         }
 
-        // GET: KhoaHoc_23TH0003/Create
+        [Authorize(Roles = "admin")]
         public ActionResult Create()
         {
             ViewBag.DepartmentID = new SelectList(db.Departments, "DepartmentID", "DepartmentName");
             return View();
         }
 
-        // POST: KhoaHoc_23TH0003/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "CourseID,CourseName,Credits,DepartmentID")] Cours cours)
@@ -80,7 +78,7 @@ namespace Project_23TH0003.Controllers
             return View(cours);
         }
 
-        // GET: KhoaHoc_23TH0003/Edit/5
+        [Authorize(Roles = "admin")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -96,9 +94,7 @@ namespace Project_23TH0003.Controllers
             return View(cours);
         }
 
-        // POST: KhoaHoc_23TH0003/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "CourseID,CourseName,Credits,DepartmentID")] Cours cours)
@@ -113,7 +109,7 @@ namespace Project_23TH0003.Controllers
             return View(cours);
         }
 
-        // GET: KhoaHoc_23TH0003/Delete/5
+        [Authorize(Roles = "admin")]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -128,7 +124,7 @@ namespace Project_23TH0003.Controllers
             return View(cours);
         }
 
-        // POST: KhoaHoc_23TH0003/Delete/5
+        [Authorize(Roles = "admin")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)

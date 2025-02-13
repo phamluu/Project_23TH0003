@@ -22,9 +22,9 @@
                     @if (User.Identity.IsAuthenticated)
                     {
                         <li>@Html.ActionLink("Khoa", "Index", "Khoa_23TH0003", new { area = "" }, new { @class = "nav-link" })</li>
+                        <li>@Html.ActionLink("Môn học", "Index", "KhoaHoc_23TH0003", new { area = "" }, new { @class = "nav-link" })</li>
                         if (User.IsInRole("admin"))
                         {
-                            <li>@Html.ActionLink("Môn học", "Index", "KhoaHoc_23TH0003", new { area = "" }, new { @class = "nav-link" })</li>
                             <li>@Html.ActionLink("Lớp học", "Index", "LopHoc_23TH0003", new { area = "" }, new { @class = "nav-link" })</li>
                             <li>@Html.ActionLink("Người dùng", "Index", "AspNetUsers_23TH0003", new { area = "" }, new { @class = "nav-link" })</li>
                             <li>@Html.ActionLink("Giảng viên", "Index", "GiangVien_23TH0003", new { area = "" }, new { @class = "nav-link" })</li>
