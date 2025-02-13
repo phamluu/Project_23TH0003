@@ -4,40 +4,66 @@
     ViewBag.Title = "Quản lý điểm sinh viên";
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
     var groupedByClass = Model.GroupBy(x => x.Class).ToList();
+    int k = 1;
 }
 
 <h4 class="title">Quản lý điểm sinh viên</h4>
 
 <div id="gridContent">
-    <table class="table table-bordered table-hover">
-        <thead>
+    @if (User.IsInRole("admin") || User.IsInRole("giangvien"))
+    {
+        <table class="table table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">STT</th>
+                    <th scope="col">Họ tên</th>
+                    <th scope="col">Điểm giữa kì</th>
+                    <th scope="col">Điểm kết thúc</th>
+                </tr>
+            </thead>
+
+            @foreach (var classGroup in groupedByClass)
+            {
+                <tr>
+                    <td colspan="5" style="text-align:center"><strong>@classGroup.Key.Cours.CourseName - Học kì: @classGroup.Key.Semester - Năm học: @classGroup.Key.Year - GV: @classGroup.Key.Instructor.FullName</strong></td>
+                </tr>
+
+                int i = 1;
+                foreach (var item in classGroup)
+                {
+                    <tr>
+                        <td>@i</td>
+                        <td>@item.Student.FullName</td>
+                        <td>@item.Midterm</td>
+                        <td>@item.Final</td>
+                    </tr>
+                    i++;
+                }
+            }
+        </table>
+    }
+    else if (User.IsInRole("sinhvien"))
+    {
+        <table class="table table-bordered table-hover">
             <tr>
                 <th scope="col">STT</th>
-                <th scope="col">Họ tên</th>
+                <th scope="col">Khóa học</th>
                 <th scope="col">Điểm giữa kì</th>
                 <th scope="col">Điểm kết thúc</th>
             </tr>
-        </thead>
-
-        @foreach (var classGroup in groupedByClass)
-        {
-            <tr>
-                <td colspan="5" style="text-align:center"><strong>@classGroup.Key.Cours.CourseName - Học kì: @classGroup.Key.Semester - Năm học: @classGroup.Key.Year - GV: @classGroup.Key.Instructor.FullName</strong></td>
-            </tr>
-
-            int i = 1;
-            foreach (var item in classGroup)
+            @foreach (var item in Model)
             {
                 <tr>
-                    <td>@i</td>
-                    <td>@item.Student.FullName</td>
+                    <td>@k</td>
+                    <td>@item.Class.Cours.CourseName</td>
                     <td>@item.Midterm</td>
                     <td>@item.Final</td>
                 </tr>
-                i++;
+                k++;
             }
-        }
-    </table>
+        </table>
+
+    }
 </div>
 
 
