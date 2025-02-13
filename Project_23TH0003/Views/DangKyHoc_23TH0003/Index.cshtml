@@ -4,6 +4,7 @@
     ViewBag.Title = "Quản lý điểm sinh viên";
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
     var groupedByClass = Model.GroupBy(x => x.Class).ToList();
+    var groupedByYearSemester = Model.GroupBy(x => new { x.Class.Year, x.Class.Semester }).ToList();
     int k = 1;
 }
 
@@ -45,25 +46,33 @@
     else if (User.IsInRole("sinhvien"))
     {
         <table class="table table-bordered table-hover">
-            <tr>
-                <th scope="col">STT</th>
-                <th scope="col">Khóa học</th>
-                <th scope="col">Điểm giữa kì</th>
-                <th scope="col">Điểm kết thúc</th>
-            </tr>
-            @foreach (var item in Model)
+            <thead>
+                <tr>
+                    <th scope="col">STT</th>
+                    <th scope="col">Khóa học</th>
+                    <th scope="col">Điểm giữa kì</th>
+                    <th scope="col">Điểm kết thúc</th>
+                </tr>
+            </thead>
+
+            @foreach (var yearSemesterGroup in groupedByYearSemester)
             {
                 <tr>
-                    <td>@k</td>
-                    <td>@item.Class.Cours.CourseName</td>
-                    <td>@item.Midterm</td>
-                    <td>@item.Final</td>
+                    <td colspan="6" style="text-align:center"><strong>Năm học: @yearSemesterGroup.Key.Year - Học kì: @yearSemesterGroup.Key.Semester</strong></td>
                 </tr>
-                k++;
+
+                int i = 1;
+                foreach (var item in yearSemesterGroup)
+                {
+                    <tr>
+                        <td>@i</td>
+                        <td>@item.Class.Cours.CourseName</td>
+                        <td>@item.Midterm</td>
+                        <td>@item.Final</td>
+                    </tr>
+                    i++;
+                }
             }
         </table>
-
     }
 </div>
-
-
