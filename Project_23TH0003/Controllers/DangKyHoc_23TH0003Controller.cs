@@ -26,24 +26,23 @@ namespace Project_23TH0003.Controllers
             return View(enrollments);
         }
         [HttpPost]
-        public ActionResult UpdateScores(int classID, Dictionary<int, int> Midterm, Dictionary<int, int> Final)
+        public ActionResult UpdateScores(int classID, List<Enrollment> ListEnrollments)
         {
-            if (Midterm == null || Final == null || !Midterm.Any() || !Final.Any())
+            if (ListEnrollments != null)
             {
-                return RedirectToAction("List", new { ClassID = classID });
-            }
-            foreach (var EnrollmentID in Midterm.Keys)
-            {
-                var enrollment = db.Enrollments
-                                   .FirstOrDefault(e => e.EnrollmentID == EnrollmentID);
-
-                if (enrollment != null)
+                foreach (var item in ListEnrollments)
                 {
-                    enrollment.Midterm = Midterm[EnrollmentID];
-                    enrollment.Final = Final[EnrollmentID];
-                    db.SaveChanges();
+                    var enrollment = db.Enrollments.FirstOrDefault(e => e.EnrollmentID == item.EnrollmentID);
+
+                    if (enrollment != null)
+                    {
+                        enrollment.Midterm = item.Midterm;
+                        enrollment.Final = item.Final;
+                        db.SaveChanges();
+                    }
                 }
             }
+            
             return RedirectToAction("List", new { ClassID = classID });
         }
         [HttpPost]

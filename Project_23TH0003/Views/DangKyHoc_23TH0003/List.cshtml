@@ -20,56 +20,73 @@
 
 @using (Html.BeginForm("UpdateScores", "DangKyHoc_23TH0003", FormMethod.Post))
 {
-    <input type="hidden" name="classID" value="@classe.ClassID"/>
-    <button type="button" class="btn btn-primary mt-3 mb-3" data-toggle="modal" data-target="#exampleModal">
+    int STT = 0;
+    <input type="hidden" name="classID" value="@classe.ClassID" />
+
+
+<button type="button" class="btn btn-primary mt-3 mb-3" data-toggle="modal" data-target="#exampleModal">
         Thêm sinh viên
     </button>
-    <button type="submit" class="btn btn-primary mt-3 mb-3">Lưu điểm</button>
-    <div id="gridContent">
-        @ViewBag.TB
-        @grid.GetHtml(
-         tableStyle: "table table-borderd table-hover",
-         footerStyle: "grid-footer",
-         fillEmptyRows: false,
-         mode: WebGridPagerModes.Numeric,
-         alternatingRowStyle: "alternatingRowStyle",
-         columns: new[]
-         {
-             grid.Column("STT",format: item => item.WebGrid.Rows.IndexOf(item) + 1 + Math.Round(Convert.ToDouble(grid.TotalRowCount / grid.PageCount) / grid.RowsPerPage) * grid.RowsPerPage * grid.PageIndex),
-             grid.Column("Student.FullName","Họ tên"),
-             grid.Column("Điểm giữa kì", format: @<text><input type="number"  name="Midterm[@item.EnrollmentID]" value="@item.Midterm" class="form-control" /></text>),
-grid.Column("Điểm kết thúc", format: @<text><input type="number"  name="Final[@item.EnrollmentID]" value="@item.Final" class="form-control" /></text>, style:"width:50px;"),
-grid.Column("Chức năng", format: @<text>
-    <a href="@Url.Action("Edit", new { id = item.EnrollmentID})" class="edit-btn"><abbr title="Cập nhật"><img src="~/Content/img/edit.png" width="20" height="20" /></abbr></a>
-    <a href="@Url.Action("Delete", new { id = item.EnrollmentID})" class="edit-btn"><abbr title="Xóa dữ liệu"><img src="~/Content/img/delete.png" width="20" height="20" /></abbr> </a>
-</text>),
- })
-    </div>
+
+
+<button type="submit" class="btn btn-primary mt-3 mb-3">Lưu điểm</button>
+
+<div id="gridContent">
+    <table class="table table-borderd table-hover">
+        <thead>
+            <tr>
+                <th scope="col">STT</th>
+                <th scope="col">Họ tên</th>
+                <th scope="col">Điểm giữa kì</th>
+                <th scope="col">Điểm kết thúc</th>
+                <th scope="col">Chức năng</th>
+            </tr>
+        </thead>
+        @foreach (var item in Model)
+        {
+           <input type="hidden" step="0.01" name="ListEnrollments[@STT].EnrollmentID" value="@item.EnrollmentID" class="form-control" />
+            <tr>
+                <td>@(STT + 1)</td>
+                <td>@item.Student.FullName</td>
+                <td><input type="number" step="0.01" name="ListEnrollments[@STT].Midterm" value="@item.Midterm" class="form-control" /></td>
+                <td><input type="number" step="0.01" name="ListEnrollments[@STT].Final" value="@item.Final" class="form-control" /></td>
+                <td>
+                    <a href="@Url.Action("Edit", new { id = item.EnrollmentID})" class="edit-btn"><abbr title="Cập nhật"><img src="~/Content/img/edit.png" width="20" height="20" /></abbr></a>
+                    <a href="@Url.Action("Delete", new { id = item.EnrollmentID})" class="edit-btn"><abbr title="Xóa dữ liệu"><img src="~/Content/img/delete.png" width="20" height="20" /></abbr> </a>
+
+                </td>
+            </tr>
+            STT++;
+        }
+    </table>
+</div>
+
 }
 
-    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Danh sách sinh viên</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                @using (Html.BeginForm("List", "DangKyHoc_23TH0003", FormMethod.Post))
-                {
-                    <input type="hidden" name="ClassID" , value="@classe.ClassID" />
-                    <div class="modal-body">
-                        @{
-                            Html.RenderAction("GetStudents", "SinhVien_23TH0003");
-                        }
-                    </div>
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary">Lưu</button>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
-                    </div>
-                }
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Danh sách sinh viên</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
+            @using (Html.BeginForm("List", "DangKyHoc_23TH0003", FormMethod.Post))
+            {
+                <input type="hidden" name="ClassID" , value="@classe.ClassID" />
+                <div class="modal-body">
+                    @{
+                        Html.RenderAction("GetStudents", "SinhVien_23TH0003");
+                    }
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Lưu</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                </div>
+            }
         </div>
     </div>
+</div>
 
