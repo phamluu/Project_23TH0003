@@ -70,8 +70,21 @@ namespace Project_23TH0003.Controllers
         [Authorize(Roles = "admin,sinhvien,giangvien")]
         public ActionResult Index()
         {
-            
             var UserID = User.Identity.GetUserId();
+            if (User.IsInRole("admin"))
+            {
+                var enrollments = db.Enrollments.Include(e => e.Class).Include(e => e.Student);
+                return View(enrollments.ToList());
+            }
+            else if (User.IsInRole("giangvien"))
+            {
+                var enrollments = db.Enrollments
+                .Include(e => e.Class)
+                .Include(e => e.Student)
+                .Where(e => e.Class.Instructor.UserID.ToString() == UserID)
+                .ToList();
+                return View(enrollments.ToList());
+            }
             if (User.IsInRole("sinhvien"))
             {
                 var student = db.Students.SingleOrDefault(x => x.UserID.ToString() == UserID);
@@ -80,22 +93,8 @@ namespace Project_23TH0003.Controllers
                     var enrollments = db.Enrollments.Include(e => e.Class).Include(e => e.Student).Where(e => e.StudentID == student.StudentID);
                     return View(enrollments.ToList());
                 }
-                 
             }
-            if (User.IsInRole("giangvien"))
-            {
-                var enrollments = db.Enrollments
-                .Include(e => e.Class)
-                .Include(e => e.Student)  
-                .Where(e => e.Class.Instructor.UserID.ToString() == UserID) 
-                .ToList();
-                return View(enrollments.ToList());
-            }
-            else if(User.IsInRole("admin"))
-            {
-                var enrollments = db.Enrollments.Include(e => e.Class).Include(e => e.Student);
-                return View(enrollments.ToList());
-            }
+            
             return View();
         }
 
