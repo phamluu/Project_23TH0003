@@ -11,7 +11,7 @@ using Project_23TH0003.Models;
 
 namespace Project_23TH0003.Controllers
 {
-    [Authorize(Roles = "admin")]
+    
     public class Khoa_23TH0003Controller : Controller
     {
         private Project_23TH0003Entities db = new Project_23TH0003Entities();
@@ -33,7 +33,7 @@ namespace Project_23TH0003.Controllers
             return View(departments.ToList());
         }
 
-        // GET: Khoa_23TH0003/Details/5
+        [Authorize(Roles = "admin")]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -48,16 +48,14 @@ namespace Project_23TH0003.Controllers
             return View(department);
         }
 
-        // GET: Khoa_23TH0003/Create
+        [Authorize(Roles = "admin")]
         public ActionResult Create()
         {
             ViewBag.DeanID = new SelectList(db.Instructors, "InstructorID", "FullName");
             return View();
         }
 
-        // POST: Khoa_23TH0003/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "DepartmentID,DepartmentName,DeanID")] Department department)
@@ -74,7 +72,7 @@ namespace Project_23TH0003.Controllers
             return View(department);
         }
 
-        // GET: Khoa_23TH0003/Edit/5
+        [Authorize(Roles = "admin")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -90,9 +88,7 @@ namespace Project_23TH0003.Controllers
             return View(department);
         }
 
-        // POST: Khoa_23TH0003/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "DepartmentID,DepartmentName,DeanID")] Department department)
@@ -107,7 +103,7 @@ namespace Project_23TH0003.Controllers
             return View(department);
         }
 
-        // GET: Khoa_23TH0003/Delete/5
+        [Authorize(Roles = "admin")]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -122,7 +118,7 @@ namespace Project_23TH0003.Controllers
             return View(department);
         }
 
-        // POST: Khoa_23TH0003/Delete/5
+        [Authorize(Roles = "admin")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
