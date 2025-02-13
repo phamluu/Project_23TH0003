@@ -76,7 +76,7 @@
          grid.Column("FullName","Họ tên"),
          grid.Column("DateOfBirth","Ngày sinh", format: (@item)=> item.DateOfBirth != null?  item.DateOfBirth.ToString("dd/MM/yyy") : ""),
          grid.Column("Phone","Điện thoại"),
-         grid.Column("Gender","Giới tính", format: (@item)=> item.Gender != null ? (item.Gender == true ? "Name" : "Nữ"): ""),
+         grid.Column("Gender","Giới tính", format: (@item)=> item.Gender != null ? (item.Gender == true ? "Nam" : "Nữ"): ""),
          grid.Column("AspNetUser.Email","Email"),
          grid.Column("Address","Địa chỉ"),
          grid.Column("AspNetUser.UserName","Tên đăng nhập"),

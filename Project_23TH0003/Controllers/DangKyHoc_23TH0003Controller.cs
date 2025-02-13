@@ -17,7 +17,7 @@ namespace Project_23TH0003.Controllers
     {
         private Project_23TH0003Entities db = new Project_23TH0003Entities();
 
-        // Danh sách sinh viên đã đăng ký môn học
+        [Authorize(Roles = "admin, giangvien")]
         public ActionResult List(int ClassID)
         {
             var Classes = db.Classes.Find(ClassID);
@@ -25,6 +25,7 @@ namespace Project_23TH0003.Controllers
             ViewBag.Classes = Classes;
             return View(enrollments);
         }
+        [Authorize(Roles = "admin, giangvien")]
         [HttpPost]
         public ActionResult UpdateScores(int classID, List<Enrollment> ListEnrollments)
         {
@@ -45,6 +46,7 @@ namespace Project_23TH0003.Controllers
             
             return RedirectToAction("List", new { ClassID = classID });
         }
+        [Authorize(Roles = "admin, giangvien")]
         [HttpPost]
         public ActionResult List(int ClassID, List<int> StudentID)
         {
