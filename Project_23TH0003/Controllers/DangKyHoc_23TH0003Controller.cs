@@ -21,7 +21,16 @@ namespace Project_23TH0003.Controllers
         public ActionResult List(int ClassID)
         {
             var Classes = db.Classes.Find(ClassID);
-            var enrollments = db.Enrollments.Include(e => e.Class).Include(e => e.Student).Where(e => e.ClassID == ClassID);
+            var enrollments = db.Enrollments.Include(e => e.Class).Include(e => e.Student).Where(e => e.ClassID == ClassID).Select(x => new EnrollmentViewModel
+            {
+                EnrollmentID = x.EnrollmentID,
+                ClassID = x.ClassID,
+                Class = x.Class,
+                StudentID = x.StudentID,
+                Student = x.Student,
+                Midterm = x.Midterm,
+                Final = x.Final
+            });
             ViewBag.Classes = Classes;
             return View(enrollments);
         }
@@ -73,7 +82,18 @@ namespace Project_23TH0003.Controllers
             var UserID = User.Identity.GetUserId();
             if (User.IsInRole("admin"))
             {
-                var enrollments = db.Enrollments.Include(e => e.Class).Include(e => e.Student);
+                var enrollments = db.Enrollments
+                                    .Include(e => e.Class)
+                                    .Include(e => e.Student).Select(e => new EnrollmentViewModel
+                                    {
+                                        ClassID = e.ClassID,
+                                        StudentID = e.StudentID,
+                                        Class = e.Class,
+                                        Student = e.Student,
+                                        Midterm = e.Midterm,
+                                        Final = e.Final,
+                                        EnrollmentID = e.EnrollmentID,
+                                    });    
                 return View(enrollments.ToList());
             }
             else if (User.IsInRole("giangvien"))
@@ -81,8 +101,17 @@ namespace Project_23TH0003.Controllers
                 var enrollments = db.Enrollments
                 .Include(e => e.Class)
                 .Include(e => e.Student)
-                .Where(e => e.Class.Instructor.UserID.ToString() == UserID)
-                .ToList();
+                .Where(e => e.Class.Instructor.UserID.ToString() == UserID).
+                Select(e => new EnrollmentViewModel
+                {
+                    ClassID = e.ClassID,
+                    StudentID = e.StudentID,
+                    Class = e.Class,
+                    Student = e.Student,
+                    Midterm = e.Midterm,
+                    Final = e.Final,
+                    EnrollmentID = e.EnrollmentID,
+                });
                 return View(enrollments.ToList());
             }
             if (User.IsInRole("sinhvien"))
@@ -90,7 +119,18 @@ namespace Project_23TH0003.Controllers
                 var student = db.Students.SingleOrDefault(x => x.UserID.ToString() == UserID);
                 if (student != null)
                 {
-                    var enrollments = db.Enrollments.Include(e => e.Class).Include(e => e.Student).Where(e => e.StudentID == student.StudentID);
+                    var enrollments = db.Enrollments.Include(e => e.Class).Include(e => e.Student)
+                        .Where(e => e.StudentID == student.StudentID).
+                        Select(e => new EnrollmentViewModel
+                        {
+                            ClassID = e.ClassID,
+                            StudentID = e.StudentID,
+                            Class = e.Class,
+                            Student = e.Student,
+                            Midterm = e.Midterm,
+                            Final = e.Final,
+                            EnrollmentID = e.EnrollmentID,
+                        });
                     return View(enrollments.ToList());
                 }
             }

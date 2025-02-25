@@ -208,6 +208,7 @@
     <Compile Include="Models\Enrollment.cs">
       <DependentUpon>Model_23TH0003.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\EnrollmentViewModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\Instructor.cs">
       <DependentUpon>Model_23TH0003.tt</DependentUpon>

@@ -21,15 +21,6 @@ namespace Project_23TH0003.Models
         public Nullable<decimal> Final { get; set; }
         public Nullable<decimal> CourseGrade { get; set; }
 
-        public Nullable<decimal> TinhDiemHP
-        {
-            get
-            {
-                decimal? result = this.Midterm * Class.HeSo_Diem1 / 100 + this.Final * Class.HeSo_Diem2 / 100;
-                return result; 
-            }
-        }
-
         public virtual Class Class { get; set; }
         public virtual Student Student { get; set; }
     }
