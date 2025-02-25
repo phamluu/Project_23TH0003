@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="70f0faa96a81488d82cdd760fadb778f" Name="Diagram1">
+      <Diagram DiagramId="70f0faa96a81488d82cdd760fadb778f" Name="Diagram1" ZoomLevel="64">
         <EntityTypeShape EntityType="Project_23TH0003Model.AspNetRole" Width="1.5" PointX="0.75" PointY="8.125" IsExpanded="true" />
         <EntityTypeShape EntityType="Project_23TH0003Model.AspNetUserClaim" Width="1.5" PointX="5.25" PointY="6.75" IsExpanded="true" />
         <EntityTypeShape EntityType="Project_23TH0003Model.AspNetUserLogin" Width="1.5" PointX="5.25" PointY="9.5" IsExpanded="true" />
@@ -14,10 +14,8 @@
         <EntityTypeShape EntityType="Project_23TH0003Model.Department" Width="1.5" PointX="10.5" PointY="11" IsExpanded="true" />
         <EntityTypeShape EntityType="Project_23TH0003Model.Enrollment" Width="1.5" PointX="17.25" PointY="6.375" IsExpanded="true" />
         <EntityTypeShape EntityType="Project_23TH0003Model.Instructor" Width="1.5" PointX="8.25" PointY="7.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="Project_23TH0003Model.Role" Width="1.5" PointX="3.75" PointY="3.125" IsExpanded="true" />
         <EntityTypeShape EntityType="Project_23TH0003Model.Student" Width="1.5" PointX="8.25" PointY="3.5" IsExpanded="true" />
         <EntityTypeShape EntityType="Project_23TH0003Model.sysdiagram" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="Project_23TH0003Model.User" Width="1.5" PointX="6" PointY="2.75" IsExpanded="true" />
         <AssociationConnector Association="Project_23TH0003Model.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" ManuallyRouted="false" />
         <AssociationConnector Association="Project_23TH0003Model.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" ManuallyRouted="false" />
         <AssociationConnector Association="Project_23TH0003Model.FK_Instructors_AspNetUsers" ManuallyRouted="false" />
@@ -29,9 +27,6 @@
         <AssociationConnector Association="Project_23TH0003Model.FK__Departmen__DeanI__5441852A" ManuallyRouted="false" />
         <AssociationConnector Association="Project_23TH0003Model.FK__Instructo__Depar__693CA210" ManuallyRouted="false" />
         <AssociationConnector Association="Project_23TH0003Model.FK__Enrollmen__Stude__6754599E" ManuallyRouted="false" />
-        <AssociationConnector Association="Project_23TH0003Model.FK__Instructo__UserI__5165187F" ManuallyRouted="false" />
-        <AssociationConnector Association="Project_23TH0003Model.FK__Users__RoleID__4D94879B" ManuallyRouted="false" />
-        <AssociationConnector Association="Project_23TH0003Model.FK_Students_Users" ManuallyRouted="false" />
         <AssociationConnector Association="Project_23TH0003Model.AspNetUserRoles" ManuallyRouted="false" />
       </Diagram>
     </edmx:Diagrams>

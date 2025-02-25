@@ -180,7 +180,6 @@
     <Compile Include="Controllers\LopHoc_23TH0003Controller.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\SinhVien_23TH0003Controller.cs" />
-    <Compile Include="Controllers\Users_23TH0003Controller.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -229,16 +228,10 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Model_23TH0003.edmx</DependentUpon>
     </Compile>
-    <Compile Include="Models\Role.cs">
-      <DependentUpon>Model_23TH0003.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\Student.cs">
       <DependentUpon>Model_23TH0003.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\sysdiagram.cs">
-      <DependentUpon>Model_23TH0003.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\User.cs">
       <DependentUpon>Model_23TH0003.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -375,6 +368,8 @@
     <Content Include="Web.config" />
     <Content Include="Views\DangKyHoc_23TH0003\List.cshtml" />
     <Content Include="Views\SinhVien_23TH0003\_StudentList.cshtml" />
+    <Content Include="Views\Shared\_AlertMessages.cshtml" />
+    <Content Include="Views\LopHoc_23TH0003\_Fields.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

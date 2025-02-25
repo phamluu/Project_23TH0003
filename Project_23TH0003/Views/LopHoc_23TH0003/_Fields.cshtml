@@ -1,0 +1,46 @@
+﻿@model Project_23TH0003.Models.Class
+<div class="form-group row mt-2">
+    @Html.LabelFor(model => model.CourseID, "Chọn khóa học", htmlAttributes: new { @class = "control-label col-md-2" })
+    <div class="col-md-10">
+        @Html.DropDownList("CourseID", null, htmlAttributes: new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.CourseID, "", new { @class = "text-danger" })
+    </div>
+</div>
+
+<div class="form-group row mt-2">
+    @Html.LabelFor(model => model.InstructorID, "Chọn giảng viên", htmlAttributes: new { @class = "control-label col-md-2" })
+    <div class="col-md-10">
+        @Html.DropDownList("InstructorID", null, htmlAttributes: new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.InstructorID, "", new { @class = "text-danger" })
+    </div>
+</div>
+
+<div class="form-group row mt-2">
+    @Html.LabelFor(model => model.Semester, "Học kì", htmlAttributes: new { @class = "control-label col-md-2" })
+    <div class="col-md-10">
+        @Html.EditorFor(model => model.Semester, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.Semester, "", new { @class = "text-danger" })
+    </div>
+</div>
+
+<div class="form-group row mt-2">
+    @Html.LabelFor(model => model.Year, "Năm học", htmlAttributes: new { @class = "control-label col-md-2" })
+    <div class="col-md-10">
+        @Html.EditorFor(model => model.Year, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.Year, "", new { @class = "text-danger" })
+    </div>
+</div>
+<div class="form-group row mt-2">
+    @Html.LabelFor(model => model.HeSo_Diem1, "Hệ số điểm giữa kì", htmlAttributes: new { @class = "control-label col-md-2" })
+    <div class="col-md-10">
+        @Html.EditorFor(model => model.HeSo_Diem1, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.HeSo_Diem1, "", new { @class = "text-danger" })
+    </div>
+</div>
+<div class="form-group row mt-2">
+    @Html.LabelFor(model => model.HeSo_Diem2, "Hệ số điểm cuối kì", htmlAttributes: new { @class = "control-label col-md-2" })
+    <div class="col-md-10">
+        @Html.EditorFor(model => model.HeSo_Diem2, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.HeSo_Diem2, "", new { @class = "text-danger" })
+    </div>
+</div>

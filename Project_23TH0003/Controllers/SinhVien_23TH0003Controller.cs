@@ -116,7 +116,7 @@ namespace Project_23TH0003.Controllers
         [Authorize(Roles = "admin")]
         public ActionResult Create()
         {
-            ViewBag.UserID = new SelectList(db.Users, "UserID", "Username");
+            ViewBag.UserID = new SelectList(db.AspNetUserClaims, "UserID", "UserName");
             return View();
         }
 
@@ -132,7 +132,7 @@ namespace Project_23TH0003.Controllers
                 return RedirectToAction("Index");
             }
 
-            ViewBag.UserID = new SelectList(db.Users, "UserID", "Username", student.UserID);
+            ViewBag.UserID = new SelectList(db.AspNetUsers, "UserID", "Username", student.UserID);
             return View(student);
         }
 

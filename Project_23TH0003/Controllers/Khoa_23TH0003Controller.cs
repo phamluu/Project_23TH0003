@@ -65,9 +65,10 @@ namespace Project_23TH0003.Controllers
                 department.Created_at = DateTime.Now;
                 db.Departments.Add(department);
                 db.SaveChanges();
+                TempData["SuccessMessage"] = "Thêm khoa thành công!";
                 return RedirectToAction("Index");
             }
-
+            TempData["ErrorMessage"] = "Không thể thêm khoa";
             ViewBag.DeanID = new SelectList(db.Instructors, "InstructorID", "FullName", department.DeanID);
             return View(department);
         }
@@ -84,7 +85,8 @@ namespace Project_23TH0003.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.DeanID = new SelectList(db.Instructors, "InstructorID", "FullName", department.DeanID);
+            var instructors = db.Instructors.Where(x => x.DepartmentID == id);
+            ViewBag.DeanID = new SelectList(instructors, "InstructorID", "FullName", department.DeanID);
             return View(department);
         }
 
@@ -97,9 +99,11 @@ namespace Project_23TH0003.Controllers
             {
                 db.Entry(department).State = EntityState.Modified;
                 db.SaveChanges();
+                TempData["SuccessMessage"] = "Cập nhật khoa thành công!";
                 return RedirectToAction("Index");
             }
             ViewBag.DeanID = new SelectList(db.Instructors, "InstructorID", "FullName", department.DeanID);
+            TempData["ErrorMessage"] = "Cập nhật khoa thất bại!";
             return View(department);
         }
 
@@ -124,9 +128,19 @@ namespace Project_23TH0003.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             Department department = db.Departments.Find(id);
-            db.Departments.Remove(department);
-            db.SaveChanges();
-            return RedirectToAction("Index");
+            try
+            {
+                db.Departments.Remove(department);
+                db.SaveChanges();
+                TempData["SuccessMessage"] = "Xóa khoa thành công!";
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            TempData["ErrorMessage"] = "Xóa khoa thất bại!";
+            return View(department);
         }
 
         protected override void Dispose(bool disposing)

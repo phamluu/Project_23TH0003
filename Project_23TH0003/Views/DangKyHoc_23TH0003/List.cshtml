@@ -24,42 +24,44 @@
     <input type="hidden" name="classID" value="@classe.ClassID" />
 
 
-<button type="button" class="btn btn-primary mt-3 mb-3" data-toggle="modal" data-target="#exampleModal">
+    <button type="button" class="btn btn-primary mt-3 mb-3" data-toggle="modal" data-target="#exampleModal">
         Thêm sinh viên
     </button>
 
 
-<button type="submit" class="btn btn-primary mt-3 mb-3">Lưu điểm</button>
+    <button type="submit" class="btn btn-primary mt-3 mb-3">Lưu điểm</button>
 
-<div id="gridContent">
-    <table class="table table-borderd table-hover">
-        <thead>
-            <tr>
-                <th scope="col">STT</th>
-                <th scope="col">Họ tên</th>
-                <th scope="col">Điểm giữa kì</th>
-                <th scope="col">Điểm kết thúc</th>
-                <th scope="col">Chức năng</th>
-            </tr>
-        </thead>
-        @foreach (var item in Model)
-        {
-           <input type="hidden" step="0.01" name="ListEnrollments[@STT].EnrollmentID" value="@item.EnrollmentID" class="form-control" />
-            <tr>
-                <td>@(STT + 1)</td>
-                <td>@item.Student.FullName</td>
-                <td><input type="number" step="0.01" name="ListEnrollments[@STT].Midterm" value="@item.Midterm" class="form-control" /></td>
-                <td><input type="number" step="0.01" name="ListEnrollments[@STT].Final" value="@item.Final" class="form-control" /></td>
-                <td>
-                    <a href="@Url.Action("Edit", new { id = item.EnrollmentID})" class="edit-btn"><abbr title="Cập nhật"><img src="~/Content/img/edit.png" width="20" height="20" /></abbr></a>
-                    <a href="@Url.Action("Delete", new { id = item.EnrollmentID})" class="edit-btn"><abbr title="Xóa dữ liệu"><img src="~/Content/img/delete.png" width="20" height="20" /></abbr> </a>
+    <div id="gridContent">
+        <table class="table table-borderd table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">STT</th>
+                    <th scope="col">Họ tên</th>
+                    <th scope="col">Điểm giữa kì (@classe.HeSo_Diem1)</th>
+                    <th scope="col">Điểm kết thúc (@classe.HeSo_Diem2)</th>
+                    <th scope="col">Điểm Học phần</th>
+                    <th scope="col">Chức năng</th>
+                </tr>
+            </thead>
+            @foreach (var item in Model)
+            {
+                <input type="hidden" step="0.01" name="ListEnrollments[@STT].EnrollmentID" value="@item.EnrollmentID" class="form-control" />
+                <tr>
+                    <td>@(STT + 1)</td>
+                    <td>@item.Student.FullName</td>
+                    <td><input type="number" step="0.01" name="ListEnrollments[@STT].Midterm" value="@item.Midterm" min=0 max=10 required class="form-control" onchange="validateInput(this)" /></td>
+                    <td><input type="number" step="0.01" name="ListEnrollments[@STT].Final" value="@item.Final" min=0 max=10 required class="form-control" onchange="validateInput(this)" /></td>
+                    <td style="color:red">@item.TinhDiemHP</td>
+                    <td>
+                        <a href="@Url.Action("Edit", new { id = item.EnrollmentID})" class="edit-btn"><abbr title="Cập nhật"><img src="~/Content/img/edit.png" width="20" height="20" /></abbr></a>
+                        <a href="@Url.Action("Delete", new { id = item.EnrollmentID})" class="edit-btn"><abbr title="Xóa dữ liệu"><img src="~/Content/img/delete.png" width="20" height="20" /></abbr> </a>
 
-                </td>
-            </tr>
-            STT++;
-        }
-    </table>
-</div>
+                    </td>
+                </tr>
+                STT++;
+            }
+        </table>
+    </div>
 
 }
 
@@ -90,3 +92,13 @@
     </div>
 </div>
 
+<script>
+    function validateInput(input) {
+        var value = parseFloat(input.value);
+        if (value < 0 || value > 10) {
+            alert("Điểm phải nằm trong khoảng từ 0 đến 10.");
+            input.value = "";
+            input.focus();
+        }
+    }
+</script>

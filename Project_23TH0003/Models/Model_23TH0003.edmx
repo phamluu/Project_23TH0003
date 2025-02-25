@@ -65,6 +65,8 @@
           <Property Name="InstructorID" Type="int" Nullable="false" />
           <Property Name="Semester" Type="tinyint" Nullable="false" />
           <Property Name="Year" Type="int" Nullable="false" />
+          <Property Name="HeSo_Diem1" Type="int" />
+          <Property Name="HeSo_Diem2" Type="int" />
         </EntityType>
         <EntityType Name="Courses">
           <Key>
@@ -94,6 +96,7 @@
           <Property Name="ClassID" Type="int" Nullable="false" />
           <Property Name="Midterm" Type="decimal" Precision="5" Scale="2" />
           <Property Name="Final" Type="decimal" Precision="5" Scale="2" />
+          <Property Name="CourseGrade" Type="decimal" Precision="5" Scale="0" />
         </EntityType>
         <EntityType Name="Instructors">
           <Key>
@@ -104,13 +107,6 @@
           <Property Name="FullName" Type="nvarchar" MaxLength="100" />
           <Property Name="Phone" Type="nvarchar" MaxLength="15" />
           <Property Name="DepartmentID" Type="int" />
-        </EntityType>
-        <EntityType Name="Roles">
-          <Key>
-            <PropertyRef Name="RoleID" />
-          </Key>
-          <Property Name="RoleID" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="RoleName" Type="nvarchar" MaxLength="50" Nullable="false" />
         </EntityType>
         <EntityType Name="Students">
           <Key>
@@ -133,16 +129,6 @@
           <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="version" Type="int" />
           <Property Name="definition" Type="varbinary(max)" />
-        </EntityType>
-        <EntityType Name="Users">
-          <Key>
-            <PropertyRef Name="UserID" />
-          </Key>
-          <Property Name="UserID" Type="nvarchar" MaxLength="128" Nullable="false" />
-          <Property Name="Username" Type="nvarchar" MaxLength="100" Nullable="false" />
-          <Property Name="Password" Type="nvarchar" MaxLength="255" Nullable="false" />
-          <Property Name="RoleID" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="Email" Type="varchar" MaxLength="50" />
         </EntityType>
         <Association Name="FK__Classes__CourseI__5CD6CB2B">
           <End Role="Courses" Type="Self.Courses" Multiplicity="1" />
@@ -225,18 +211,6 @@
             </Principal>
             <Dependent Role="Instructors">
               <PropertyRef Name="DepartmentID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__Users__RoleID__4D94879B">
-          <End Role="Roles" Type="Self.Roles" Multiplicity="1" />
-          <End Role="Users" Type="Self.Users" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Roles">
-              <PropertyRef Name="RoleID" />
-            </Principal>
-            <Dependent Role="Users">
-              <PropertyRef Name="RoleID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -331,10 +305,8 @@
           <EntitySet Name="Departments" EntityType="Self.Departments" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Enrollments" EntityType="Self.Enrollments" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Instructors" EntityType="Self.Instructors" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Roles" EntityType="Self.Roles" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Students" EntityType="Self.Students" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK__Classes__CourseI__5CD6CB2B" Association="Self.FK__Classes__CourseI__5CD6CB2B">
             <End Role="Courses" EntitySet="Courses" />
             <End Role="Classes" EntitySet="Classes" />
@@ -362,10 +334,6 @@
           <AssociationSet Name="FK__Instructo__Depar__693CA210" Association="Self.FK__Instructo__Depar__693CA210">
             <End Role="Departments" EntitySet="Departments" />
             <End Role="Instructors" EntitySet="Instructors" />
-          </AssociationSet>
-          <AssociationSet Name="FK__Users__RoleID__4D94879B" Association="Self.FK__Users__RoleID__4D94879B">
-            <End Role="Roles" EntitySet="Roles" />
-            <End Role="Users" EntitySet="Users" />
           </AssociationSet>
           <AssociationSet Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
@@ -459,6 +427,8 @@
           <NavigationProperty Name="Cours" Relationship="Self.FK__Classes__CourseI__5CD6CB2B" FromRole="Classes" ToRole="Courses" />
           <NavigationProperty Name="Instructor" Relationship="Self.FK__Classes__Instruc__5DCAEF64" FromRole="Classes" ToRole="Instructors" />
           <NavigationProperty Name="Enrollments" Relationship="Self.FK__Enrollmen__Class__68487DD7" FromRole="Classes" ToRole="Enrollments" />
+          <Property Name="HeSo_Diem1" Type="Int32" />
+          <Property Name="HeSo_Diem2" Type="Int32" />
         </EntityType>
         <EntityType Name="Cours">
           <Key>
@@ -495,6 +465,7 @@
           <Property Name="Final" Type="Decimal" Precision="5" Scale="2" />
           <NavigationProperty Name="Class" Relationship="Self.FK__Enrollmen__Class__68487DD7" FromRole="Enrollments" ToRole="Classes" />
           <NavigationProperty Name="Student" Relationship="Self.FK__Enrollmen__Stude__6754599E" FromRole="Enrollments" ToRole="Students" />
+          <Property Name="CourseGrade" Type="Decimal" Precision="5" Scale="0" />
         </EntityType>
         <EntityType Name="Instructor">
           <Key>
@@ -509,15 +480,6 @@
           <NavigationProperty Name="Classes" Relationship="Self.FK__Classes__Instruc__5DCAEF64" FromRole="Instructors" ToRole="Classes" />
           <NavigationProperty Name="Departments" Relationship="Self.FK__Departmen__DeanI__5441852A" FromRole="Instructors" ToRole="Departments" />
           <NavigationProperty Name="Department" Relationship="Self.FK__Instructo__Depar__693CA210" FromRole="Instructors" ToRole="Departments" />
-          <NavigationProperty Name="User" Relationship="Self.FK__Instructo__UserI__5165187F" FromRole="Instructors" ToRole="Users" />
-        </EntityType>
-        <EntityType Name="Role">
-          <Key>
-            <PropertyRef Name="RoleID" />
-          </Key>
-          <Property Name="RoleID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="RoleName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="Users" Relationship="Self.FK__Users__RoleID__4D94879B" FromRole="Roles" ToRole="Users" />
         </EntityType>
         <EntityType Name="Student">
           <Key>
@@ -532,7 +494,6 @@
           <Property Name="Address" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="AspNetUser" Relationship="Self.FK_Students_AspNetUsers" FromRole="Students" ToRole="AspNetUsers" />
           <NavigationProperty Name="Enrollments" Relationship="Self.FK__Enrollmen__Stude__6754599E" FromRole="Students" ToRole="Enrollments" />
-          <NavigationProperty Name="User" Relationship="Self.FK_Students_Users" FromRole="Students" ToRole="Users" />
         </EntityType>
         <EntityType Name="sysdiagram">
           <Key>
@@ -543,19 +504,6 @@
           <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="version" Type="Int32" />
           <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
-        </EntityType>
-        <EntityType Name="User">
-          <Key>
-            <PropertyRef Name="UserID" />
-          </Key>
-          <Property Name="UserID" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Username" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Password" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="RoleID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="Instructors" Relationship="Self.FK__Instructo__UserI__5165187F" FromRole="Users" ToRole="Instructors" />
-          <NavigationProperty Name="Role" Relationship="Self.FK__Users__RoleID__4D94879B" FromRole="Users" ToRole="Roles" />
-          <NavigationProperty Name="Students" Relationship="Self.FK_Students_Users" FromRole="Users" ToRole="Students" />
         </EntityType>
         <Association Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
           <End Role="AspNetUsers" Type="Self.AspNetUser" Multiplicity="1">
@@ -693,42 +641,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Instructo__UserI__5165187F">
-          <End Role="Users" Type="Self.User" Multiplicity="1" />
-          <End Role="Instructors" Type="Self.Instructor" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Users">
-              <PropertyRef Name="UserID" />
-            </Principal>
-            <Dependent Role="Instructors">
-              <PropertyRef Name="UserID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__Users__RoleID__4D94879B">
-          <End Role="Roles" Type="Self.Role" Multiplicity="1" />
-          <End Role="Users" Type="Self.User" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Roles">
-              <PropertyRef Name="RoleID" />
-            </Principal>
-            <Dependent Role="Users">
-              <PropertyRef Name="RoleID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Students_Users">
-          <End Role="Users" Type="Self.User" Multiplicity="1" />
-          <End Role="Students" Type="Self.Student" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Users">
-              <PropertyRef Name="UserID" />
-            </Principal>
-            <Dependent Role="Students">
-              <PropertyRef Name="UserID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="AspNetUserRoles">
           <End Role="AspNetRoles" Type="Self.AspNetRole" Multiplicity="*" />
           <End Role="AspNetUsers" Type="Self.AspNetUser" Multiplicity="*" />
@@ -743,10 +655,8 @@
           <EntitySet Name="Departments" EntityType="Self.Department" />
           <EntitySet Name="Enrollments" EntityType="Self.Enrollment" />
           <EntitySet Name="Instructors" EntityType="Self.Instructor" />
-          <EntitySet Name="Roles" EntityType="Self.Role" />
           <EntitySet Name="Students" EntityType="Self.Student" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagram" />
-          <EntitySet Name="Users" EntityType="Self.User" />
           <AssociationSet Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
             <End Role="AspNetUserClaims" EntitySet="AspNetUserClaims" />
@@ -790,18 +700,6 @@
           <AssociationSet Name="FK__Enrollmen__Stude__6754599E" Association="Self.FK__Enrollmen__Stude__6754599E">
             <End Role="Students" EntitySet="Students" />
             <End Role="Enrollments" EntitySet="Enrollments" />
-          </AssociationSet>
-          <AssociationSet Name="FK__Instructo__UserI__5165187F" Association="Self.FK__Instructo__UserI__5165187F">
-            <End Role="Users" EntitySet="Users" />
-            <End Role="Instructors" EntitySet="Instructors" />
-          </AssociationSet>
-          <AssociationSet Name="FK__Users__RoleID__4D94879B" Association="Self.FK__Users__RoleID__4D94879B">
-            <End Role="Roles" EntitySet="Roles" />
-            <End Role="Users" EntitySet="Users" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Students_Users" Association="Self.FK_Students_Users">
-            <End Role="Users" EntitySet="Users" />
-            <End Role="Students" EntitySet="Students" />
           </AssociationSet>
           <AssociationSet Name="AspNetUserRoles" Association="Self.AspNetUserRoles">
             <End Role="AspNetRoles" EntitySet="AspNetRoles" />
@@ -862,6 +760,8 @@
           <EntitySetMapping Name="Classes">
             <EntityTypeMapping TypeName="Project_23TH0003Model.Class">
               <MappingFragment StoreEntitySet="Classes">
+                <ScalarProperty Name="HeSo_Diem2" ColumnName="HeSo_Diem2" />
+                <ScalarProperty Name="HeSo_Diem1" ColumnName="HeSo_Diem1" />
                 <ScalarProperty Name="ClassID" ColumnName="ClassID" />
                 <ScalarProperty Name="CourseID" ColumnName="CourseID" />
                 <ScalarProperty Name="InstructorID" ColumnName="InstructorID" />
@@ -894,6 +794,7 @@
           <EntitySetMapping Name="Enrollments">
             <EntityTypeMapping TypeName="Project_23TH0003Model.Enrollment">
               <MappingFragment StoreEntitySet="Enrollments">
+                <ScalarProperty Name="CourseGrade" ColumnName="CourseGrade" />
                 <ScalarProperty Name="EnrollmentID" ColumnName="EnrollmentID" />
                 <ScalarProperty Name="StudentID" ColumnName="StudentID" />
                 <ScalarProperty Name="ClassID" ColumnName="ClassID" />
@@ -910,14 +811,6 @@
                 <ScalarProperty Name="FullName" ColumnName="FullName" />
                 <ScalarProperty Name="Phone" ColumnName="Phone" />
                 <ScalarProperty Name="DepartmentID" ColumnName="DepartmentID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Roles">
-            <EntityTypeMapping TypeName="Project_23TH0003Model.Role">
-              <MappingFragment StoreEntitySet="Roles">
-                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
-                <ScalarProperty Name="RoleName" ColumnName="RoleName" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -942,17 +835,6 @@
                 <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
                 <ScalarProperty Name="version" ColumnName="version" />
                 <ScalarProperty Name="definition" ColumnName="definition" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Users">
-            <EntityTypeMapping TypeName="Project_23TH0003Model.User">
-              <MappingFragment StoreEntitySet="Users">
-                <ScalarProperty Name="UserID" ColumnName="UserID" />
-                <ScalarProperty Name="Username" ColumnName="Username" />
-                <ScalarProperty Name="Password" ColumnName="Password" />
-                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
-                <ScalarProperty Name="Email" ColumnName="Email" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

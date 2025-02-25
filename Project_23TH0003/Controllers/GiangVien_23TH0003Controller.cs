@@ -33,7 +33,7 @@ namespace Project_23TH0003.Controllers
         public ActionResult Profile()
         {
             var UserID = User.Identity.GetUserId();
-            Instructor instructor = db.Instructors.Include(i => i.User).Include(i => i.Department).FirstOrDefault(i => i.UserID.ToString() == UserID);
+            Instructor instructor = db.Instructors.Include(i => i.AspNetUser).Include(i => i.Department).FirstOrDefault(i => i.UserID.ToString() == UserID);
             if (instructor == null)
             {
                 return HttpNotFound();

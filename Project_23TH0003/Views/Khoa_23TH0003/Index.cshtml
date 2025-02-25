@@ -14,7 +14,7 @@
         @Html.ActionLink("Thêm mới", "Create", "Khoa_23TH0003", "", new { @class = "btn btn-default" })
     </p>
 }
-
+@Html.Partial("_AlertMessages")
 <div class="form-search">
     @using (Html.BeginForm("TimKiemNC", "Khoa_23TH0003", FormMethod.Get))
     {

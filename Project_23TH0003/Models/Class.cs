@@ -25,6 +25,8 @@ namespace Project_23TH0003.Models
         public int InstructorID { get; set; }
         public byte Semester { get; set; }
         public int Year { get; set; }
+        public Nullable<int> HeSo_Diem1 { get; set; }
+        public Nullable<int> HeSo_Diem2 { get; set; }
     
         public virtual Cours Cours { get; set; }
         public virtual Instructor Instructor { get; set; }

@@ -112,7 +112,7 @@ namespace Project_23TH0003.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ClassID,CourseID,InstructorID,Semester,Year")] Class @class)
+        public ActionResult Create([Bind(Include = "ClassID,CourseID,InstructorID,Semester,Year, HeSo_Diem1, HeSo_Diem2")] Class @class)
         {
             if (ModelState.IsValid)
             {
@@ -151,7 +151,7 @@ namespace Project_23TH0003.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ClassID,CourseID,InstructorID,Semester,Year")] Class @class)
+        public ActionResult Edit([Bind(Include = "ClassID,CourseID,InstructorID,Semester,Year, HeSo_Diem1, HeSo_Diem2")] Class @class)
         {
             if (ModelState.IsValid)
             {

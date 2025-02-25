@@ -5,38 +5,30 @@
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
 
-
 @using (Html.BeginForm()) 
 {
     @Html.AntiForgeryToken()
     
-    <div class="form-horizontal">
-        <h4 class="title">Thêm thông tin khoa</h4>
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        <div class="form-group row mt-md-2">
-            @Html.LabelFor(model => model.DepartmentName, "Tên khoa", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.DepartmentName, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.DepartmentName, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group row mt-md-2">
-            @Html.LabelFor(model => model.DeanID, "Trưởng khoa", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DropDownList("DeanID", null, htmlAttributes: new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.DeanID, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group row mt-md-3">
-            <div class="col-md-2"></div>
-            <div class="col-md-10">
-                <input type="submit" value="Thêm mới" class="btn btn-default" />
-                @Html.ActionLink("Quay lại danh sách", "Index", "", new {@class="btn btn-default"})
-            </div>
+<div class="form-horizontal">
+    <h4 class="title">Thêm thông tin khoa</h4>
+    @Html.Partial("_AlertMessages")
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="form-group row mt-md-2">
+        @Html.LabelFor(model => model.DepartmentName, "Tên khoa", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.DepartmentName, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.DepartmentName, "", new { @class = "text-danger" })
         </div>
     </div>
+
+    <div class="form-group row mt-md-3">
+        <div class="col-md-2"></div>
+        <div class="col-md-10">
+            <input type="submit" value="Thêm mới" class="btn btn-default" />
+            @Html.ActionLink("Quay lại danh sách", "Index", "", new { @class = "btn btn-default" })
+        </div>
+    </div>
+</div>
 }
 
 @section Scripts {
