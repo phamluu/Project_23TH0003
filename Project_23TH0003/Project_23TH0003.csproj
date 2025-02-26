@@ -180,6 +180,7 @@
     <Compile Include="Controllers\LopHoc_23TH0003Controller.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\SinhVien_23TH0003Controller.cs" />
+    <Compile Include="Controllers\XemDiem_23TH0003Controller.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -255,7 +256,7 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\bootstrap.rtl.css" />
     <Content Include="Content\bootstrap.rtl.min.css" />
-    <Content Include="Content\style.css" />
+    <Content Include="Content\css\style.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
@@ -371,6 +372,11 @@
     <Content Include="Views\SinhVien_23TH0003\_StudentList.cshtml" />
     <Content Include="Views\Shared\_AlertMessages.cshtml" />
     <Content Include="Views\LopHoc_23TH0003\_Fields.cshtml" />
+    <Content Include="Views\XemDiem_23TH0003\Create.cshtml" />
+    <Content Include="Views\XemDiem_23TH0003\Delete.cshtml" />
+    <Content Include="Views\XemDiem_23TH0003\Details.cshtml" />
+    <Content Include="Views\XemDiem_23TH0003\Edit.cshtml" />
+    <Content Include="Views\XemDiem_23TH0003\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -380,6 +386,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Content\js\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.rtl.min.css.map" />

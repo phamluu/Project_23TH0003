@@ -76,67 +76,7 @@ namespace Project_23TH0003.Controllers
             }
             return RedirectToAction("List", new { ClassID = ClassID });
         }
-        [Authorize(Roles = "admin,sinhvien,giangvien")]
-        public ActionResult Index()
-        {
-            var UserID = User.Identity.GetUserId();
-            if (User.IsInRole("admin"))
-            {
-                var enrollments = db.Enrollments
-                                    .Include(e => e.Class)
-                                    .Include(e => e.Student).Select(e => new EnrollmentViewModel
-                                    {
-                                        ClassID = e.ClassID,
-                                        StudentID = e.StudentID,
-                                        Class = e.Class,
-                                        Student = e.Student,
-                                        Midterm = e.Midterm,
-                                        Final = e.Final,
-                                        EnrollmentID = e.EnrollmentID,
-                                    });    
-                return View(enrollments.ToList());
-            }
-            else if (User.IsInRole("giangvien"))
-            {
-                var enrollments = db.Enrollments
-                .Include(e => e.Class)
-                .Include(e => e.Student)
-                .Where(e => e.Class.Instructor.UserID.ToString() == UserID).
-                Select(e => new EnrollmentViewModel
-                {
-                    ClassID = e.ClassID,
-                    StudentID = e.StudentID,
-                    Class = e.Class,
-                    Student = e.Student,
-                    Midterm = e.Midterm,
-                    Final = e.Final,
-                    EnrollmentID = e.EnrollmentID,
-                });
-                return View(enrollments.ToList());
-            }
-            if (User.IsInRole("sinhvien"))
-            {
-                var student = db.Students.SingleOrDefault(x => x.UserID.ToString() == UserID);
-                if (student != null)
-                {
-                    var enrollments = db.Enrollments.Include(e => e.Class).Include(e => e.Student)
-                        .Where(e => e.StudentID == student.StudentID).
-                        Select(e => new EnrollmentViewModel
-                        {
-                            ClassID = e.ClassID,
-                            StudentID = e.StudentID,
-                            Class = e.Class,
-                            Student = e.Student,
-                            Midterm = e.Midterm,
-                            Final = e.Final,
-                            EnrollmentID = e.EnrollmentID,
-                        });
-                    return View(enrollments.ToList());
-                }
-            }
-            
-            return View();
-        }
+        
 
         [Authorize(Roles = "admin")]
         public ActionResult Details(int? id)
@@ -235,9 +175,19 @@ namespace Project_23TH0003.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             Enrollment enrollment = db.Enrollments.Find(id);
-            db.Enrollments.Remove(enrollment);
-            db.SaveChanges();
-            return RedirectToAction("Index");
+            try
+            {
+                db.Enrollments.Remove(enrollment);
+                db.SaveChanges();
+                TempData["SuccessMessage"] = "Xóa đăng ký học phẩn thành công!";
+                return RedirectToAction("List", new { ClassID = enrollment.ClassID });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            TempData["ErrorMessage"] = "Không thể xóa đăng ký học phần";
+            return RedirectToAction("List", new { ClassID = enrollment.ClassID });
         }
         [Authorize(Roles = "admin")]
         protected override void Dispose(bool disposing)

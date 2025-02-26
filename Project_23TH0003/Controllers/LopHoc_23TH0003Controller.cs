@@ -196,7 +196,7 @@ namespace Project_23TH0003.Controllers
                 }
                 db.Classes.Remove(@class);
                 db.SaveChanges();
-                TempData["SuccessMessage"] = "Thêm lớp học thành công!";
+                TempData["SuccessMessage"] = "Xóa lớp học thành công!";
             }
             catch (Exception ex)
             {

@@ -1,0 +1,95 @@
+﻿@model IEnumerable<Project_23TH0003.Models.EnrollmentViewModel>
+
+@{
+    ViewBag.Title = "Quản lý điểm sinh viên";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    var groupedByClass = Model.GroupBy(x => x.Class).ToList();
+    var groupedByYearSemester = Model.GroupBy(x => new { x.Class.Year, x.Class.Semester }).ToList();
+    int k = 1;
+}
+
+<h4 class="title">Quản lý điểm sinh viên</h4>
+
+<div id="gridContent">
+    @if (User.IsInRole("admin") || User.IsInRole("giangvien"))
+    {
+        <table class="table table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">STT</th>
+                    <th scope="col">Họ tên</th>
+                    <th scope="col">Điểm giữa kì</th>
+                    <th scope="col">Điểm kết thúc</th>
+                    <th scope="col">Điểm học phần</th>
+                </tr>
+            </thead>
+
+            @foreach (var classGroup in groupedByClass)
+            {
+                <tr>
+                    <td colspan="5" style="text-align:center"><strong>@classGroup.Key.Cours.CourseName - Học kì: @classGroup.Key.Semester - Năm học: @classGroup.Key.Year - GV: @classGroup.Key.Instructor.FullName</strong></td>
+                </tr>
+
+                int i = 1;
+                foreach (var item in classGroup)
+                {
+                    <tr>
+                        <td>@i</td>
+                        <td>@item.Student.FullName</td>
+                        <td>@item.Midterm</td>
+                        <td>@item.Final</td>
+                        <td>@item.TinhDiemHP</td>
+                    </tr>
+                    i++;
+                }
+            }
+        </table>
+    }
+    else if (User.IsInRole("sinhvien"))
+    {
+<table class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th scope="col">STT</th>
+            <th scope="col">Khóa học</th>
+            <th scope="col">Điểm giữa kì</th>
+            <th scope="col">Điểm kết thúc</th>
+            <th scope="col">Điểm Học phần</th>
+        </tr>
+    </thead>
+
+    @foreach (var yearSemesterGroup in groupedByYearSemester)
+    {
+        <tr>
+            <td colspan="6" style="text-align:center"><strong>Năm học: @yearSemesterGroup.Key.Year - Học kì: @yearSemesterGroup.Key.Semester</strong></td>
+        </tr>
+
+        int i = 1;
+        foreach (var item in yearSemesterGroup)
+        {
+            <tr>
+                <td>@i</td>
+                <td>@item.Class.Cours.CourseName</td>
+                <td>@item.Midterm</td>
+                <td>@item.Final</td>
+                <td style="color:red;">@item.TinhDiemHP</td>
+            </tr>
+            i++;
+        }
+        <tr>
+            <td>Tổng số tín chỉ học kỳ: </td>
+            <td colspan="4"></td>
+        </tr>
+        <tr>
+            <td>Điểm trung bình học kỳ: </td>
+            <td colspan="4"></td>
+        </tr>
+        <tr>
+            <td>Điểm trung bình tích lũy: </td>
+            <td colspan="4"></td>
+        </tr>
+    }
+
+</table>
+    }
+</div>

@@ -10,7 +10,7 @@
 }
 
 <h4 class="title">Đăng ký môn học</h4>
-
+@Html.Partial("_AlertMessages")
 <div class="row">
     <div class="col-3"><b>Khóa học: </b> @classe.Cours.CourseName</div>
     <div class="col-3"><b>Giảng viên: </b>  @classe.Instructor.FullName</div>
@@ -101,4 +101,6 @@
             input.focus();
         }
     }
+}
+
 </script>
