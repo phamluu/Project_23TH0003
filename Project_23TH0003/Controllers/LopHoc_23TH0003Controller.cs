@@ -197,6 +197,7 @@ namespace Project_23TH0003.Controllers
                 db.Classes.Remove(@class);
                 db.SaveChanges();
                 TempData["SuccessMessage"] = "Xóa lớp học thành công!";
+                return RedirectToAction("Index");
             }
             catch (Exception ex)
             {
