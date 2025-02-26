@@ -11,6 +11,7 @@
 <p>
     @Html.ActionLink("Thêm mới", "Create", "", new {@class="btn btn-default"})
 </p>
+@Html.Partial("_AlertMessages")
 @if (User.IsInRole("admin")) {
 <div class="form-search">
     @using (Html.BeginForm("TimKiemNC", "LopHoc_23TH0003", FormMethod.Get))

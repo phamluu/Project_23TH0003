@@ -186,8 +186,23 @@ namespace Project_23TH0003.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             Class @class = db.Classes.Find(id);
-            db.Classes.Remove(@class);
-            db.SaveChanges();
+            try
+            {
+                var enrollments = db.Enrollments.Where(x => x.ClassID == id);
+                if (enrollments != null && enrollments.Count() > 0)
+                {
+                    TempData["ErrorMessage"] = "Không thể xóa lớp học này. Vui lòng xóa sinh viên khỏi đăng ký lớp học này trước";
+                    return RedirectToAction("Index");
+                }
+                db.Classes.Remove(@class);
+                db.SaveChanges();
+                TempData["SuccessMessage"] = "Thêm lớp học thành công!";
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            TempData["ErrorMessage"] = "Không thể xóa lớp học này";
             return RedirectToAction("Index");
         }
 
