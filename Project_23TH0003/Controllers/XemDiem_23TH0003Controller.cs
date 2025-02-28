@@ -15,8 +15,31 @@ namespace Project_23TH0003.Controllers
     {
         private Project_23TH0003Entities db = new Project_23TH0003Entities();
 
-        [Authorize(Roles = "admin,sinhvien,giangvien")]
+        // Xem bảng điêm tất cả các môn của tất cả sinh viên
         public ActionResult Index()
+        {
+            var classs = db.Courses;
+            var students = db.Students.Include(s => s.Enrollments.Select(e => e.Class)).ToList();
+            var viewModel = students.Select(student => new XemDiemViewModel
+            {
+                studentId = student.StudentID,
+                Student = student,
+                ListDiem = student.Enrollments.Select(e => new DiemViewModel
+                {
+                    classId = e.ClassID,
+                    Midterm = e.Midterm,
+                    Final = e.Final,
+                    SoTinChi = e.Class.Cours.Credits,
+                    Class = e.Class
+                }).ToList()
+            }).ToList();
+            ViewBag.CourseID = db.Courses.ToList();
+            return View(viewModel);
+        }
+        
+        // Xem bảng điểm group theo môn
+        [Authorize(Roles = "admin,sinhvien,giangvien")]
+        public ActionResult XemDiemTheoMon()
         {
             var UserID = User.Identity.GetUserId();
             if (User.IsInRole("admin"))
@@ -76,6 +99,32 @@ namespace Project_23TH0003.Controllers
 
             return View();
         }
+
+        // Xem bảng điểm chi tiết của 1 sinh viên
+        public ActionResult XemDiemSinhVien(int studentId)
+        {
+            var student = db.Students.SingleOrDefault(x => x.StudentID == studentId);
+            if (student != null)
+            {
+                var enrollments = db.Enrollments.Include(e => e.Class).Include(e => e.Student)
+                    .Where(e => e.StudentID == student.StudentID).
+                    Select(e => new EnrollmentViewModel
+                    {
+                        ClassID = e.ClassID,
+                        StudentID = e.StudentID,
+                        Class = e.Class,
+                        Student = e.Student,
+                        Midterm = e.Midterm,
+                        Final = e.Final,
+                        EnrollmentID = e.EnrollmentID,
+                    });
+                ViewBag.Student = student;
+                return View(enrollments.ToList());
+            }
+            return View();
+        }
+
+        
 
         // GET: XemDiem_23TH0003/Details/5
         public ActionResult Details(int? id)

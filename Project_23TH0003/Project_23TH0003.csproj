@@ -376,7 +376,9 @@
     <Content Include="Views\XemDiem_23TH0003\Delete.cshtml" />
     <Content Include="Views\XemDiem_23TH0003\Details.cshtml" />
     <Content Include="Views\XemDiem_23TH0003\Edit.cshtml" />
+    <Content Include="Views\XemDiem_23TH0003\XemDiemTheoMon.cshtml" />
     <Content Include="Views\XemDiem_23TH0003\Index.cshtml" />
+    <Content Include="Views\XemDiem_23TH0003\XemDiemSinhVien.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

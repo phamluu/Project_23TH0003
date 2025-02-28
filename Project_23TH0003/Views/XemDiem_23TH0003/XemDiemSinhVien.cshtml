@@ -1,0 +1,59 @@
+﻿@model IEnumerable<Project_23TH0003.Models.EnrollmentViewModel>
+@using Project_23TH0003.Models
+@{
+    ViewBag.Title = "XemDiemSinhVien";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    var groupedByClass = Model.GroupBy(x => x.Class).ToList();
+    var groupedByYearSemester = Model.GroupBy(x => new { x.Class.Year, x.Class.Semester }).ToList();
+    Student student = (Student)ViewBag.Student;
+}
+
+<h4 class="title">Quản lý điểm sinh viên @student.FullName</h4>
+<div class="no-print mb-3">
+    <button onclick="window.print()">In Bảng Điểm</button>
+</div>
+<table class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th scope="col">STT</th>
+            <th scope="col">Khóa học</th>
+            <th scope="col">Điểm giữa kì</th>
+            <th scope="col">Điểm kết thúc</th>
+            <th scope="col">Điểm Học phần</th>
+        </tr>
+    </thead>
+
+    @foreach (var yearSemesterGroup in groupedByYearSemester)
+    {
+        <tr>
+            <td colspan="6" style="text-align:center"><strong>Năm học: @yearSemesterGroup.Key.Year - Học kì: @yearSemesterGroup.Key.Semester</strong></td>
+        </tr>
+
+        int i = 1;
+        foreach (var item in yearSemesterGroup)
+        {
+            <tr>
+                <td>@i</td>
+                <td>@item.Class.Cours.CourseName</td>
+                <td>@item.Midterm</td>
+                <td>@item.Final</td>
+                <td style="color:red;">@item.TinhDiemHP</td>
+            </tr>
+            i++;
+        }
+        <tr>
+            <td colspan="2">Tổng số tín chỉ học kỳ: </td>
+            <td colspan="3"></td>
+        </tr>
+        <tr>
+            <td colspan="2">Điểm trung bình học kỳ: </td>
+            <td colspan="3"></td>
+        </tr>
+        <tr>
+            <td colspan="2">Điểm trung bình tích lũy: </td>
+            <td colspan="3"></td>
+        </tr>
+    }
+
+</table>
+
