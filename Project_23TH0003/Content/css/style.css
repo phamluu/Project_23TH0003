@@ -1,6 +1,13 @@
 ﻿a{
     text-decoration:none;
 }
+ul{
+    padding:0;
+    margin:0;
+}
+ul li{
+    list-style-type:none;
+}
 .btn {
     border: #107299 1px solid;
     background: #107299;  
@@ -66,3 +73,56 @@ footer {
 .btn-default:hover {
     background: gray;
 }
+.dropdown-menu {
+    background: rgb(34 107 143);
+}
+
+.tabs {
+    margin: 50px auto;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.tab-header {
+    display: flex;
+    background-color: #f1f1f1;
+}
+
+.tab-button {
+    padding: 14px 20px;
+    cursor: pointer;
+    border: none;
+    background-color: #f1f1f1;
+    font-size: 16px;
+    text-align: center;
+}
+
+    .tab-button:hover {
+        background-color: #ddd;
+    }
+
+.tab-content {
+    display: none;
+    background-color: #f9f9f9;
+    border-top: 1px solid #ddd;
+}
+
+    .tab-content.active {
+        display: block;
+    }
+.parent-tab-button {
+    color: green;
+    font-weight: 700;
+}
+    .parent-tab-button.active{
+        background-color:green !important;
+        color:#fff;
+    }
+    .child-tab-button {
+        color: red;
+        font-weight: 700;
+    }
+    .child-tab-button.active{
+        background-color:red !important;
+        color:#fff;
+    }

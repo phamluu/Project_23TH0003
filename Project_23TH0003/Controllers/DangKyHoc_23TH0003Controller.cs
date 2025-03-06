@@ -17,6 +17,46 @@ namespace Project_23TH0003.Controllers
     {
         private Project_23TH0003Entities db = new Project_23TH0003Entities();
 
+        #region Đăng ký học phần
+        public ActionResult Index()
+        {
+            var ListClasses = db.Classes.ToList();
+            var ListStudents = db.Enrollments.ToList();
+            ViewBag.ListClasses = ListClasses;
+            return View(ListStudents);
+        }
+        [Authorize(Roles = "admin, giangvien")]
+        [HttpPost]
+        public ActionResult List(int ClassID, List<int> StudentID)
+        {
+            var classs = db.Classes.Find(ClassID);
+            if (classs == null)
+            {
+                TempData["ErrorMessage"] = "Không tồn tại khóa học";
+                return RedirectToAction("Index");
+            }
+            if (StudentID == null)
+            {
+                TempData["ErrorMessage"] = "Không có sinh viên đăng ký khóa học" + classs.Cours.CourseName;
+                return RedirectToAction("Index");
+            }
+            foreach (var item in StudentID)
+            {
+                if (db.Enrollments.Any(e => e.ClassID == ClassID && e.StudentID == item)) continue;
+                var enrollment = new Enrollment
+                {
+                    ClassID = ClassID,
+                    StudentID = item
+                };
+                db.Enrollments.Add(enrollment);
+                db.SaveChanges();
+            }
+            TempData["SuccessMessage"] = "Đăng ký học phần " + classs.Cours.CourseName + " thành công.";
+            return RedirectToAction("Index");
+        }
+
+        #endregion
+
         [Authorize(Roles = "admin, giangvien")]
         public ActionResult List(int ClassID)
         {
@@ -55,27 +95,7 @@ namespace Project_23TH0003.Controllers
             
             return RedirectToAction("List", new { ClassID = classID });
         }
-        [Authorize(Roles = "admin, giangvien")]
-        [HttpPost]
-        public ActionResult List(int ClassID, List<int> StudentID)
-        {
-            if (StudentID == null)
-            {
-                return RedirectToAction("List", new { ClassID = ClassID });
-            }
-            foreach (var item in StudentID)
-            {
-                if(db.Enrollments.Any(e => e.ClassID == ClassID && e.StudentID == item )) continue;
-                var enrollment = new Enrollment
-                {
-                    ClassID = ClassID,
-                    StudentID = item
-                };
-                db.Enrollments.Add(enrollment);
-                db.SaveChanges();
-            }
-            return RedirectToAction("List", new { ClassID = ClassID });
-        }
+        
         
 
         [Authorize(Roles = "admin")]

@@ -1,49 +1,54 @@
-﻿@model IEnumerable<Project_23TH0003.Models.XemDiemViewModel>
+﻿@model List<Project_23TH0003.Models.XemDiemTheoNamHoc>
 @{
     ViewBag.Title = "Xem điểm tổng kết";
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
-    int STT = 1;
 }
 
-<h4 class="title">Quản lý điểm sinh viên</h4>
-<div class="no-print mb-3">
-    <button onclick="window.print()">In Bảng Điểm</button>
-</div>
-<div id="gridContent">
-    <table>
-        <thead>
-        <th>STT</th>
-        <th>Sinh viên</th>
-        @foreach (var lop in ViewBag.CourseID) { 
-            <th>@lop.CourseName</th>
-        }
-        <th>Điểm TB HK</th>
-        <th>Điểm TB Tích lũy</th>
-        <th>Chi tiết</th>
-        </thead>
-        @foreach (var student in Model)
+<h3 class="title">Xem điểm sinh viên</h3>
+<div class="tabs">
+    <div class="tab-header">
+        @foreach (var namhoc in Model)
         {
-            <tr>
-                <td>@STT</td>
-                <td>@student.Student.FullName</td>
-                @foreach (var lop in ViewBag.CourseID)
-                {
-                    var diem = student.ListDiem.Where(x => x.Class.CourseID == lop.CourseID).FirstOrDefault();
-
-                    if (diem != null)
-                    {
-                        <td>@diem.DiemHP</td>
-                    }
-                    else
-                    {
-                        <td></td>
-                    }
-                }
-                <td style="color:red;">@student.DiemTBHocKy</td>
-                <td>@student.DiemTBTichLuy</td>
-                <td><a href='@Url.Action("XemDiemSinhVien","XemDiem_23TH0003", new {studentId = student.studentId})'>Xem</a></td>
-            </tr>
-            STT++;
+            <button class="tab-button" onclick="openTab(event, 'tab_@namhoc.Year')" style="color:green; font-weight:700;">Năm học @namhoc.Year</button>
         }
-    </table>
+
+    </div>
+
+    @foreach (var namhoc in Model)
+    {
+        <div id='tab_@namhoc.Year' class="tab-content">
+            @foreach (var hocky in namhoc.LisDiemHocKy)
+            {
+                <p style="text-align:center; color:green;"><strong>Học kỳ @hocky.semester - Năm học: @namhoc.Year</strong></p>
+                <table class="table table-borderd table-hover">
+                    <thead class="grid-footer">
+                    <th>STT</th>
+                    <th>Sinh viên</th>
+                    @foreach (var mon in hocky.ListClass)
+                    {
+                        <th>@mon.Cours.CourseName</th>
+                    }
+                    <th>Điểm TB học kỳ</th>
+                    <th>Chi tiết</th>
+                    </thead>
+                    @foreach (var (sinhvien, index) in hocky.ListDiemSinhVien.Select((value, idx) => (value, idx)))
+                    {
+                        <tr>
+                            <td style="text-align:center;">@(index + 1)</td>
+                            <td>@sinhvien.student.FullName</td>
+                            @foreach (var mon in hocky.ListClass)
+                            {
+                                var DiemHP = sinhvien.ListDiem.Where(x => x.Class.ClassID == mon.ClassID).FirstOrDefault();
+                                decimal? Diem = DiemHP != null ? DiemHP.DiemHP : null;
+                                <td style="text-align:right;">@Diem</td>
+                            }
+                            <td style="text-align:right;">@sinhvien.DiemTBHocKy</td>
+                            <td style="text-align:center;"><a href='@Url.Action("XemDiemSinhVien","XemDiem_23TH0003", new {@studentId = sinhvien.student.StudentID})'>Xem</a></td>
+                        </tr>
+                    }
+                </table>
+            }
+        </div>
+    }
+</div>
 </div>

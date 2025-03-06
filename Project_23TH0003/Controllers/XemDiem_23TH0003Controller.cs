@@ -18,26 +18,108 @@ namespace Project_23TH0003.Controllers
         // Xem bảng điêm tất cả các môn của tất cả sinh viên
         public ActionResult Index()
         {
-            var classs = db.Courses;
-            var students = db.Students.Include(s => s.Enrollments.Select(e => e.Class)).ToList();
-            var viewModel = students.Select(student => new XemDiemViewModel
+            var allClasses = db.Classes.ToList();
+            var allEnrollments = db.Enrollments.ToList();
+            var groupedClassesByYear = allClasses.GroupBy(x => x.Year).ToList();
+            List<XemDiemTheoNamHoc> ListNamHoc = new List<XemDiemTheoNamHoc>();
+
+            foreach (var nam in groupedClassesByYear)
             {
-                studentId = student.StudentID,
-                Student = student,
-                ListDiem = student.Enrollments.Select(e => new DiemViewModel
+                var _diemnamhoc = new XemDiemTheoNamHoc
                 {
-                    classId = e.ClassID,
-                    Midterm = e.Midterm,
-                    Final = e.Final,
-                    SoTinChi = e.Class.Cours.Credits,
-                    Class = e.Class
-                }).ToList()
-            }).ToList();
-            ViewBag.CourseID = db.Courses.ToList();
-            return View(viewModel);
+                    Year = nam.Key,
+                    LisDiemHocKy = new List<XemDiemTheoHocKy>()
+                };
+
+                // Group các lớp theo học kỳ trong mỗi năm.
+                var groupedClassesBySemester = nam.GroupBy(x => new { x.Semester, x.Year }).ToList();
+
+                foreach (var hk in groupedClassesBySemester)
+                {
+                    var _diemHocKy = new XemDiemTheoHocKy
+                    {
+                        semester = hk.Key.Semester,
+                        ListClass = hk.ToList(),
+                        ListDiemSinhVien = new List<XemDiemSinhVien>()
+                    };
+
+                    // Lấy danh sách sinh viên đã đăng ký các lớp trong học kỳ và năm học cụ thể
+                    var lstSinhVien = allEnrollments
+                        .Where(x => x.Class.Year == hk.Key.Year && x.Class.Semester == hk.Key.Semester)
+                        .Select(x => x.Student)
+                        .Distinct()
+                        .ToList();
+
+                    foreach (var sinhvien in lstSinhVien)
+                    {
+                        var diemSinhVien = new XemDiemSinhVien
+                        {
+                            student = sinhvien,
+                            ListDiem = allEnrollments
+                                .Where(x => x.StudentID == sinhvien.StudentID && x.Class.Year == hk.Key.Year && x.Class.Semester == hk.Key.Semester)
+                                .Select(x => new DiemViewModel { Midterm = x.Midterm, Final = x.Final, Class = x.Class })
+                                .ToList()
+                        };
+                        _diemHocKy.ListDiemSinhVien.Add(diemSinhVien);
+                    }
+
+                    // Thêm học kỳ vào danh sách các học kỳ của năm học.
+                    _diemnamhoc.LisDiemHocKy.Add(_diemHocKy);
+                }
+
+                // Thêm năm học vào danh sách kết quả.
+                ListNamHoc.Add(_diemnamhoc);
+            }
+
+            return View(ListNamHoc);
         }
-        
-        // Xem bảng điểm group theo môn
+
+        public ActionResult NhapDiem()
+        {
+            var enrollments = db.Enrollments.Select(e => new EnrollmentViewModel
+            {
+                EnrollmentID = e.EnrollmentID,
+                ClassID = e.ClassID,
+                Class = e.Class,
+                StudentID = e.StudentID,
+                Student = e.Student,
+                Midterm = e.Midterm,
+                Final = e.Final
+            });
+            return View(enrollments);
+        }
+        [HttpPost]
+        public ActionResult UpdateScores(int classID, List<Enrollment> ListEnrollments)
+        {
+            var classes = db.Classes.SingleOrDefault(c => c.ClassID == classID);
+            if (classes == null)
+            {
+                TempData["ErrorMessage"] = "Không tồn tại khóa học";
+                return RedirectToAction("NhapDiem");
+            }
+            if (ListEnrollments != null)
+            {
+                foreach (var item in ListEnrollments)
+                {
+                    var enrollment = db.Enrollments.FirstOrDefault(e => e.EnrollmentID == item.EnrollmentID);
+
+                    if (enrollment != null)
+                    {
+                        enrollment.Midterm = item.Midterm;
+                        enrollment.Final = item.Final;
+                        db.SaveChanges();
+                    }
+                }
+                TempData["SuccessMessage"] = "Cập nhật điểm " + classes.Cours.CourseName + " thành công.";
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "Cập nhật điểm " + classes.Cours.CourseName + " thất bại.";
+            }
+
+            return RedirectToAction("NhapDiem");
+        }
+
         [Authorize(Roles = "admin,sinhvien,giangvien")]
         public ActionResult XemDiemTheoMon()
         {
@@ -104,24 +186,26 @@ namespace Project_23TH0003.Controllers
         public ActionResult XemDiemSinhVien(int studentId)
         {
             var student = db.Students.SingleOrDefault(x => x.StudentID == studentId);
-            if (student != null)
+            if (student == null)
             {
-                var enrollments = db.Enrollments.Include(e => e.Class).Include(e => e.Student)
-                    .Where(e => e.StudentID == student.StudentID).
-                    Select(e => new EnrollmentViewModel
+                return View();
+            }
+                XemDiemTongKet tongket = new XemDiemTongKet();
+                tongket.StudentId = studentId;
+                var groupedEnrollments = student.Enrollments.GroupBy(x => new { x.Class.Semester, x.Class.Year }).ToList();
+
+                tongket.ListDiemHocKy = groupedEnrollments
+                .Select(g => new XemDiemSinhVienTheoHocKy
+                {
+                    HocKyNamHoc = $"Học kỳ {g.Key.Semester} - Năm học {g.Key.Year}-{g.Key.Year + 1}",
+                    ListDiem = g.Select(e => new DiemViewModel
                     {
-                        ClassID = e.ClassID,
-                        StudentID = e.StudentID,
-                        Class = e.Class,
-                        Student = e.Student,
                         Midterm = e.Midterm,
                         Final = e.Final,
-                        EnrollmentID = e.EnrollmentID,
-                    });
-                ViewBag.Student = student;
-                return View(enrollments.ToList());
-            }
-            return View();
+                        Class = e.Class
+                    }).ToList()
+                }).ToList();
+            return View(tongket);
         }
 
         

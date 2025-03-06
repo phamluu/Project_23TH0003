@@ -1,95 +1,138 @@
-﻿@model IEnumerable<Project_23TH0003.Models.EnrollmentViewModel>
+﻿@using Project_23TH0003.Models
+@model IEnumerable<Project_23TH0003.Models.Enrollment>
 
 @{
-    ViewBag.Title = "Quản lý điểm sinh viên";
+    ViewBag.Title = "Đăng ký học phần";
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
-    var groupedByClass = Model.GroupBy(x => x.Class).ToList();
-    var groupedByYearSemester = Model.GroupBy(x => new { x.Class.Year, x.Class.Semester }).ToList();
-    int k = 1;
+    IEnumerable<Class> ListClass = (IEnumerable<Class>)ViewBag.ListClasses;
+    var ListNamHoc = ListClass.GroupBy(x => x.Year);
 }
+<style>
+    .class ul li button {
+        width: 100%;
+        display: block;
+        text-align: left;
+    }
 
-<h4 class="title">Quản lý điểm sinh viên</h4>
+    .tab-content {
+        padding: 10px 15px;
+    }
 
-<div id="gridContent">
-    @if (User.IsInRole("admin") || User.IsInRole("giangvien"))
-    {
-        <table class="table table-bordered table-hover">
-            <thead>
-                <tr>
-                    <th scope="col">STT</th>
-                    <th scope="col">Họ tên</th>
-                    <th scope="col">Điểm giữa kì</th>
-                    <th scope="col">Điểm kết thúc</th>
-                    <th scope="col">Điểm học phần</th>
-                </tr>
-            </thead>
-
-            @foreach (var classGroup in groupedByClass)
+    .class ul li a {
+        display: block;
+        padding: 10px 15px;
+        background: #295d83;
+        border-bottom: grey 1px solid;
+        color: #fff;
+    }
+</style>
+<h4 class="title">Đăng ký học phần</h4>
+@Html.Partial("_AlertMessages")
+<div class="tabs">
+    <div class="row">
+        <div class="col-md-3 class">
+            @if (ListClass != null)
             {
-                <tr>
-                    <td colspan="5" style="text-align:center"><strong>@classGroup.Key.Cours.CourseName - Học kì: @classGroup.Key.Semester - Năm học: @classGroup.Key.Year - GV: @classGroup.Key.Instructor.FullName</strong></td>
-                </tr>
+                <ul>
+                    @foreach (var nam in ListNamHoc)
+                    {
 
-                int i = 1;
-                foreach (var item in classGroup)
-                {
-                    <tr>
-                        <td>@i</td>
-                        <td>@item.Student.FullName</td>
-                        <td>@item.Midterm</td>
-                        <td>@item.Final</td>
-                        <td>@item.TinhDiemHP</td>
-                    </tr>
-                    i++;
-                }
+                        var hockys = nam.GroupBy(x => x.Semester);
+                        <li class="dropdown">
+                            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button"
+                               aria-haspopup="true" aria-expanded="false">Năm học @nam.Key - @(nam.Key + 1) <span class="caret"></span></a>
+                            <ul style="display:none;">
+                                @foreach (var hocky in hockys)
+                                {
+                                    var Lops = hocky.Where(x => x.Semester == hocky.Key);
+                                    <li class="dropdown">
+                                        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button"
+                                           aria-haspopup="true" aria-expanded="false">Học kỳ @hocky.Key<span class="caret"></span></a>
+                                        <ul style="display:none;">
+                                            @foreach (var lop in Lops)
+                                            {
+                                                <li style="list-style-type: none">
+                                                    <button class="tab-button" onclick="openTab(event, 'tab_@lop.ClassID')">@lop.Cours.CourseName</button>
+                                                </li>
+                                            }
+                                        </ul>
+                                    </li>
+
+                                }
+                            </ul>
+                        </li>
+                    }
+                </ul>
             }
-        </table>
-    }
-    else if (User.IsInRole("sinhvien"))
-    {
-<table class="table table-bordered table-hover">
-    <thead>
-        <tr>
-            <th scope="col">STT</th>
-            <th scope="col">Khóa học</th>
-            <th scope="col">Điểm giữa kì</th>
-            <th scope="col">Điểm kết thúc</th>
-            <th scope="col">Điểm Học phần</th>
-        </tr>
-    </thead>
+        </div>
+        <div class="col-md-9">
+            <div class="studentList" id="gridContent">
+                @foreach (var lop in ListClass)
+                {
+                    var students = lop.Enrollments;
+                    <div id='tab_@lop.ClassID' class="tab-content">
+                        <p><strong>Danh sách sinh viên đăng ký môn @lop.Cours.CourseName</strong></p>
+                        <p><strong>Giảng viên: </strong>@lop.Instructor.FullName</p>
+                        <p><strong>Học kỳ: </strong>@lop.Semester - <strong>Năm học: </strong>@lop.Year</p>
+                        @if (lop.Year >= DateTime.Now.Year)
+                        {
+                            <button type="button" class="btn btn-primary mt-3 mb-3" data-toggle="modal" data-target="#Modal_@lop.ClassID">
+                                Thêm sinh viên
+                            </button>
+                        }
 
-    @foreach (var yearSemesterGroup in groupedByYearSemester)
-    {
-        <tr>
-            <td colspan="6" style="text-align:center"><strong>Năm học: @yearSemesterGroup.Key.Year - Học kì: @yearSemesterGroup.Key.Semester</strong></td>
-        </tr>
+                        <table class="table table-borderd table-hover">
+                            <thead>
+                            <th>STT</th>
+                            <th>Sinh viên</th>
+                            <th>Chức năng</th>
+                            </thead>
 
-        int i = 1;
-        foreach (var item in yearSemesterGroup)
-        {
-            <tr>
-                <td>@i</td>
-                <td>@item.Class.Cours.CourseName</td>
-                <td>@item.Midterm</td>
-                <td>@item.Final</td>
-                <td style="color:red;">@item.TinhDiemHP</td>
-            </tr>
-            i++;
-        }
-        <tr>
-            <td>Tổng số tín chỉ học kỳ: </td>
-            <td colspan="4"></td>
-        </tr>
-        <tr>
-            <td>Điểm trung bình học kỳ: </td>
-            <td colspan="4"></td>
-        </tr>
-        <tr>
-            <td>Điểm trung bình tích lũy: </td>
-            <td colspan="4"></td>
-        </tr>
-    }
+                            @foreach (var item in students.Select((value, index) => new { value, index }))
+                            {
+                                <tr>
+                                    <td>@(item.index + 1)</td>
+                                    <td>@item.value.Student.FullName</td>
+                                    <td><a href="">Xóa</a></td>
+                                </tr>
+                            }
+                        </table>
+                    </div>
 
-</table>
-    }
+                    <div class="modal fade" id="Modal_@lop.ClassID" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Danh sách sinh viên</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                @using (Html.BeginForm("List", "DangKyHoc_23TH0003", FormMethod.Post))
+                                {
+                                    <input type="hidden" name="ClassID" , value="@lop.ClassID" />
+                                    <div class="modal-body">
+                                        @{
+                                            Html.RenderAction("GetStudents", "SinhVien_23TH0003");
+                                        }
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="submit" class="btn btn-primary">Lưu</button>
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                }
+
+            </div>
+        </div>
+    </div>
 </div>
+
+<script>
+    $(".dropdown-toggle").on("click", function () {
+        $(this).next().slideToggle();
+    })
+</script>

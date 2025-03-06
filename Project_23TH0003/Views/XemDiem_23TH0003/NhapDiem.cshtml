@@ -1,0 +1,87 @@
+﻿@using Project_23TH0003.Models
+@model IEnumerable<Project_23TH0003.Models.EnrollmentViewModel>
+
+@{
+    ViewBag.Title = "Nhập điểm";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    var grid = new WebGrid(Model, canPage: true, defaultSort: "CourseName", rowsPerPage: 10);
+
+    var groupNamHoc = Model.GroupBy(x => x.Class.Year);
+
+}
+
+<h4 class="title">@ViewBag.Title</h4>
+@Html.Partial("_AlertMessages")
+
+<div class="tabs">
+    <div class="tab-header">
+        @foreach (var nam in groupNamHoc)
+        {
+            <button class="parent-tab-button" onclick="openParentTab(event, 'nam_@nam.Key')">Năm học @nam.Key - @(nam.Key + 1)</button>
+        }
+    </div>
+
+
+    @foreach (var nam in groupNamHoc)
+    {
+        var groupClass = Model.Where(x => x.Class.Year == nam.Key).GroupBy(x => x.Class);
+        <div id='nam_@nam.Key' class="parent-tab-content tab-content">
+            <div class="tab-header">
+                @foreach (var lop in groupClass)
+                {
+                    <button class="child-tab-button" onclick="openChildTab(event, 'lop_@lop.Key.ClassID')">@lop.Key.Cours.CourseName</button>
+                }
+            </div>
+            @foreach (var lop in groupClass)
+            {
+                <div id='lop_@lop.Key.ClassID' class="child-tab-content tab-content">
+                    @using (Html.BeginForm("UpdateScores", "XemDiem_23TH0003", FormMethod.Post))
+                    {
+                        int STT = 0;
+                        <p style="text-align:center; "><strong>Nhập điểm môn học @lop.Key.Cours.CourseName - Năm học @nam.Key - @(nam.Key + 1)</strong></p>
+                        <button type="submit" class="btn btn-primary mb-3">Lưu điểm</button>
+                        <input type="hidden" name="classID" value="@lop.Key.ClassID"/>
+                        <div id="gridContent">
+                            <table class="table table-borderd table-hover">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">STT</th>
+                                        <th scope="col">Họ tên</th>
+                                        <th scope="col">Điểm giữa kì (@lop.Key.HeSo_Diem1)</th>
+                                        <th scope="col">Điểm kết thúc (@lop.Key.HeSo_Diem1)</th>
+                                        <th scope="col">Điểm Học phần</th>
+                                    </tr>
+                                </thead>
+                                @foreach (var item in lop)
+                                {
+                                    <input type="hidden" step="0.01" name="ListEnrollments[@STT].EnrollmentID" value="@item.EnrollmentID" class="form-control" />
+                                    <tr>
+                                        <td>@(STT + 1)</td>
+                                        <td>@item.Student.FullName</td>
+                                        <td><input type="number" step="0.01" name="ListEnrollments[@STT].Midterm" value="@item.Midterm" min=0 max=10 required class="form-control" onchange="validateInput(this)" /></td>
+                                        <td><input type="number" step="0.01" name="ListEnrollments[@STT].Final" value="@item.Final" min=0 max=10 required class="form-control" onchange="validateInput(this)" /></td>
+                                        <td style="color:red">@item.TinhDiemHP</td>
+                                    </tr>
+                                    STT++;
+                                }
+                            </table>
+                        </div>
+
+                    }
+
+                </div>
+            }
+        </div>
+    }
+</div>
+
+<script>
+    function validateInput(input) {
+        var value = parseFloat(input.value);
+        if (value < 0 || value > 10) {
+            alert("Điểm phải nằm trong khoảng từ 0 đến 10.");
+            input.value = "";
+            input.focus();
+        }
+    }
+</script>
