@@ -1,5 +1,10 @@
-﻿namespace XemDiem_23TH0003.Models
+﻿using System.ComponentModel.DataAnnotations;
+using XemDiem_23TH0003.Enums;
+
+namespace XemDiem_23TH0003.Models
 {
+   
+
     public class PhanCongGiangDay
     {
         public int Id { get; set; }
@@ -11,6 +16,7 @@
 
         public DateTime NgayPhanCong { get; set; }
 
-        public string VaiTro { get; set; } // Chính, trợ giảng,..
+        public VaiTroGiangVien VaiTro { get; set; } // Chính, trợ giảng,..
+        public string? GhiChu { get; set; }
     }
 }

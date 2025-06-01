@@ -3,19 +3,21 @@
     public class HocPhan
     {
         public int Id { get; set; }
-        public string? MaHP { get; set; }
+        public string? MaHocPhan { get; set; }
+        public string? TenHocPhan { get; set; }
+
+        public int IdHocKy { get; set; }
+        public HocKy? HocKy { get; set; }
+        public int? SoTinChi { get; set; }
 
         public int IdMonHoc { get; set; }
-        public MonHoc MonHoc { get; set; }
+        public MonHoc? MonHoc { get; set; }
         
-        public int IdGiangVien { get; set; }
-        public GiangVien GiangVien { get; set; }
-        
-        public string? TenHP { get; set; }
-        public int SoTC { get; set; }
-        public string ? HocKy { get; set; }
-        public int NamHoc { get; set; }
+        public ICollection<LopHocPhan>? LopHocPhans { get; set; }
 
-        public ICollection<LopHocPhan> LopHocPhans { get; set; } 
+      
+        public bool IsDeleted { get; set; }
+        public DateTime NgayTao { get; set; } = DateTime.UtcNow;
+        public DateTime? NgayCapNhat { get; set; }
     }
 }
