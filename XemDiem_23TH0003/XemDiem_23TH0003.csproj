@@ -29,6 +29,9 @@
     <Folder Include="Areas\SinhVien\Data\" />
     <Folder Include="Areas\SinhVien\Models\" />
     <Folder Include="Areas\SinhVien\Views\" />
+    <Folder Include="Helpers\" />
+    <Folder Include="ViewModels\" />
+    <Folder Include="Service\" />
   </ItemGroup>
 
 </Project>

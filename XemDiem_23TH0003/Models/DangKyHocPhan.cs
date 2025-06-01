@@ -14,7 +14,9 @@ namespace XemDiem_23TH0003.Models
         public int IdLopHocPhan { get; set; }
         public LopHocPhan LopHocPhan { get; set; }
 
-       // ví dụ: 0 = Chờ duyệt, 1 = Đã đăng ký, 2 = Đã hủy
+        public virtual Diem? Diem { get; set; }
+
+        // ví dụ: 0 = Chờ duyệt, 1 = Đã đăng ký, 2 = Đã hủy
         public int TrangThai { get; set; }
         [NotMapped]
         public TrangThaiDangKy TrangThaiEnum => (TrangThaiDangKy)TrangThai;

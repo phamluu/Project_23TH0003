@@ -7,11 +7,11 @@
         public string? TenKhoa { get; set; }
 
         public int? IdTruongKhoa { get; set; }
-        public GiangVien? TruongKhoa { get; set; }
+        public virtual GiangVien? TruongKhoa { get; set; }
 
-        public ICollection<GiangVien>? GiangViens { get; set; }
-        public ICollection<Lop>? Lops { get; set; }
-        public ICollection<MonHoc>? MonHocs { get; set; }
+        public virtual  ICollection<GiangVien>? GiangViens { get; set; }
+        public virtual  ICollection<Lop>? Lops { get; set; }
+        public virtual  ICollection<MonHoc>? MonHocs { get; set; }
 
         public bool IsDeleted { get; set; }
         public DateTime NgayTao { get; set; } = DateTime.UtcNow;
