@@ -1,0 +1,50 @@
+﻿@model IEnumerable<QLHocPhan_23TH0003.Models.HocKy>
+
+<div class="head_action">
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+        Thêm mới
+    </button>
+</div>
+<table id="grid">
+    <thead>
+        <td>Mã học kỳ</td>
+        <td>Tên học kỳ</td>
+        <td>Năm học</td>
+        <td>Cập nhật</td>
+        <td>Xóa</td>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.MaHocKy</td>
+                <td>@item.TenHocKy</td>
+                <td>@item.NamHoc</td>
+                <td></td>
+                <td></td>
+            </tr>
+        }
+        
+    </tbody>
+</table>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Thêm mới học kỳ</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            @Html.BeginForm("Create", "HocKy_23TH0003", FormMethod.Post))
+            {
+            <div class="modal-body">
+                @Html.Partial("_Fields", new QLHocPhan_23TH0003.Models.HocKy())
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-primary">Lưu thay đổi</button>
+            </div>
+            }
+        </div>
+    </div>
+</div>

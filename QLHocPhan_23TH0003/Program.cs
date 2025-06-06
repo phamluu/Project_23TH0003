@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using XemDiem_23TH0003.Data;
-using XemDiem_23TH0003.Extensions;
+using QLHocPhan_23TH0003.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,19 +10,14 @@ builder.Services.AddDbContext<MainDbContext>(options =>
     options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-// add dbcontext để tạo các migration
-builder.Services.AddDbContext<XemDiemDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-//end
-
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<MainDbContext>();
-
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews()
+    .AddRazorRuntimeCompilation(); // Bổ sung để load view không cần build lại
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Configure the HTTP request pipelines
 if (app.Environment.IsDevelopment())
 {
     app.UseMigrationsEndPoint();
@@ -36,23 +30,14 @@ else
 }
 
 app.UseHttpsRedirection();
-app.UseStaticFiles(); // bổ sung thêm hình anh, css, js, ...
-//.WithStaticAssets();
-//app.MapStaticAssets(); // bỏ tạm thời
+app.UseStaticFiles(); // bổ sung Middleware phục vụ các file tĩnh (CSS, JS, hình ảnh)
 app.UseRouting();
 
-//app.UseAuthorization(); Tạm thời bỏ 
+app.UseAuthorization();
+
+app.MapStaticAssets();
 
 
-
-// Router mặc định
-//app.MapControllerRoute(
-//    name: "default",
-//    pattern: "{controller=Home}/{action=Index}/{id?}")
-//    .WithStaticAssets();
-// Cấu hình Router area
-
-// Gọi Router
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllerRoute(
@@ -63,13 +48,11 @@ app.UseEndpoints(endpoints =>
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}",
     defaults: new { controller = "Home", action = "Index" },
-    dataTokens: new { Namespace = "XemDiem_23TH0003.Controllers" });
+    dataTokens: new { Namespace = "QLHocPhan_23TH0003.Controllers" });
 });
-//app.UseEndpoints(endpoints =>
-//{
-//    endpoints.MapCustomRoutes();
-//});
-//app.MapRazorPages()
-//   .WithStaticAssets();
+
+
+app.MapRazorPages()
+   .WithStaticAssets();
 
 app.Run();

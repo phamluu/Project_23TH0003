@@ -1,0 +1,22 @@
+﻿@model QLHocPhan_23TH0003.Models.HocKy
+
+<div class="mb-3">
+    @Html.LabelFor(model => model.MaHocKy, "Mã học kỳ", htmlAttributes: new { @class = "control-label col-md-4" })
+    @Html.EditorFor(model => model.MaHocKy, new { htmlAttributes = new { @class = "form-control" } })
+    @Html.ValidationMessageFor(model => model.MaHocKy, "", new { @class = "text-danger" })
+</div>
+<div class="mb-3">
+    @Html.LabelFor(model => model.TenHocKy, "Tên học kỳ", htmlAttributes: new { @class = "control-label col-md-4" })
+    @Html.EditorFor(model => model.TenHocKy, new { htmlAttributes = new { @class = "form-control" } })
+    @Html.ValidationMessageFor(model => model.TenHocKy, "", new { @class = "text-danger" })
+</div>
+<div class="mb-3">
+    @Html.LabelFor(model => model.ThuTu, "Thứ tự", htmlAttributes: new { @class = "control-label col-md-4" })
+    @Html.EditorFor(model => model.ThuTu, new { htmlAttributes = new { @class = "form-control" } })
+    @Html.ValidationMessageFor(model => model.ThuTu, "", new { @class = "text-danger" })
+</div>
+<div class="mb-3">
+    @Html.LabelFor(model => model.NamHoc, "Năm học", htmlAttributes: new { @class = "control-label col-md-4" })
+    @Html.EditorFor(model => model.NamHoc, new { htmlAttributes = new { @class = "form-control" } })
+    @Html.ValidationMessageFor(model => model.NamHoc, "", new { @class = "text-danger" })
+</div>

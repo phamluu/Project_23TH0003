@@ -4,33 +4,22 @@
     <TargetFramework>net9.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <UserSecretsId>aspnet-XemDiem_23TH0003-2320225b-6b64-4383-9bb1-11fb6cefe312</UserSecretsId>
+    <UserSecretsId>aspnet-QLHocPhan_23TH0003-0052985b-17ca-4b88-aa0f-75c482cc1256</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="9.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="9.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="9.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="9.0.3" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="9.0.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Areas\Admin\Controllers\" />
     <Folder Include="Areas\Admin\Data\" />
     <Folder Include="Areas\Admin\Models\" />
-    <Folder Include="Areas\GiangVien\Controllers\" />
-    <Folder Include="Areas\GiangVien\Data\" />
-    <Folder Include="Areas\GiangVien\Models\" />
-    <Folder Include="Areas\GiangVien\Views\" />
-    <Folder Include="Areas\SinhVien\Controllers\" />
-    <Folder Include="Areas\SinhVien\Data\" />
-    <Folder Include="Areas\SinhVien\Models\" />
-    <Folder Include="Areas\SinhVien\Views\" />
-    <Folder Include="Helpers\" />
-    <Folder Include="ViewModels\" />
-    <Folder Include="Service\" />
   </ItemGroup>
 
 </Project>
