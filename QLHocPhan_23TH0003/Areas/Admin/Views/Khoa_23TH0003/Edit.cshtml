@@ -1,0 +1,12 @@
+﻿@model QLHocPhan_23TH0003.Models.Khoa
+<form  action="/Admin/Khoa_23TH0003/Edit" method="post">
+    @Html.AntiForgeryToken()
+    <div class="modal-body">
+        @Html.HiddenFor(model => model.Id)
+        @Html.Partial("_Fields", Model)
+    </div>
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+        <a href="@Url.Action("Index", "Khoa_23TH0003")" class="btn btn-secondary">Danh sách</a>
+    </div>
+</form>

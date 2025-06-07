@@ -4,6 +4,10 @@ html {
 img{
     max-width:100%;
 }
+.text-bg-success {
+    background: green;
+    color: #fff;
+}
 @media (min-width: 768px) {
   html {
     font-size: 16px;

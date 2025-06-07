@@ -1,4 +1,5 @@
-﻿@{
+﻿@using QLHocPhan_23TH0003.Common.Constants
+@{
     var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
     var currentAction = ViewContext.RouteData.Values["action"]?.ToString();
 }
@@ -24,7 +25,9 @@
     <link href="/assets/demo/demo.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/jquery.dataTables.min.css"/>
 
-    <link href="/css/site.css" rel="stylesheet" />
+    <link href="/css/site.css" rel="stylesheet"/>
+    <script src="/assets/js/core/jquery.min.js"></script>
+
 </head>
 
 <body class="">
@@ -121,8 +124,11 @@
             </footer>
         </div>
     </div>
+    
+    
+
     <!--   Core JS Files   -->
-    <script src="/assets/js/core/jquery.min.js"></script>
+    
     <script src="/assets/js/core/popper.min.js"></script>
     <script src="/assets/js/core/bootstrap.min.js"></script>
     <script src="/assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>
@@ -141,6 +147,79 @@
         $(document).ready(function() {
           // Javascript method's body can be found in assets/js/demos.js
           $('#grid').DataTable();
+
+          // delete
+          $('.btn-delete').on('click', function () {
+                var id = $(this).data('id');
+                var url = $(this).data('url');
+                if (!confirm('Bạn có chắc chắn muốn xóa?')) return;
+
+                $.ajax({
+                        url: url,
+                        type: 'POST',
+                        data: { id: id },
+                        success: function (response) {
+                            if (response.status === true) {
+                                showToast(response.message || 'Thành công', 'success');
+                                $('tr[data-id="' + id + '"]').remove(); 
+                            } else {
+                                showToast(response.message || 'Vui lòng thử lại.', 'danger');
+                            }
+                        },
+                        error: function () {
+                            alert('Lỗi mạng khi xóa.');
+                        }
+                    });
+            });
+            // end delete
+
+            // submit create or edit
+             $(document).on('submit', '#@UiConstants.CreateEditForm', function(e) {
+                    e.preventDefault();
+                      debugger;
+                    var form = this;
+                    var formData = new FormData(form);
+                    var url = $(form).attr('action');
+                    var method = $(form).attr('method');
+                        $.ajax({
+                            url: url,
+                            type: method,
+                            data: formData,
+                            processData: false,
+                            contentType: false,
+                            success: function(response) {
+                                if (response.status === true) {
+                                    showToast(response.message || 'Thành công', 'success');
+                                    setTimeout(() => location.reload(), 1000);
+                                } else {
+                                    showToast(response.message || 'Vui lòng thử lại.', 'danger');
+                                }
+                            },
+                            error: function(xhr) {
+                                if (xhr.status === 419) {
+                                    alert('CSRF token không hợp lệ hoặc đã hết hạn.');
+                                } else {
+                                    alert('Lỗi kết nối máy chủ.');
+                                }
+                                console.log(xhr.responseText);
+                            }
+                        });
+                });
+               // end submit create or edit
+
+            function showToast(message, type = 'success') {
+                debugger;
+                const toastEl = document.getElementById('toast-notify');
+                const toastBody = document.getElementById('toast-message');
+
+                // Đổi màu nền theo loại
+                toastEl.className = 'toast align-items-center text-bg-' + type + ' border-0';
+                toastBody.innerText = message;
+
+                const toast = new bootstrap.Toast(toastEl);
+                toast.show();
+            }
+
           demo.initDashboardPageCharts();
         
         });

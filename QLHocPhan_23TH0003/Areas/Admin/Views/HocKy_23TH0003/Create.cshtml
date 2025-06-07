@@ -1,7 +1,21 @@
-﻿
-@{
-    ViewData["Title"] = "Create";
-}
-
-<h1>Create</h1>
+﻿@using QLHocPhan_23TH0003.Common.Constants
+@model QLHocPhan_23TH0003.Models.HocKy
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">Thêm mới học kỳ</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form id="@UiConstants.CreateEditForm" action="/Admin/HocKy_23TH0003/Create" method="post">
+            @Html.AntiForgeryToken()
+            <div class="modal-body">
+                @Html.Partial("_Fields", new QLHocPhan_23TH0003.Models.HocKy())
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+            </div>
+        </form>
+    </div>
+</div>
 

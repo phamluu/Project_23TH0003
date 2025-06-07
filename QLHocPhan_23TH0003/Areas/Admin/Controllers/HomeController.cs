@@ -1,10 +1,11 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace QLHocPhan_23TH0003.Areas.Admin.Controllers
 {
-    [Area("Admin")]
-    public class HomeController : Controller
+   
+    public class HomeController : BaseAdminController
     {
         // GET: HomeController
         public ActionResult Index()

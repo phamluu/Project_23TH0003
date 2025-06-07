@@ -1,0 +1,64 @@
+﻿@using QLHocPhan_23TH0003.Common.Constants
+@using QLHocPhan_23TH0003.Common.Helpers
+@model IEnumerable<QLHocPhan_23TH0003.Models.Khoa>
+
+<div class="head_action">
+    @Html.ModalButton("Thêm mới", "btn-primary", UiConstants.btnCreateModal, UiConstants.CreateModal)
+</div>
+@Html.Partial("_AlertMessages")
+    <table id="grid">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayName("Mã Khoa")
+            </th>
+            <th>
+                @Html.DisplayName("Tên Khoa")
+            </th>
+            <th>
+                @Html.DisplayName("Trưởng Khoa")
+            </th>
+            <th>
+                @Html.DisplayName("Ngày tạo")
+            </th>
+            <th>
+                @Html.DisplayName("Ngày cập nhật")
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null)
+        {
+            foreach (var item in Model)
+            {
+                <tr data-id="@item.Id">
+                    <td>
+                        @Html.DisplayFor(modelItem => item.MaKhoa)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TenKhoa)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TruongKhoa.HoTen)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.NgayTao)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.NgayCapNhat)
+                    </td>
+                    <td>
+                        @Html.EditButton("Khoa_23TH0003", item.Id)
+                        @Html.DeleteButton(item.Id, Url.Action("Delete", "Khoa_23TH0003"))
+                    </td>
+                </tr>
+            }
+        }
+        
+    </tbody>
+</table>
+
+<div class="modal fade" id="@UiConstants.CreateModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    @Html.Partial("Create", new QLHocPhan_23TH0003.Models.Khoa())
+</div>
