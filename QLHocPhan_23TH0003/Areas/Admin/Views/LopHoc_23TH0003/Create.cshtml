@@ -1,0 +1,63 @@
+﻿@model QLHocPhan_23TH0003.Models.Lop
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Create</title>
+</head>
+<body>
+
+<h4>Lop</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="MaLop" class="control-label"></label>
+                <input asp-for="MaLop" class="form-control" />
+                <span asp-validation-for="MaLop" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TenLop" class="control-label"></label>
+                <input asp-for="TenLop" class="form-control" />
+                <span asp-validation-for="TenLop" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="IdKhoa" class="control-label"></label>
+                <select asp-for="IdKhoa" class ="form-control" asp-items="ViewBag.IdKhoa"></select>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="IsDeleted" /> @Html.DisplayNameFor(model => model.IsDeleted)
+                </label>
+            </div>
+            <div class="form-group">
+                <label asp-for="NgayTao" class="control-label"></label>
+                <input asp-for="NgayTao" class="form-control" />
+                <span asp-validation-for="NgayTao" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NgayCapNhat" class="control-label"></label>
+                <input asp-for="NgayCapNhat" class="form-control" />
+                <span asp-validation-for="NgayCapNhat" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+</body>
+</html>

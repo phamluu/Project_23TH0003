@@ -1,0 +1,121 @@
+﻿@model IEnumerable<QLHocPhan_23TH0003.Models.LopHocPhan>
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+</head>
+<body>
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.MaLopHocPhan)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TenLopHocPhan)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SiSoToiDa)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ThoiGianHoc)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DiaDiemHoc)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.GhiChu)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.HeSoChuyenCan)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.HeSoGiuaKy)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.HeSoThucHanh)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.HeSoCuoiKy)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.HocPhan)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsDeleted)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NgayTao)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NgayCapNhat)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.MaLopHocPhan)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TenLopHocPhan)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SiSoToiDa)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ThoiGianHoc)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DiaDiemHoc)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.GhiChu)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.HeSoChuyenCan)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.HeSoGiuaKy)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.HeSoThucHanh)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.HeSoCuoiKy)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.HocPhan.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsDeleted)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NgayTao)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NgayCapNhat)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+</body>
+</html>
