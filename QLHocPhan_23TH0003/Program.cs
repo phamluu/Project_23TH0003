@@ -3,9 +3,28 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using QLHocPhan_23TH0003.Data;
+using QLHocPhan_23TH0003.Extensions;
 using QLHocPhan_23TH0003.Service;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// 💡 Cấu hình Serilog (ghi log ra file logs/log-2025-06-08.txt, theo ngày)
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Debug() // Log từ mức Debug trở lên
+    .WriteTo.File(
+        path: "logs/log-.txt",        // Ghi log ra thư mục logs/
+        rollingInterval: RollingInterval.Day,  // Tự chia file theo ngày
+        retainedFileCountLimit: 10,   // Giữ lại tối đa 10 file log cũ (tùy chọn)
+        fileSizeLimitBytes: 10_000_000, // Tùy chọn: 10MB/file (auto roll)
+        rollOnFileSizeLimit: true     // Chia file nếu vượt quá giới hạn
+    )
+    .CreateLogger();
+
+// ⚙️ Tích hợp Serilog vào ASP.NET Core
+builder.Host.UseSerilog();
+// 💡 End Cấu hình Serilog (ghi log ra file logs/log-2025-06-08.txt, theo ngày)
+
 
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
@@ -36,7 +55,8 @@ builder.Services.AddScoped<IRazorViewToStringRenderer, RazorViewToStringRenderer
 builder.Services.AddRazorPages(); // Bổ sugng khi dùng razor page với Identity
 
 builder.Services.AddTransient<IEmailSender, FakeEmailSender>(); // Đăng ký tạm thời fake email sender trong môi trường phát triển
-
+// Lưu key
+builder.Services.ConfigureDataProtection(builder.Environment);
 var app = builder.Build();
 
 // Configure the HTTP request pipelines
@@ -55,6 +75,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles(); // bổ sung Middleware phục vụ các file tĩnh (CSS, JS, hình ảnh)
 app.UseRouting();
 
+app.UseAuthentication(); // bổ sung tránh lỗi 403
 app.UseAuthorization();
 
 app.MapStaticAssets();
@@ -74,7 +95,7 @@ app.UseEndpoints(endpoints =>
 });
 
 
-app.MapRazorPages()
-   .WithStaticAssets();
+app.MapRazorPages();
+   //.WithStaticAssets(); Tạm xóa không rõ nguồn gốc
 
 app.Run();

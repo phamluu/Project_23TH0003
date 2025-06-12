@@ -1,15 +1,54 @@
 html {
   font-size: 14px;
 }
+section {
+    padding: 3rem 0;
+}
 img{
     max-width:100%;
+}
+.logo img{
+    max-height:60px;
+}
+footer {
+    background: #1062ab;
+    color: #fff;
+}
+.footer-bottom {
+    background: #0c0c56;
+    color: #fff;
+}
+.title span {
+    border-bottom: blue 2px solid;
+    padding: 0.5rem 0;
+    display: inline-block;
+}
+.title {
+    border-bottom: #33333326 1px solid;
+}
+.giaovien{
+    padding:0.5rem 0;
 }
 .text-bg-success {
     background: green;
     color: #fff;
 }
+.navbar-toggler, .navbar-toggler:hover, .navbar-toggler:focus {
+    border: none;
+    background: none;
+    box-shadow:none;
+}
+.login {
+    width: 500px;
+    max-width:100%;
+    margin: 3rem auto;
+    background: #f5eded36;
+    padding: 1.5rem;
+    border: #3333330f 1px solid;
+    border-radius: 0.5rem;
+}
 @media (min-width: 768px) {
-  html {
+    html {
     font-size: 16px;
   }
 }
@@ -23,9 +62,6 @@ html {
   min-height: 100%;
 }
 
-body {
-  margin-bottom: 60px;
-}
 
 .form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
   color: var(--bs-secondary-color);
@@ -38,4 +74,8 @@ body {
 
 .main-panel > .content{
     margin-top:0;
+}
+
+@media(max-width:490px){
+    .logo img{max-height:40px;}
 }

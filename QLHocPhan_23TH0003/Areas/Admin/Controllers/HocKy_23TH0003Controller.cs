@@ -7,8 +7,7 @@ using QLHocPhan_23TH0003.Service;
 
 namespace QLHocPhan_23TH0003.Areas.Admin.Controllers
 {
-    [Area("Admin")]
-    public class HocKy_23TH0003Controller : Controller
+    public class HocKy_23TH0003Controller : BaseAdminController
     {
         private readonly MainDbContext _context;
         private readonly IRazorViewToStringRenderer _renderer;
@@ -46,6 +45,7 @@ namespace QLHocPhan_23TH0003.Areas.Admin.Controllers
             try
             {
                 _context.HocKy.Add(model);
+                _context.SaveChanges();
                 TempData["SuccessMessage"] = "Thêm học kỳ thành công";
                 return Json(new {status = true, message = TempData["SuccessMessage"] });
             }

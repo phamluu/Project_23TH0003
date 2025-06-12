@@ -5,8 +5,7 @@ using QLHocPhan_23TH0003.Models;
 
 namespace QLHocPhan_23TH0003.Areas.Admin.Controllers
 {
-    [Area("Admin")]
-    public class Khoa_23TH0003Controller : Controller
+    public class Khoa_23TH0003Controller : BaseAdminController
     {
         private readonly MainDbContext _context;
 

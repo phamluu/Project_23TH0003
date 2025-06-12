@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace QLHocPhan_23TH0003.Areas.Admin.Controllers
@@ -7,6 +8,11 @@ namespace QLHocPhan_23TH0003.Areas.Admin.Controllers
    
     public class HomeController : BaseAdminController
     {
+        private readonly SignInManager<IdentityUser> _signInManager;
+        public HomeController(SignInManager<IdentityUser> signInManager)
+        {
+            _signInManager = signInManager;
+        }
         // GET: HomeController
         public ActionResult Index()
         {
@@ -80,6 +86,20 @@ namespace QLHocPhan_23TH0003.Areas.Admin.Controllers
             {
                 return View();
             }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Logout(string returnUrl = null)
+        {
+            await _signInManager.SignOutAsync();  // Đăng xuất người dùng
+
+            if (returnUrl != null)
+            {
+                return Redirect(returnUrl);  // Chuyển hướng nếu có URL
+            }
+
+            return RedirectToAction("Index", "Home", new { area = "" });  // Hoặc quay về trang chủ nếu không có returnUrl
         }
     }
 }

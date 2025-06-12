@@ -5,6 +5,11 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>aspnet-QLHocPhan_23TH0003-0052985b-17ca-4b88-aa0f-75c482cc1256</UserSecretsId>
+	
+	 <!-- Tắt biên dịch Razor view -->
+    <!--<RazorCompileOnBuild>false</RazorCompileOnBuild>
+    <RazorCompileOnPublish>false</RazorCompileOnPublish>-->
+	<!-- Tắt biên dịch Razor view -->
   </PropertyGroup>
 
   <ItemGroup>
@@ -16,11 +21,35 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="9.0.0" />
+    <PackageReference Include="Serilog.AspNetCore" Version="9.0.0" />
+    <PackageReference Include="Serilog.Sinks.File" Version="7.0.0" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Areas\Admin\Data\" />
     <Folder Include="Areas\Admin\Models\" />
+    <Folder Include="Areas\Student\Controllers\" />
+    <Folder Include="Areas\Student\Data\" />
+    <Folder Include="Areas\Student\Models\" />
+    <Folder Include="logs\" />
   </ItemGroup>
 
+	<!-- Gom các file dll vào chung thư mục libs-->
+
+
+	<!-- Gom các file dll vào chung thư mục -->
+
+<!-- 🔽 Bổ sung publish các thư mục ngôn ngữ vào 1 folder chung -->
+  <Target Name="MoveSatelliteAssemblies" AfterTargets="Publish">
+    <ItemGroup>
+      <SatelliteAssemblies Include="$(PublishDir)*\*.resources.dll" />
+    </ItemGroup>
+
+    <Message Importance="high" Text="Moving satellite assemblies to /lang folder" />
+    
+    <Copy SourceFiles="@(SatelliteAssemblies)" DestinationFiles="@(SatelliteAssemblies->'$(PublishDir)lang\%(RecursiveDir)%(Filename)%(Extension)')" />
+
+    <RemoveDir Directories="@(SatelliteAssemblies->'%(RootDir)%(Directory)')" />
+  </Target>
+  <!-- 🔼 Bổ sung publish các thư mục ngôn ngữ vào 1 folder chung -->
 </Project>

@@ -75,6 +75,10 @@ namespace QLHocPhan_23TH0003.Data
             {
                 entity.ToTable("LopHocPhan");
                 entity.HasKey(e => e.Id);
+                entity.Property(l => l.HeSoChuyenCan).HasColumnType("decimal(18,2)");
+                entity.Property(l => l.HeSoGiuaKy).HasColumnType("decimal(18,2)");
+                entity.Property(l => l.HeSoThucHanh).HasColumnType("decimal(18,2)");
+                entity.Property(l => l.HeSoCuoiKy).HasColumnType("decimal(18,2)");
                 entity.HasOne(e => e.HocPhan).WithMany(e => e.LopHocPhans).HasForeignKey(e => e.IdHocPhan);
                 entity.HasMany(e => e.DangKyHocPhans).WithOne(e => e.LopHocPhan).HasForeignKey(e => e.IdLopHocPhan);
                 entity.HasMany(e => e.PhanCongGiangDays).WithOne(e => e.LopHocPhan).HasForeignKey(e => e.IdLopHocPhan);
@@ -98,6 +102,11 @@ namespace QLHocPhan_23TH0003.Data
                 entity.ToTable("Diem");
                 entity.HasKey(e => e.Id);
                 entity.HasOne(e => e.DangKyHocPhan).WithOne(e => e.Diem).HasForeignKey<Diem>(e => e.IdDangKyHocPhan);
+                entity.Property(d => d.DiemChuyenCan).HasColumnType("decimal(18,2)");
+                entity.Property(d => d.DiemGiuaKy).HasColumnType("decimal(18,2)");
+                entity.Property(d => d.DiemThucHanh).HasColumnType("decimal(18,2)");
+                entity.Property(d => d.DiemCuoiKy).HasColumnType("decimal(18,2)");
+                entity.Property(d => d.DiemTrungBinh).HasColumnType("decimal(18,2)");
             });
 
             modelBuilder.Entity<SinhVien>(entity =>

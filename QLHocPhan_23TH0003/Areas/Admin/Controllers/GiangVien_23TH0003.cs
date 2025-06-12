@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace QLHocPhan_23TH0003.Areas.Admin.Controllers
 {
-    public class GiangVien_23TH0003 : Controller
+    public class GiangVien_23TH0003 : BaseAdminController
     {
         // GET: GiangVien_23TH0003
         public ActionResult Index()

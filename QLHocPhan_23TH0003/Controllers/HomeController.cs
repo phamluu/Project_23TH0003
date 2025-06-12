@@ -17,13 +17,20 @@ namespace QLHocPhan_23TH0003.Controllers
 
         public IActionResult Index()
         {
-            // Kiểm tra nếu chưa có người dùng nào sẽ về trang đăng ký tài khoản set quyền admin
-            var userCount = _userManager.Users.Count();
-            if (userCount == 0)
+            try
             {
-                return Redirect("/Identity/Account/Register");
+                var hasUser = _userManager.Users.Any();
+                if (!hasUser)
+                {
+                    return Redirect("/Identity/Account/Register");
+                }
+                return View();
             }
-            return View();
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Lỗi xảy ra trong HomeController.Index khi đếm số lượng người dùng.");
+                return RedirectToAction("Error");
+            }
         }
 
         public IActionResult Privacy()

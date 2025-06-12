@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - QLHocPhan_23TH0003</title>
+    <title>@ViewData["Title"] - Quản lý học phần</title>
     <script type="importmap"></script>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
@@ -11,26 +11,42 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Quản lý học phần</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
-                    <partial name="_LoginPartial" />
-                </div>
+        <div class="container">
+            <div class="max-w-screen-xl mx-auto">
+                <nav class="navbar navbar-expand-lg navbar-light border-b shadow-md">
+                    <!-- Logo (Navbar on the left) -->
+                    <a class="navbar-brand logo" href="/">
+                        <img src="~/img/logo.webp" alt="QLHocPhan_23TH0003" class="h-10">
+                    </a>
+
+                    <!-- Navbar Toggle Button (for mobile view) -->
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive"
+                    aria-expanded="false" aria-label="Toggle navigation" style="background:none; border:none">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+
+                    <!-- Navbar Links (collapsed on mobile) -->
+                    <div class="collapse navbar-collapse" id="navbarResponsive">
+                        <ul class="navbar-nav mb-2 mb-lg-0" style="margin:0 auto;">
+                            <li class="nav-item">
+                                <a class="nav-link" href="/">Trang chủ</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/Home/Privacy">Lớp học phần</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/Home/Privacy">Thông báo</a>
+                            </li>
+                        </ul>
+                        <partial name="_LoginPartial" />
+                    </div>
+
+                    <!-- Login Partial (aligned to the right on larger screens) -->
+                    
+                </nav>
             </div>
-        </nav>
+        </div>
+        
     </header>
     
         <main role="main" class="pb-3">
@@ -38,9 +54,21 @@
         </main>
    
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2025 - QLHocPhan_23TH0003 - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    <footer class="border-top footer">
+        <div class="container py-4">
+            <h4>TRƯỜNG ĐẠI HỌC NHA TRANG</h4>
+            <p>Trải qua 65 năm xây dựng và phát triển, Trường Đại học Nha Trang đã trở thành một trong những cơ sở đào tạo đa ngành, đa lĩnh vực quy mô lớn; là cơ sở nghiên cứu chủ đạo, triển khai ứng dụng công nghệ tiên tiến, đặc biệt trong lĩnh vực thủy sản phục vụ phát triển kinh tế xã hội khu vực Nam Trung Bộ, Tây Nguyên và phạm vi cả nước.</p>
+            <h4>Thông tin liên hệ</h4>
+            <p>Nguyễn Đình Chiểu, phường Vĩnh Thọ, Nha Trang, Khánh Hòa</p>
+            <p>
+                02583831149  02583831147
+            </p>
+            <p> dhnt@ntu.edu.vn  www.ntu.edu.vn</p>
+        </div>
+        <div class="footer-bottom py-2">
+            <div class="container">
+                &copy; 2025 - QLHocPhan_23TH0003
+            </div>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
