@@ -1,0 +1,52 @@
+﻿@using QLHocPhan_23TH0003.Common.Constants
+@using QLHocPhan_23TH0003.Common.Helpers
+@model IEnumerable<QLHocPhan_23TH0003.Models.Lop>
+@{
+    ViewBag.Title = "Thùng rác";
+}
+<h3>@ViewBag.Title</h3>
+
+@Html.Partial("_AlertMessages")
+
+<table id="grid">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayName("Mã lớp")
+            </th>
+            <th>
+                @Html.DisplayName("Tên lớp")
+            </th>
+            <th>
+                @Html.DisplayName("Khoa")
+            </th>
+            <th>
+                @Html.DisplayName("Ngày tạo")
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MaLop)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TenLop)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Khoa.TenKhoa)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NgayTao)
+                </td>
+                <td>
+                    @Html.DeleteHardButton(item.Id, Url.Action("HardDelete", "LopHoc_23TH0003"))
+                    @Html.RestoreButton(item.Id, Url.Action("Restore", "LopHoc_23TH0003"))
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

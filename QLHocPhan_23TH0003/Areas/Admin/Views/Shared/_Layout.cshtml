@@ -120,7 +120,8 @@
             </footer>
         </div>
     </div>
-    
+   
+    @Html.Partial("_toastNotify")
     
 
     <!--   Core JS Files   -->
@@ -176,6 +177,7 @@
                     var form = this;
                     var formData = new FormData(form);
                     var url = $(form).attr('action');
+                    var table = $('#grid').DataTable();
                     var method = $(form).attr('method');
                         $.ajax({
                             url: url,
@@ -186,7 +188,9 @@
                             success: function(response) {
                                 if (response.status === true) {
                                     showToast(response.message || 'Thành công', 'success');
-                                    setTimeout(() => location.reload(), 1000);
+                                    $('.modal').modal('hide');
+                                    table.ajax.reload(null, false);
+                                    //setTimeout(() => location.reload(), 1000);
                                 } else {
                                     showToast(response.message || 'Vui lòng thử lại.', 'danger');
                                 }
@@ -201,6 +205,11 @@
                             }
                         });
                 });
+
+            $(document).on('click', '#btnSave', function () {
+                const form = $(this).closest('form'); 
+                form.submit(); 
+            });
                // end submit create or edit
 
             function showToast(message, type = 'success') {

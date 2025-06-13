@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.Routing;
+using System.Text.Encodings.Web;
 
 namespace QLHocPhan_23TH0003.Common.Helpers
 {
@@ -17,16 +18,129 @@ namespace QLHocPhan_23TH0003.Common.Helpers
             button.InnerHtml.Append(text);
             return button;
         }
+        //public static IHtmlContent DeleteButton(this IHtmlHelper htmlHelper, object id, string url, string btnClass = "btn-danger btn-sm")
+        //{
+        //    var button = new TagBuilder("button");
+        //    button.Attributes["type"] = "button";
+        //    button.AddCssClass($"btn {btnClass} btn-delete");
+        //    button.Attributes["data-id"] = id?.ToString();
+        //    button.Attributes["data-url"] = url;
+        //    button.InnerHtml.Append("Xóa");
+        //    return button;
+        //}
+
+        // Khôi phục
+        public static IHtmlContent RestoreButton(this IHtmlHelper htmlHelper, object id, string url, string btnClass = "btn-success btn-sm")
+        {
+            // Form tag
+            var form = new TagBuilder("form");
+            form.Attributes["action"] = url;
+            form.Attributes["method"] = "post";
+            form.Attributes["onsubmit"] = "return confirm('Bạn có chắc chắn muốn khôi phục?');";
+            form.AddCssClass("d-inline");
+
+            // Anti-forgery token
+            var antiForgery = htmlHelper.AntiForgeryToken();
+
+            // Hidden ID input
+            var hidden = new TagBuilder("input");
+            hidden.Attributes["type"] = "hidden";
+            hidden.Attributes["name"] = "id";
+            hidden.Attributes["value"] = id?.ToString();
+
+            // Submit button
+            var button = new TagBuilder("button");
+            button.Attributes["type"] = "submit";
+            button.AddCssClass($"btn {btnClass}");
+            button.InnerHtml.Append("Khôi phục");
+
+            // Gộp các phần tử vào form
+            using var writer = new System.IO.StringWriter();
+            antiForgery.WriteTo(writer, HtmlEncoder.Default);
+            hidden.WriteTo(writer, HtmlEncoder.Default);
+            button.WriteTo(writer, HtmlEncoder.Default);
+            form.InnerHtml.AppendHtml(writer.ToString());
+
+            return form;
+        }
+        // Xóa vĩnh viễn
+        public static IHtmlContent DeleteHardButton(this IHtmlHelper htmlHelper, object id, string url, string btnClass = "btn-danger btn-sm")
+        {
+            // Form tag
+            var form = new TagBuilder("form");
+            form.Attributes["action"] = url;
+            form.Attributes["method"] = "post";
+            form.Attributes["onsubmit"] = "return confirm('Bạn có chắc chắn muốn xóa vĩnh viễn?');";
+            form.AddCssClass("d-inline");
+
+            // Anti-forgery token
+            var antiForgery = htmlHelper.AntiForgeryToken();
+
+            // Hidden ID input
+            var hidden = new TagBuilder("input");
+            hidden.Attributes["type"] = "hidden";
+            hidden.Attributes["name"] = "id";
+            hidden.Attributes["value"] = id?.ToString();
+
+            // Submit button
+            var button = new TagBuilder("button");
+            button.Attributes["type"] = "submit";
+            button.AddCssClass($"btn {btnClass}");
+            button.InnerHtml.Append("Xóa vĩnh viễn");
+
+            // Gộp các phần tử vào form
+            using var writer = new System.IO.StringWriter();
+            antiForgery.WriteTo(writer, HtmlEncoder.Default);
+            hidden.WriteTo(writer, HtmlEncoder.Default);
+            button.WriteTo(writer, HtmlEncoder.Default);
+            form.InnerHtml.AppendHtml(writer.ToString());
+
+            return form;
+        }
         public static IHtmlContent DeleteButton(this IHtmlHelper htmlHelper, object id, string url, string btnClass = "btn-danger btn-sm")
         {
+            // Form tag
+            var form = new TagBuilder("form");
+            form.Attributes["action"] = url;
+            form.Attributes["method"] = "post";
+            form.Attributes["onsubmit"] = "return confirm('Bạn có chắc chắn muốn xóa?');";
+            form.AddCssClass("d-inline"); 
+
+            // Anti-forgery token
+            var antiForgery = htmlHelper.AntiForgeryToken();
+
+            // Hidden ID input
+            var hidden = new TagBuilder("input");
+            hidden.Attributes["type"] = "hidden";
+            hidden.Attributes["name"] = "id";
+            hidden.Attributes["value"] = id?.ToString();
+
+            // Submit button
             var button = new TagBuilder("button");
-            button.Attributes["type"] = "button";
-            button.AddCssClass($"btn {btnClass} btn-delete");
-            button.Attributes["data-id"] = id?.ToString();
-            button.Attributes["data-url"] = url;
-            button.InnerHtml.Append("Xóa");
-            return button;
+            button.Attributes["type"] = "submit";
+            button.AddCssClass($"btn {btnClass}");
+            button.InnerHtml.Append("Xóa");
+
+            // Gộp các phần tử vào form
+            using var writer = new System.IO.StringWriter();
+            antiForgery.WriteTo(writer, HtmlEncoder.Default);
+            hidden.WriteTo(writer, HtmlEncoder.Default);
+            button.WriteTo(writer, HtmlEncoder.Default);
+            form.InnerHtml.AppendHtml(writer.ToString());
+
+            return form;
         }
+        public static string BuildDeleteFormHtml(int id, string actionUrl, string token, string buttonClass = "btn btn-sm btn-danger", string confirmMessage = "Bạn có chắc muốn xóa?")
+        {
+            var form = new TagBuilder("form");
+            return $@"
+            <form action='{actionUrl}' method='post' style='display:inline;' onsubmit='return confirm(""{confirmMessage}"")'>
+                <input type='hidden' name='id' value='{id}' />
+                <input type='hidden' name='__RequestVerificationToken' value='{token}' />
+                <button type='submit' class='{buttonClass}'>Xóa</button>
+            </form>";
+        }
+
         public static IHtmlContent EditButton(this IHtmlHelper htmlHelper, string controller, object id, string action = "Edit", string btnClass = "btn-edit", string text = "Cập nhật")
         {
             // ✅ Lấy IUrlHelper thông qua DI để tương thích với endpoint routing

@@ -1,0 +1,24 @@
+﻿@model QLHocPhan_23TH0003.ViewModel.LopViewModel
+@using QLHocPhan_23TH0003.Common.Constants
+<div class="form-group">
+    <label asp-for="MaLop" class="control-label">Mã lớp</label>
+    @Html.EditorFor(model => model.MaLop, new { htmlAttributes = new { @class = "form-control" } })
+    <span asp-validation-for="MaLop" class="text-danger"></span>
+</div>
+<div class="form-group">
+    <label asp-for="TenLop" class="control-label">Tên lớp</label>
+    @Html.EditorFor(model => model.TenLop, new { htmlAttributes = new { @class = "form-control" } })
+    <span asp-validation-for="TenLop" class="text-danger"></span>
+</div>
+<div class="form-group">
+    <label asp-for="IdKhoa" class="control-label">Khoa</label>
+    <select asp-for="IdKhoa" name="IdKhoa" class="form-control">
+        <option value="">-- Chọn khoa --</option>
+        @foreach (var khoa in Model.KhoaList)
+        {
+            <option value="@khoa.Id" @(khoa.Id == Model.IdKhoa ? "selected" : "")>
+                @khoa.TenKhoa
+            </option>
+        }
+    </select>
+</div>

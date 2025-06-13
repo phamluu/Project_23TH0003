@@ -1,46 +1,35 @@
-﻿@model IEnumerable<QLHocPhan_23TH0003.Models.Lop>
-
+﻿@using QLHocPhan_23TH0003.Common.Constants
+@using QLHocPhan_23TH0003.Common.Helpers
+@model IEnumerable<QLHocPhan_23TH0003.Models.Lop>
 @{
-    Layout = null;
+    ViewBag.Title ="Quản lý lớp học";
 }
-
-<!DOCTYPE html>
-
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Index</title>
-</head>
-<body>
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
+<h3>@ViewBag.Title</h3>
+<div class="head_action">
+    @Html.ModalButton("Thêm mới", "btn-primary", UiConstants.btnCreateModal, UiConstants.CreateModal)
+    <a href="@Url.Action("Trash", "LopHoc_23TH0003")" class="btn btn-warning"><i class="fa fa-trash"></i> Thùng rác</a>
+</div>
+@Html.Partial("_AlertMessages")
+<table id="grid">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.MaLop)
+                @Html.DisplayName("Mã lớp")
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.TenLop)
+                @Html.DisplayName("Tên lớp")
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Khoa)
+                @Html.DisplayName("Khoa")
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.IsDeleted)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.NgayTao)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.NgayCapNhat)
+                @Html.DisplayName("Ngày tạo")
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+@* @foreach (var item in Model) {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.MaLop)
@@ -49,25 +38,77 @@
                 @Html.DisplayFor(modelItem => item.TenLop)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Khoa.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsDeleted)
+                @Html.DisplayFor(modelItem => item.Khoa.TenKhoa)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.NgayTao)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.NgayCapNhat)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    <a data-id="@item.Id" data-url="@Url.Action("Edit", "LopHoc_23TH0003", new { id = item.Id })" class="btn btn-primary @UiConstants.btnEditModal">Sửa</a>
+                    @Html.DeleteButton(item.Id, Url.Action("Delete", "LopHoc_23TH0003"))
             </td>
         </tr>
-}
+} *@
     </tbody>
 </table>
-</body>
-</html>
+
+
+<div class="modal fade" id="@UiConstants.CreateModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    @{
+        var model = new QLHocPhan_23TH0003.ViewModel.LopViewModel();
+        model.KhoaList = ViewBag.IdKhoa;
+    }
+    @Html.Partial("Create", model)
+    
+</div>
+
+<div class="modal fade" id="@UiConstants.EditModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+</div>
+
+<script>
+     $(document).ready(function() {
+            $('#grid').DataTable({
+        processing: true,
+        serverSide: true,
+        ajax: {
+            url: '/Admin/LopHoc_23TH0003/GetData',
+            type: 'GET'
+        },
+        columns: [
+            { data: 'maLop' },
+            { data: 'tenLop' },
+            { data: 'tenKhoa' },
+            { data: 'ngayTao' },
+            { data: 'action', orderable: false, searchable: false }
+        ]
+    });
+
+    });
+
+</script>
+<script>
+
+    $(document).ready(function() {
+        // get edit
+        $(".@UiConstants.btnEditModal").on("click", function(){
+            var id = $(this).data('id');
+            var url = $(this).data('url');
+             $.ajax({
+                url: url,
+                type: 'GET',
+                data: { id: id },
+                success: function (response) {
+                    $("#@UiConstants.EditModal").html(response);
+                    $("#@UiConstants.EditModal").modal('show');
+                },
+                error: function () {
+                    alert('Có lỗi xảy ra');
+                }
+            });
+        });
+
+    })
+
+
+</script>
