@@ -1,85 +1,74 @@
-﻿@model IEnumerable<QLHocPhan_23TH0003.Models.HocPhan>
-
+﻿@using QLHocPhan_23TH0003.Common.Constants
+@using QLHocPhan_23TH0003.Common.Helpers
+@model IEnumerable<QLHocPhan_23TH0003.Models.HocPhan>
 @{
-    Layout = null;
+    ViewBag.Title = "Quản lý học phần";
 }
-
-<!DOCTYPE html>
-
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Index</title>
-</head>
-<body>
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
+<h3>@ViewBag.Title</h3>
+<div class="head_action">
+    @Html.ModalButton("Thêm mới", "btn-primary", UiConstants.btnCreateModal, UiConstants.CreateModal)
+    <a href="@Url.Action("Trash", "HocPhan_23TH0003")" class="btn btn-warning"><i class="fa fa-trash"></i> Thùng rác</a>
+</div>
+@Html.Partial("_AlertMessages")
+<table id="grid">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.MaHocPhan)
+                @Html.DisplayName("Mã học phần")
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.TenHocPhan)
+                @Html.DisplayName("Tên học phần")
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.HocKy)
+                @Html.DisplayName("Môn học")
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.SoTinChi)
+                @Html.DisplayName("Học kỳ")
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.MonHoc)
+                @Html.DisplayName("Số tín chỉ")
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.IsDeleted)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.NgayTao)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.NgayCapNhat)
+                @Html.DisplayName("Ngày tạo")
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.MaHocPhan)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TenHocPhan)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.HocKy.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.SoTinChi)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.MonHoc.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsDeleted)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.NgayTao)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.NgayCapNhat)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
     </tbody>
 </table>
-</body>
-</html>
+
+<div class="modal fade" id="@UiConstants.CreateModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    @{
+        var model = new QLHocPhan_23TH0003.ViewModel.HocPhanViewModel();
+        model.HocKies = ViewBag.IdHocKy;
+        model.MonHocs = ViewBag.IdMonHoc;
+    }
+    @Html.Partial("Create", model)
+
+</div>
+
+<div class="modal fade" id="@UiConstants.EditModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+</div>
+
+<script>
+     $(document).ready(function() {
+            $('#grid').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    url: '/Admin/HocPhan_23TH0003/GetData',
+                    type: 'GET'
+                },
+                columns: [
+                    { data: 'maHocPhan' },
+                    { data: 'tenHocPhan' },
+                    { data: 'tenMonHoc' },
+                    { data: 'tenHocKy' },
+                    { data: 'soTinChi' },
+                    { data: 'ngayTao' },
+                    { data: 'action', orderable: false, searchable: false }
+                ]
+            });
+    });
+</script>

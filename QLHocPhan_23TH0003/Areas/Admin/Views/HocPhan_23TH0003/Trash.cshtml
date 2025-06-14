@@ -1,0 +1,52 @@
+﻿@using QLHocPhan_23TH0003.Common.Constants
+@using QLHocPhan_23TH0003.Common.Helpers
+@model IEnumerable<QLHocPhan_23TH0003.Models.HocPhan>
+@{
+    ViewBag.Title = "Thùng rác";
+}
+<h3>@ViewBag.Title</h3>
+
+@Html.Partial("_AlertMessages")
+
+<table id="grid">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayName("Mã học phần")
+            </th>
+            <th>
+                @Html.DisplayName("Tên học phần")
+            </th>
+            <th>
+                @Html.DisplayName("Môn học")
+            </th>
+            <th>
+                @Html.DisplayName("Ngày tạo")
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MaHocPhan)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TenHocPhan)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MonHoc.TenMonHoc)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NgayTao)
+                </td>
+                <td>
+                    @Html.DeleteHardButton(item.Id, Url.Action("HardDelete", "HocPhan_23TH0003"))
+                    @Html.RestoreButton(item.Id, Url.Action("Restore", "HocPhan_23TH0003"))
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

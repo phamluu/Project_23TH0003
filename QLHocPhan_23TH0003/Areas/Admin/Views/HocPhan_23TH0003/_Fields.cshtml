@@ -1,0 +1,42 @@
+﻿@model QLHocPhan_23TH0003.ViewModel.HocPhanViewModel
+@using QLHocPhan_23TH0003.Common.Constants
+<div class="form-group">
+    <label asp-for="MaLop" class="control-label">Mã học phần</label>
+    @Html.EditorFor(model => model.MaHocPhan, new { htmlAttributes = new { @class = "form-control" } })
+    <span asp-validation-for="MaHocPhan" class="text-danger"></span>
+</div>
+<div class="form-group">
+    <label asp-for="TenLop" class="control-label">Tên học phần</label>
+    @Html.EditorFor(model => model.TenHocPhan, new { htmlAttributes = new { @class = "form-control" } })
+    <span asp-validation-for="TenHocPhan" class="text-danger"></span>
+</div>
+<div class="form-group">
+    <label asp-for="TenLop" class="control-label">Số tín chỉ</label>
+    @Html.EditorFor(model => model.SoTinChi, new { htmlAttributes = new { @class = "form-control" , type = "number" } })
+    <span asp-validation-for="SoTinChi" class="text-danger"></span>
+</div>
+<div class="form-group">
+    <label asp-for="IdMonHoc" class="control-label">Môn học</label>
+    <select asp-for="IdMonHoc" name="IdMonHoc" class="form-control">
+        <option value="">-- Chọn môn học --</option>
+        @foreach (var monhoc in Model.MonHocs)
+        {
+            <option value="@monhoc.Id" @(monhoc.Id == Model.IdMonHoc ? "selected" : "")>
+                @monhoc.TenMonHoc
+            </option>
+        }
+    </select>
+</div>
+
+<div class="form-group">
+    <label asp-for="IdHocKy" class="control-label">Học kỳ</label>
+    <select asp-for="IdHocKy" name="IdHocKy" class="form-control">
+        <option value="">-- Chọn học kỳ --</option>
+        @foreach (var hocky in Model.HocKies)
+        {
+            <option value="@hocky.Id" @(hocky.Id == Model.IdHocKy ? "selected" : "")>
+                @hocky.TenHocKy
+            </option>
+        }
+    </select>
+</div>

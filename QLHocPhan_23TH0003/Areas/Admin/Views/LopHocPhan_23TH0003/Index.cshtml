@@ -1,121 +1,54 @@
-﻿@model IEnumerable<QLHocPhan_23TH0003.Models.LopHocPhan>
-
+﻿@using QLHocPhan_23TH0003.Common.Helpers
+@model IEnumerable<QLHocPhan_23TH0003.Models.LopHocPhan>
 @{
-    Layout = null;
+    ViewBag.Title = "Danh sách lớp học phần";
 }
-
-<!DOCTYPE html>
-
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Index</title>
-</head>
-<body>
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
+<h4>@ViewBag.Title</h4>
+<div class="head_action">
+    <a href="@Url.Action("Create", "LopHocPhan_23TH0003")" class="btn btn-primary">Thêm mới</a>
+    <a href="@Url.Action("Trash", "LopHocPhan_23TH0003")" class="btn btn-warning"><i class="fa fa-trash"></i> Thùng rác</a>
+</div>
+<table id="grid">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.MaLopHocPhan)
+                @Html.DisplayName("Mã lớp học phần")
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.TenLopHocPhan)
+                @Html.DisplayName("Tên lớp học phần")
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.SiSoToiDa)
+                @Html.DisplayName("Học phần")
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ThoiGianHoc)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DiaDiemHoc)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.GhiChu)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.HeSoChuyenCan)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.HeSoGiuaKy)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.HeSoThucHanh)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.HeSoCuoiKy)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.HocPhan)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IsDeleted)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.NgayTao)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.NgayCapNhat)
+                @Html.DisplayName("Ngày tạo")
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.MaLopHocPhan)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TenLopHocPhan)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.SiSoToiDa)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ThoiGianHoc)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DiaDiemHoc)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.GhiChu)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.HeSoChuyenCan)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.HeSoGiuaKy)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.HeSoThucHanh)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.HeSoCuoiKy)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.HocPhan.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsDeleted)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.NgayTao)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.NgayCapNhat)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MaLopHocPhan)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TenLopHocPhan)
+                </td>
+                
+                <td>
+                    @Html.DisplayFor(modelItem => item.HocPhan.TenHocPhan)
+                </td>
+                
+                <td>
+                    @Html.DisplayFor(modelItem => item.NgayTao)
+                </td>
+                <td>
+                    @Html.EditButton("LopHocPhan_23TH0003", item.Id)
+                    @Html.DeleteButton(item.Id, Url.Action("Delete", "LopHocPhan_23TH0003"))
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
-</body>
-</html>

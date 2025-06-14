@@ -1,72 +1,21 @@
-﻿@model QLHocPhan_23TH0003.Models.HocPhan
+﻿@model QLHocPhan_23TH0003.ViewModel.HocPhanViewModel
+@using QLHocPhan_23TH0003.Common.Constants
 
-@{
-    Layout = null;
-}
-
-<!DOCTYPE html>
-
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Create</title>
-</head>
-<body>
-
-<h4>HocPhan</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="MaHocPhan" class="control-label"></label>
-                <input asp-for="MaHocPhan" class="form-control" />
-                <span asp-validation-for="MaHocPhan" class="text-danger"></span>
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title fs-5" id="exampleModalLabel">Thêm mới học phần</h4>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form id="@UiConstants.CreateEditForm" action="/Admin/HocPhan_23TH0003/Create" method="post">
+            @Html.AntiForgeryToken()
+            <div class="modal-body">
+                @Html.Partial("_Fields", Model)
             </div>
-            <div class="form-group">
-                <label asp-for="TenHocPhan" class="control-label"></label>
-                <input asp-for="TenHocPhan" class="form-control" />
-                <span asp-validation-for="TenHocPhan" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="IdHocKy" class="control-label"></label>
-                <select asp-for="IdHocKy" class ="form-control" asp-items="ViewBag.IdHocKy"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="SoTinChi" class="control-label"></label>
-                <input asp-for="SoTinChi" class="form-control" />
-                <span asp-validation-for="SoTinChi" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="IdMonHoc" class="control-label"></label>
-                <select asp-for="IdMonHoc" class ="form-control" asp-items="ViewBag.IdMonHoc"></select>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="IsDeleted" /> @Html.DisplayNameFor(model => model.IsDeleted)
-                </label>
-            </div>
-            <div class="form-group">
-                <label asp-for="NgayTao" class="control-label"></label>
-                <input asp-for="NgayTao" class="form-control" />
-                <span asp-validation-for="NgayTao" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="NgayCapNhat" class="control-label"></label>
-                <input asp-for="NgayCapNhat" class="form-control" />
-                <span asp-validation-for="NgayCapNhat" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="btnSave">Lưu thay đổi</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
             </div>
         </form>
     </div>
 </div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
-</body>
-</html>
