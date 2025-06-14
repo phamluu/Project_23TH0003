@@ -1,9 +1,12 @@
 ﻿using Microsoft.AspNetCore.Components.RenderTree;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using QLHocPhan_23TH0003.Common.Helpers;
 using QLHocPhan_23TH0003.Data;
 using QLHocPhan_23TH0003.Models;
 using QLHocPhan_23TH0003.Service;
+using QLHocPhan_23TH0003.ViewModel;
 
 namespace QLHocPhan_23TH0003.Areas.Admin.Controllers
 {
@@ -25,13 +28,49 @@ namespace QLHocPhan_23TH0003.Areas.Admin.Controllers
             return View(model);
         }
 
-        // GET: HocKy_23TH0003Controller/Create
-        public async Task<ActionResult> Create()
+        [HttpGet]
+        public ActionResult GetData(int draw, int start, int length, string searchValue)
         {
-            var html = await _renderer.RenderViewToStringAsync("Create", null, area: "Admin", controller: "HocKy_23TH0003");
+            var query = _context.HocKy.AsQueryable();
 
-            return Json(new { html });
+            if (!string.IsNullOrEmpty(searchValue))
+            {
+                query = query.Where(x => x.TenHocKy.Contains(searchValue) || x.MaHocKy.Contains(searchValue));
+            }
+            var recordsTotal = query.Count();
+            var antiforgery = HttpContext.RequestServices.GetService<Microsoft.AspNetCore.Antiforgery.IAntiforgery>();
+            var tokens = antiforgery.GetAndStoreTokens(HttpContext);
+            string token = tokens.RequestToken;
+
+            var data = query.Skip(start).Take(length).ToList()
+                .Select(x =>
+                {
+                    var deleteForm = ButtonHelper.BuildDeleteFormHtml(
+                        x.Id,
+                        "/Admin/HocKy_23TH0003/Delete",
+                        token
+                    );
+                    var editForm = ButtonHelper.BuildEditFormHtml(x.Id, "/Admin/HocKy_23TH0003/Edit");
+                    return new HocKyViewModel
+                    {
+                        Id = x.Id,
+                        MaHocKy = x.MaHocKy,
+                        TenHocKy = x.TenHocKy,
+                        NamHoc = x.NamHoc,
+                        NgayTao = x.NgayTao,
+                        Action = editForm + deleteForm
+                    };
+                }).ToList();
+
+            return Json(new
+            {
+                draw,
+                recordsFiltered = recordsTotal,
+                recordsTotal,
+                data
+            });
         }
+
 
         // POST: HocKy_23TH0003Controller/Create
         [HttpPost]
@@ -51,7 +90,8 @@ namespace QLHocPhan_23TH0003.Areas.Admin.Controllers
             }
             catch
             {
-                return Json(new { status = false, message = "" });
+                TempData["ErrorMessage"] = "Có lỗi xảy ra";
+                return Json(new { status = false, message = TempData["ErrorMessage"] });
             }
         }
 
@@ -59,6 +99,8 @@ namespace QLHocPhan_23TH0003.Areas.Admin.Controllers
         public async Task<ActionResult> Edit(int id)
         {
             var model = _context.HocKy.Find(id);
+            if (model == null)
+                return NotFound();
             return View(model);
         }
 
@@ -71,7 +113,10 @@ namespace QLHocPhan_23TH0003.Areas.Admin.Controllers
             {
                 var data = _context.HocKy.Find(model.Id);
                 if (data == null)
+                {
+                    TempData["ErrorMessage"] = "Học kỳ không tồn tại";
                     return View(model);
+                }
                 data.MaHocKy = model.MaHocKy;
                 data.TenHocKy = model.TenHocKy;
                 data.NamHoc = model.NamHoc;
@@ -81,14 +126,14 @@ namespace QLHocPhan_23TH0003.Areas.Admin.Controllers
                 _context.Update(data);
                 _context.SaveChanges();
                 TempData["SuccessMessage"] = "Cập nhật học kỳ thành công";
-                return RedirectToAction(nameof(Index));
+                return Json(new { status = true, message = TempData["SuccessMessage"] });
             }
             catch(Exception ex)
             {
                 Console.WriteLine("Lỗi" + ex.Message);
             }
             TempData["ErrorMessage"] = "Cập nhật học kỳ không thành công";
-            return View(model);
+            return Json(new { status = false, message = TempData["ErrorMessage"] });
         }
 
         // GET: HocKy_23TH0003Controller/Delete/5
@@ -101,19 +146,22 @@ namespace QLHocPhan_23TH0003.Areas.Admin.Controllers
             {
                 var hocKy = _context.HocKy.Find(id);
                 if (hocKy == null)
-                    return Json(new { status = false, message = "Học kỳ không tồn tại." });
-
+                {
+                    TempData["ErrorMessage"] = "Học kỳ không tồn tại";
+                    RedirectToAction("Index");
+                }
+                    
                 _context.HocKy.Remove(hocKy);
                 _context.SaveChanges();
-
-                return Json(new { status = true });
+                TempData["SuccessMessage"] = "Xóa học kỳ thành công";
+                return RedirectToAction("Index");
             }
             catch (Exception ex)
             {
                 return Json(new { status = false, message = "Lỗi khi xóa: " + ex.Message });
             }
+            
         }
-
 
     }
 }

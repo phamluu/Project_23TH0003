@@ -145,6 +145,27 @@
           // Javascript method's body can be found in assets/js/demos.js
           $('#grid').DataTable();
 
+          // get edit
+           $(document).ready(function() {
+                $(document).on("click", ".btnEditModal", function () {
+                    var id = $(this).data('id');
+                    var url = $(this).data('url');
+                     $.ajax({
+                        url: url,
+                        type: 'GET',
+                        data: { id: id },
+                        success: function (response) {
+                            $("#@UiConstants.EditModal").html(response);
+                            $("#@UiConstants.EditModal").modal('show');
+                        },
+                        error: function () {
+                            alert('Có lỗi xảy ra');
+                        }
+                    });
+                });
+            })
+          // end get edit
+
           // delete
           $('.btn-delete').on('click', function () {
                 var id = $(this).data('id');
@@ -169,7 +190,7 @@
                     });
             });
             // end delete
-
+    
             // submit create or edit
              $(document).on('submit', '#@UiConstants.CreateEditForm', function(e) {
                     e.preventDefault();
@@ -225,7 +246,7 @@
                 toast.show();
             }
 
-          demo.initDashboardPageCharts();
+          //demo.initDashboardPageCharts();
         
         });
     </script>

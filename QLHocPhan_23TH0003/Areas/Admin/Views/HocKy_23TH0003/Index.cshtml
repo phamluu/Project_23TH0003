@@ -1,31 +1,27 @@
 ﻿@model IEnumerable<QLHocPhan_23TH0003.Models.HocKy>
 @using QLHocPhan_23TH0003.Common.Constants
 @using QLHocPhan_23TH0003.Common.Helpers
+@{
+    ViewBag.Title = "Quản lý học kỳ";
+}
+
+<h4>@ViewBag.Title</h4>
 <div class="head_action">
     @Html.ModalButton("Thêm mới", "btn-primary", UiConstants.btnCreateModal, UiConstants.CreateModal)
 </div>
 @Html.Partial("_AlertMessages")
 <table id="grid">
     <thead>
-        <td>Mã học kỳ</td>
-        <td>Tên học kỳ</td>
-        <td>Năm học</td>
-        <td>Chức năng</td>
+        <tr>
+            <th>Mã học kỳ</th>
+            <th>Tên học kỳ</th>
+            <th>Năm học</th>
+            <th>Ngày tạo</th>
+            <th>Chức năng</th>
+        </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
-        {
-            <tr data-id="@item.Id">
-                <td>@item.MaHocKy</td>
-                <td>@item.TenHocKy</td>
-                <td>@item.NamHoc</td>
-                <td>
-                    @Html.EditButton("HocKy_23TH0003", item.Id)
-                    @Html.DeleteButton(item.Id, Url.Action("Delete", "HocKy_23TH0003"))
-                </td>
-            </tr>
-        }
-        
+       
     </tbody>
 </table>
 
@@ -38,27 +34,21 @@
 </div>
 
 <script>
-   
-    $(document).ready(function() {
-        // get edit
-        $(".@UiConstants.btnEditModal").on("click", function(){
-            var id = $(this).data('id');
-            var url = $(this).data('url');
-             $.ajax({
-                url: url,
-                type: 'GET',
-                data: { id: id },
-                success: function (response) {
-                    $("#@UiConstants.EditModal").html(response.html);
-                    $("#@UiConstants.EditModal").modal('show');
+     $(document).ready(function() {
+            $('#grid').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    url: '/Admin/HocKy_23TH0003/GetData',
+                    type: 'GET'
                 },
-                error: function () {
-                    alert('Có lỗi xảy ra');
-                }
+                columns: [
+                    { data: 'maHocKy' },
+                    { data: 'tenHocKy' },
+                    { data: 'namHoc' },
+                    { data: 'ngayTao' },
+                    { data: 'action', orderable: false, searchable: false }
+                ]
             });
-        });
-        
-    })
-
-    
+    });
 </script>

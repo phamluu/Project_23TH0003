@@ -42,12 +42,12 @@ namespace QLHocPhan_23TH0003.Areas.Admin.Controllers
             var data = query.Skip(start).Take(length).ToList()
                 .Select(x =>
                 {
-                    var deleteForm = HtmlHelperExtensions.BuildDeleteFormHtml(
+                    var deleteForm = ButtonHelper.BuildDeleteFormHtml(
                         x.Id,
                         "/Admin/LopHoc_23TH0003/Delete",
                         token
                     );
-
+                    var editForm = ButtonHelper.BuildEditFormHtml(x.Id, "/Admin/LopHoc_23TH0003/Edit");
                     return new LopViewModel
                     {
                         Id = x.Id,
@@ -55,7 +55,7 @@ namespace QLHocPhan_23TH0003.Areas.Admin.Controllers
                         TenLop = x.TenLop,
                         TenKhoa = x.Khoa?.TenKhoa ?? "",
                         NgayTao = x.NgayTao,
-                        Action = deleteForm
+                        Action = editForm + deleteForm
                     };
                 }).ToList();
 

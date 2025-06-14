@@ -29,29 +29,9 @@
         </tr>
     </thead>
     <tbody>
-@* @foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.MaLop)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TenLop)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Khoa.TenKhoa)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.NgayTao)
-            </td>
-            <td>
-                    <a data-id="@item.Id" data-url="@Url.Action("Edit", "LopHoc_23TH0003", new { id = item.Id })" class="btn btn-primary @UiConstants.btnEditModal">Sửa</a>
-                    @Html.DeleteButton(item.Id, Url.Action("Delete", "LopHoc_23TH0003"))
-            </td>
-        </tr>
-} *@
+
     </tbody>
 </table>
-
 
 <div class="modal fade" id="@UiConstants.CreateModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     @{
@@ -69,46 +49,19 @@
 <script>
      $(document).ready(function() {
             $('#grid').DataTable({
-        processing: true,
-        serverSide: true,
-        ajax: {
-            url: '/Admin/LopHoc_23TH0003/GetData',
-            type: 'GET'
-        },
-        columns: [
-            { data: 'maLop' },
-            { data: 'tenLop' },
-            { data: 'tenKhoa' },
-            { data: 'ngayTao' },
-            { data: 'action', orderable: false, searchable: false }
-        ]
-    });
-
-    });
-
-</script>
-<script>
-
-    $(document).ready(function() {
-        // get edit
-        $(".@UiConstants.btnEditModal").on("click", function(){
-            var id = $(this).data('id');
-            var url = $(this).data('url');
-             $.ajax({
-                url: url,
-                type: 'GET',
-                data: { id: id },
-                success: function (response) {
-                    $("#@UiConstants.EditModal").html(response);
-                    $("#@UiConstants.EditModal").modal('show');
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    url: '/Admin/LopHoc_23TH0003/GetData',
+                    type: 'GET'
                 },
-                error: function () {
-                    alert('Có lỗi xảy ra');
-                }
+                columns: [
+                    { data: 'maLop' },
+                    { data: 'tenLop' },
+                    { data: 'tenKhoa' },
+                    { data: 'ngayTao' },
+                    { data: 'action', orderable: false, searchable: false }
+                ]
             });
-        });
-
-    })
-
-
+    });
 </script>

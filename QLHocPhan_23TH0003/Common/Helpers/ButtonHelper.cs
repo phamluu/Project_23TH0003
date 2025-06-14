@@ -2,11 +2,12 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.Routing;
+using QLHocPhan_23TH0003.Common.Constants;
 using System.Text.Encodings.Web;
 
 namespace QLHocPhan_23TH0003.Common.Helpers
 {
-    public static class HtmlHelperExtensions
+    public static class ButtonHelper
     {
         public static IHtmlContent ModalButton(this IHtmlHelper htmlHelper, string text, string btnClass, string extraClass, string modalId)
         {
@@ -140,7 +141,11 @@ namespace QLHocPhan_23TH0003.Common.Helpers
                 <button type='submit' class='{buttonClass}'>Xóa</button>
             </form>";
         }
-
+        public static string BuildEditFormHtml(int id, string actionUrl, string buttonClass = "btn btn-primary")
+        {
+            return $@"
+            <a data-id='{id}' data-url='{actionUrl}' class='btn btn-primary {UiConstants.btnEditModal}'>Sửa</a>";
+        }
         public static IHtmlContent EditButton(this IHtmlHelper htmlHelper, string controller, object id, string action = "Edit", string btnClass = "btn-edit", string text = "Cập nhật")
         {
             // ✅ Lấy IUrlHelper thông qua DI để tương thích với endpoint routing

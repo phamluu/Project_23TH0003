@@ -4,16 +4,18 @@ namespace QLHocPhan_23TH0003.Common.Helpers
 {
     public static class HtmlHelpers
     {
-        public static string IsActive(this IHtmlHelper htmlHelper, string action, string controller)
+        public static string IsActive(this IHtmlHelper htmlHelper, string controller, string? action = null)
         {
             var routeData = htmlHelper.ViewContext.RouteData;
 
             var routeAction = routeData.Values["action"]?.ToString();
             var routeController = routeData.Values["controller"]?.ToString();
 
-            return (string.Equals(action, routeAction, StringComparison.OrdinalIgnoreCase) &&
-                    string.Equals(controller, routeController, StringComparison.OrdinalIgnoreCase))
-                    ? "active" : "";
+            bool isControllerMatch = string.Equals(controller, routeController, StringComparison.OrdinalIgnoreCase);
+            bool isActionMatch = string.IsNullOrEmpty(action) || string.Equals(action, routeAction, StringComparison.OrdinalIgnoreCase);
+
+            return (isControllerMatch && isActionMatch) ? "active" : "";
+
         }
     }
 }
