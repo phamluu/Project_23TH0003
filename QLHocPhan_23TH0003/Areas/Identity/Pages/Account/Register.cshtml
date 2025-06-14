@@ -1,4 +1,5 @@
 ﻿@page
+@using QLHocPhan_23TH0003.Enums
 @model RegisterModel
 @{
     ViewData["Title"] = "Đăng ký";
@@ -6,26 +7,37 @@
 
 <div class="container">
     <section class="login">
-        <h1>@ViewData["Title"]</h1>
+        <h4>@ViewData["Title"]</h4>
         <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
-            <hr />
-            <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
-            <div class="form-floating mb-3">
-                <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
-                <label asp-for="Input.Email">Email</label>
-                <span asp-validation-for="Input.Email" class="text-danger"></span>
+            <div class="form-body">
+                <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+                <div class="form-floating mb-3">
+                    <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
+                    <label asp-for="Input.Email">Email</label>
+                    <span asp-validation-for="Input.Email" class="text-danger"></span>
+                </div>
+                <div class="form-floating mb-3">
+                    <input asp-for="Input.Password" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
+                    <label asp-for="Input.Password">Password</label>
+                    <span asp-validation-for="Input.Password" class="text-danger"></span>
+                </div>
+                <div class="form-floating mb-3">
+                    <input asp-for="Input.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
+                    <label asp-for="Input.ConfirmPassword">Confirm Password</label>
+                    <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+                </div>
+                <div class=" mb-3">
+                    <label asp-for="Input.Role" class="mb-2"><strong>Bạn là: </strong></label>
+                    <div class="form-group">
+                        <label style="margin-right:1rem"><input asp-for="Input.Role" style="margin-right:1rem" autocomplete="Role" aria-required="true" value="@Role.GiangVien" type="radio" />Giảng viên</label>
+                        <label><input asp-for="Input.Role" style="margin-right:1rem" autocomplete="Role" aria-required="true" value="@Role.SinhVien" type="radio" />Sinh viên</label>
+                    </div>
+                    <span asp-validation-for="Input.Role" class="text-danger"></span>
+                </div>
             </div>
-            <div class="form-floating mb-3">
-                <input asp-for="Input.Password" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
-                <label asp-for="Input.Password">Password</label>
-                <span asp-validation-for="Input.Password" class="text-danger"></span>
+            <div class="form-footer">
+                <button id="registerSubmit" type="submit" class="btn btn-lg btn-primary" style="display:flex; margin:0 auto;">Đăng ký</button>
             </div>
-            <div class="form-floating mb-3">
-                <input asp-for="Input.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
-                <label asp-for="Input.ConfirmPassword">Confirm Password</label>
-                <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
-            </div>
-            <button id="registerSubmit" type="submit" class="btn btn-lg btn-primary">Đăng ký</button>
         </form>
     </section>
     
