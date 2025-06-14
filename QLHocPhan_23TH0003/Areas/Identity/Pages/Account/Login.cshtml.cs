@@ -125,7 +125,14 @@ namespace QLHocPhan_23TH0003.Areas.Identity.Pages.Account
                             // Nếu là Admin, chuyển hướng đến trang Admin
                             return RedirectToAction("Index", "Home", new { area = "Admin" }); // Đảm bảo AdminController đã có trong dự án
                         }
-
+                        if (roles.Contains("GiangVien"))
+                        {
+                            return RedirectToAction("Index", "Home", new { area = "Instructor" });
+                        }
+                        if (roles.Contains("SinhVien"))
+                        {
+                            return RedirectToAction("Index", "Home", new { area = "Student" });
+                        }
                         // Nếu không phải Admin, chuyển hướng về trang mặc định
                         return LocalRedirect(returnUrl);
 

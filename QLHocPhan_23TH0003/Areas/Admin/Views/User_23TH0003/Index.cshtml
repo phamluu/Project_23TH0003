@@ -1,0 +1,53 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using QLHocPhan_23TH0003.Common.Constants
+@using QLHocPhan_23TH0003.Common.Helpers
+@using QLHocPhan_23TH0003.ViewModel
+@model IEnumerable<UserViewModel>
+
+@{
+    ViewBag.Title = "Quản lý người dùng";
+}
+<h4>@ViewBag.Title</h4>
+@Html.Partial("_AlertMessages")
+<table id="grid">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayName("UserName")
+            </th>
+            <th>
+                @Html.DisplayName("PhoneNumber")
+            </th>
+            <th>
+                @Html.DisplayName("Email")
+            </th>
+            <th>
+                Vai trò
+            </th>
+            <th>Chức năng</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null)
+        {
+            foreach (var item in Model)
+            {
+                <tr data-id="@item.Id">
+                    <td>@item.UserName</td>
+                    <td>@item.PhoneNumber</td>
+                    <td>@item.Email</td>
+                    <td>@string.Join(", ", item.Roles)</td>
+                    <td>
+                        <a href="@Url.Action("Details", "User_23TH0003", new { id = item.Id })" class="btn btn-info">Xem</a>
+                        @Html.DeleteButton(item.Id, Url.Action("Delete", "User_23TH0003"))
+                    </td>
+                </tr>
+            }
+        }
+
+    </tbody>
+</table>
+
+<div class="modal fade" id="@UiConstants.CreateModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    @Html.Partial("Create", new QLHocPhan_23TH0003.Models.Khoa())
+</div>

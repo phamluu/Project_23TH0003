@@ -33,6 +33,9 @@ footer {
     background: green;
     color: #fff;
 }
+.alert {
+    display: inline-block;
+}
 .navbar-toggler, .navbar-toggler:hover, .navbar-toggler:focus {
     border: none;
     background: none;

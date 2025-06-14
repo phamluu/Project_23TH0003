@@ -9,6 +9,11 @@
             @if (User.IsInRole("Admin"))
             {
                 <a class="nav-link text-dark" asp-area="Admin" asp-page="/Home/Index" title="Manage">Hello @User.Identity?.Name!</a>
+            }else if(User.IsInRole("GiangVien")){
+                <a class="nav-link text-dark" asp-area="Instructor" asp-page="/Home/Index" title="Manage">Hello @User.Identity?.Name!</a>
+            }else if (User.IsInRole("SinhVien"))
+            {
+                <a class="nav-link text-dark" asp-area="Student" asp-page="/Home/Index" title="Manage">Hello @User.Identity?.Name!</a>
             }
             else
             {
