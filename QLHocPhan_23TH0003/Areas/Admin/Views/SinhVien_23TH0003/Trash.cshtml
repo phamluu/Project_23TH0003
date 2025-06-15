@@ -1,14 +1,13 @@
-﻿@using QLHocPhan_23TH0003.Common.Helpers
+﻿@using QLHocPhan_23TH0003.Common.Constants
+@using QLHocPhan_23TH0003.Common.Helpers
 @model IEnumerable<QLHocPhan_23TH0003.Models.SinhVien>
 @{
-    ViewBag.Title = "Danh sách sinh viên";
+    ViewBag.Title = "Thùng rác";
 }
-<h4>@ViewBag.Title</h4>
-<div class="head_action">
-    <a href="@Url.Action("Create","SinhVien_23TH0003")" class="btn btn-primary">Thêm mới</a>
-    <a href="@Url.Action("Trash", "SinhVien_23TH0003")" class="btn btn-warning"><i class="fa fa-trash"></i> Thùng rác</a>
-</div>
+<h3>@ViewBag.Title</h3>
+
 @Html.Partial("_AlertMessages")
+
 <table id="grid">
     <thead>
         <tr>
@@ -17,10 +16,6 @@
             </th>
             <th>
                 @Html.DisplayName("Họ tên")
-            </th>
-            
-            <th>
-                @Html.DisplayName("Tài khoản")
             </th>
             <th>
                 @Html.DisplayName("Lớp")
@@ -41,21 +36,15 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.HoTen)
                 </td>
-               
-                <td>
-                    @(item.UserId.HasValue ? "Đã có tài khoản" : "Chưa có tài khoản")
-                </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Lop.TenLop)
                 </td>
-                
                 <td>
                     @Html.DisplayFor(modelItem => item.NgayTao)
                 </td>
-                
                 <td>
-                    @Html.EditButton("SinhVien_23TH0003", item.Id)
-                    @Html.DeleteButton(item.Id, Url.Action("Delete", "SinhVien_23TH0003"))
+                    @Html.DeleteHardButton(item.Id, Url.Action("HardDelete", "SinhVien_23TH0003"))
+                    @Html.RestoreButton(item.Id, Url.Action("Restore", "SinhVien_23TH0003"))
                 </td>
             </tr>
         }

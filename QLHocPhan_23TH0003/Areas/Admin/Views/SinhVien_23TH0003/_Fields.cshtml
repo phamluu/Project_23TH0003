@@ -1,0 +1,78 @@
+﻿@model QLHocPhan_23TH0003.Models.SinhVien
+<div class="row">
+    <div class="col-md-8">
+        <div class="form-group">
+            <label asp-for="MaSinhVien" class="control-label">Mã sinh viên</label>
+            @Html.EditorFor(model => model.MaSinhVien, new { htmlAttributes = new { @class = "form-control" } })
+            <span asp-validation-for="MaSinhVien" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="HoTen" class="control-label">Họ tên</label>
+            @Html.EditorFor(model => model.HoTen, new { htmlAttributes = new { @class = "form-control" } })
+            <span asp-validation-for="HoTen" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="NgaySinh" class="control-label">Ngày sinh</label>
+            @Html.EditorFor(model => model.NgaySinh, new { htmlAttributes = new { @class = "form-control", @type = "date" } })
+            <span asp-validation-for="NgaySinh" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="GioiTinh" class="control-label">Giới tính</label>
+            <label>
+                @Html.RadioButtonFor(model => model.GioiTinh, true) Nam
+            </label>
+            <label>
+                @Html.RadioButtonFor(model => model.GioiTinh, false) Nữ
+            </label>
+            <span asp-validation-for="GioiTinh" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="DiaChi" class="control-label">Địa chỉ</label>
+            @Html.EditorFor(model => model.DiaChi, new { htmlAttributes = new { @class = "form-control" } })
+            <span asp-validation-for="DiaChi" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="IdLop" class="control-label">Lớp</label>
+            @Html.DropDownList("IdLop", (SelectList)ViewData["Lop"], new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="form-group">
+            <label asp-for="HinhDaiDien" class="control-label">Hình đại diện</label>
+            <span class="preview" style="width:100%; display:block">
+                @if (Model != null && Model.HinhDaiDien != null)
+                {
+                    <img src="/images/@Model.HinhDaiDien" alt="" width="100" height="100" />
+                }
+                else
+                {
+                    <img src="~/assets/img/default-avatar.png" alt="" width="100" height="100" />
+                }
+            </span>
+            @Html.EditorFor(model => model.HinhDaiDien, new { htmlAttributes = new { @class = "form-control", @type = "file" } })
+            <span asp-validation-for="HinhDaiDien" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="UserId" class="control-label">Tài khoản</label>
+            <div class="" style="width:100%">
+                @if (Model != null)
+                {
+                    @Html.HiddenFor(model => model.UserId)
+                    if (Model.UserId != null)
+                    {
+                        <button class="btn btn-primary" type="button">Đổi tài khoản</button>
+                    }
+                    else
+                    {
+                        <button class="btn btn-primary" type="button">Tạo tài khoản</button>
+                    }
+                }
+                else
+                {
+                    <span class="btn btn-primary">Chưa có tài khoản</span>
+                }
+                <span asp-validation-for="UserId" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+</div>

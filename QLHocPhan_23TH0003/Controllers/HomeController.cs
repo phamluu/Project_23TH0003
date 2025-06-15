@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using QLHocPhan_23TH0003.Data;
 using QLHocPhan_23TH0003.Models;
 using System.Diagnostics;
 
@@ -9,10 +11,12 @@ namespace QLHocPhan_23TH0003.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly UserManager<IdentityUser> _userManager;
-        public HomeController(ILogger<HomeController> logger, UserManager<IdentityUser> userManager)
+        private readonly MainDbContext _context;
+        public HomeController(ILogger<HomeController> logger, UserManager<IdentityUser> userManager, MainDbContext context)
         {
             _logger = logger;
             _userManager = userManager;
+            _context = context;
         }
 
         public IActionResult Index()
@@ -24,7 +28,9 @@ namespace QLHocPhan_23TH0003.Controllers
                 {
                     return Redirect("/Identity/Account/Register");
                 }
-                return View();
+                var model = _context.LopHocPhan.Include(x => x.PhanCongGiangDays).ThenInclude(x => x.GiangVien)
+                    .Where(x => x.IsDeleted != true).OrderByDescending(x => x.NgayTao);
+                return View(model);
             }
             catch (Exception ex)
             {

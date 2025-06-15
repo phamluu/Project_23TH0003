@@ -7,10 +7,10 @@ using QLHocPhan_23TH0003.Models;
 
 namespace QLHocPhan_23TH0003.Areas.Admin.Controllers
 {
-    public class SinhVien_23TH0003Controller : BaseAdminController
+    public class GiangVien_23TH0003Controller : BaseAdminController
     {
         private readonly MainDbContext _context;
-        public SinhVien_23TH0003Controller(MainDbContext context)
+        public GiangVien_23TH0003Controller(MainDbContext context)
         {
             _context = context;
         }
@@ -18,7 +18,7 @@ namespace QLHocPhan_23TH0003.Areas.Admin.Controllers
         // GET: GiangVien_23TH0003
         public ActionResult Index()
         {
-            var model = _context.SinhVien.Include(x => x.Lop).Where(x => x.IsDeleted != true).ToList();
+            var model = _context.GiangVien.Include(x => x.Khoa).Where(x => x.IsDeleted != true).ToList();
             return View(model);
         }
 
@@ -31,25 +31,25 @@ namespace QLHocPhan_23TH0003.Areas.Admin.Controllers
         // GET: GiangVien_23TH0003/Create
         public ActionResult Create()
         {
-            ViewBag.IdLop = new SelectList(_context.Lop.ToList(), "Id", "TenLop");
+            ViewBag.IdKhoa = new SelectList(_context.Khoa.ToList(), "Id", "TenKhoa");
             return View();
         }
 
         // POST: GiangVien_23TH0003/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(SinhVien model)
+        public ActionResult Create(GiangVien model)
         {
             try
             {
-                _context.SinhVien.Add(model);
+                _context.GiangVien.Add(model);
                 _context.SaveChanges();
-                TempData["SuccessMessage"] = "Thêm sinh viên thành công";
+                TempData["SuccessMessage"] = "Thêm giảng viên thành công";
                 return RedirectToAction(nameof(Index));
             }
             catch
             {
-                TempData["ErrorMessage"] = "Thêm sinh viên không thành công";
+                TempData["ErrorMessage"] = "Thêm giảng viên không thành công";
                 return View(model);
             }
         }
@@ -57,25 +57,25 @@ namespace QLHocPhan_23TH0003.Areas.Admin.Controllers
         // GET: GiangVien_23TH0003/Edit/5
         public ActionResult Edit(int id)
         {
-            var model = _context.SinhVien.Find(id);
+            var model = _context.GiangVien.Find(id);
             if (model == null)
             {
                 return NotFound();
             }
-            ViewBag.IdLop = new SelectList(_context.Lop.ToList(), "Id", "TenLop");
+            ViewBag.IdKhoa = new SelectList(_context.Khoa.ToList(), "Id", "TenKhoa");
             return View(model);
         }
 
         // POST: GiangVien_23TH0003/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(SinhVien model)
+        public ActionResult Edit(GiangVien model)
         {
             try
             {
                 _context.Update(model);
                 _context.SaveChanges();
-                TempData["SuccessMessage"] = "Cập nhật sinh viên thành công";
+                TempData["SuccessMessage"] = "Cập nhật giảng viên thành công";
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -91,21 +91,21 @@ namespace QLHocPhan_23TH0003.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int id)
         {
-            var mon = _context.SinhVien.Find(id);
+            var mon = _context.GiangVien.Find(id);
             if (mon == null)
             {
-                TempData["ErrorMessage"] = "Sinh viên không tồn tại";
+                TempData["ErrorMessage"] = "Giảng viên không tồn tại";
                 return RedirectToAction("Index");
             }
             mon.IsDeleted = true;
             _context.SaveChanges();
-            TempData["SuccessMessage"] = "Xóa sinh viên thành công";
+            TempData["SuccessMessage"] = "Xóa giảng viên thành công";
             return RedirectToAction("Index");
         }
 
         public ActionResult Trash()
         {
-            var deletedLop = _context.SinhVien.Include(x => x.Lop).Where(x => x.IsDeleted == true).ToList();
+            var deletedLop = _context.GiangVien.Include(x => x.Khoa).Where(x => x.IsDeleted == true).ToList();
             return View(deletedLop);
         }
 
@@ -113,12 +113,12 @@ namespace QLHocPhan_23TH0003.Areas.Admin.Controllers
         [HttpPost]
         public ActionResult Restore(int id)
         {
-            var mon = _context.SinhVien.Find(id);
+            var mon = _context.GiangVien.Find(id);
             if (mon != null)
             {
                 mon.IsDeleted = false;
                 _context.SaveChanges();
-                TempData["SuccessMessage"] = "Khôi phục sinh viên thành công";
+                TempData["SuccessMessage"] = "Khôi phục giảng viên thành công";
             }
             return RedirectToAction("Trash");
         }
@@ -127,12 +127,12 @@ namespace QLHocPhan_23TH0003.Areas.Admin.Controllers
         [HttpPost]
         public ActionResult HardDelete(int id)
         {
-            var mon = _context.SinhVien.Find(id);
+            var mon = _context.GiangVien.Find(id);
             if (mon != null)
             {
-                _context.SinhVien.Remove(mon);
+                _context.GiangVien.Remove(mon);
                 _context.SaveChanges();
-                TempData["SuccessMessage"] = "Xóa vĩnh viễn sinh viên thành công";
+                TempData["SuccessMessage"] = "Xóa vĩnh viễn giảng viên thành công";
             }
             return RedirectToAction("Trash");
         }

@@ -3,8 +3,9 @@
     ViewBag.Title = "Thêm lớp học phần";
 }
 <h4>@ViewBag.Title</h4>
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+@Html.Partial("_AlertMessages")
+        <form action="@Url.Action("Create", "LopHocPhan_23TH0003")" method="post">
+            @Html.AntiForgeryToken()
             @{
                 ViewData["HocPhan"] = ViewBag.IdHocPhan;
             }

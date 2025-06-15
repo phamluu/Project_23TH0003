@@ -16,7 +16,7 @@ namespace QLHocPhan_23TH0003.Areas.Admin.Controllers
         }
         public ActionResult Index()
         {
-            var model = _context.LopHocPhan.Include(x => x.HocPhan).ToList();
+            var model = _context.LopHocPhan.Include(x => x.HocPhan).Where(x => x.IsDeleted != true).ToList();
             return View(model);
         }
 
@@ -101,7 +101,7 @@ namespace QLHocPhan_23TH0003.Areas.Admin.Controllers
 
         public ActionResult Trash()
         {
-            var deletedLop = _context.LopHocPhan.Where(x => x.IsDeleted == true).ToList();
+            var deletedLop = _context.LopHocPhan.Include(x => x.HocPhan).Where(x => x.IsDeleted == true).ToList();
             return View(deletedLop);
         }
 
