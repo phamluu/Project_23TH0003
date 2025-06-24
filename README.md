@@ -10,3 +10,4 @@ Cập nhật web.config
 <h3>Cập nhật lại database sau khi tạo migration</h3>
 <p>dotnet ef database update --context QuanLyHocPhanDbContext
 </p>
+<p>dotnet ef database update --context ApplicationDbContext </p>
