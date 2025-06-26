@@ -7,7 +7,7 @@ namespace QLHocPhan_23TH0003.ViewModel
         public string TenMonHoc { get; set; }
         public string Action { get; set; }
         public string TenHocKy { get; set; }
-
+        public string NamHoc { get; set; }
         public IEnumerable<MonHoc> MonHocs { get; set; }
         public IEnumerable<HocKy> HocKies { get; set; }
     }

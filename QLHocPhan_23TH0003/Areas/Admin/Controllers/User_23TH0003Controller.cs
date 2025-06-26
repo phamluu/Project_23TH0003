@@ -24,7 +24,6 @@ namespace QLHocPhan_23TH0003.Areas.Admin.Controllers
             // Load roles một lần
             var allRoles = _context.Roles.ToList();
             var userRoles = _context.UserRoles.ToList();
-
             var model = _context.Users
                 .AsEnumerable() // chuyển từ LINQ to Entities sang LINQ to Objects
                 .Select(x => new UserViewModel

@@ -1,14 +1,27 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using QLHocPhan_23TH0003.Common.Helpers;
+using QLHocPhan_23TH0003.Data;
+using QLHocPhan_23TH0003.Enums;
 
 namespace QLHocPhan_23TH0003.Areas.Admin.Controllers
 {
     public class DangKyHocPhan_23TH0003Controller : BaseAdminController
     {
+        private readonly MainDbContext _context;
+
+        public DangKyHocPhan_23TH0003Controller(MainDbContext context)
+        {
+            _context = context;
+        }
         // GET: DangKyHocPhan_23TH0003Controller
         public ActionResult Index()
         {
-            return View();
+            var model = _context.DangKyHocPhan.Include(x => x.LopHocPhan).ThenInclude(x => x.HocPhan)
+                .ThenInclude(x => x.HocKy)
+                .Include(x => x.SinhVien).ThenInclude(x => x.Lop).ToList();
+            return View(model);
         }
 
         // GET: DangKyHocPhan_23TH0003Controller/Details/5
@@ -59,25 +72,38 @@ namespace QLHocPhan_23TH0003.Areas.Admin.Controllers
             }
         }
 
-        // GET: DangKyHocPhan_23TH0003Controller/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
 
-        // POST: DangKyHocPhan_23TH0003Controller/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public ActionResult UpdateStatus(int id, int status)
         {
-            try
+            var model = _context.DangKyHocPhan.Find(id);
+            if (model == null)
             {
-                return RedirectToAction(nameof(Index));
+                TempData["ErrorMessage"] = "Đăng ký học phần không tồn tại";
+                return RedirectToAction("Index");
             }
-            catch
+            string StatusName = EnumExtensions.GetDisplayName((TrangThaiDangKy)status);
+            model.TrangThai = status;
+            _context.SaveChanges();
+            TempData["SuccessMessage"] = StatusName + " đăng ký học phần thành công";
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Delete(int id)
+        {
+            var model = _context.DangKyHocPhan.Find(id);
+            if (model == null)
             {
-                return View();
+                TempData["ErrorMessage"] = "Đăng ký học phần không tồn tại";
+                return RedirectToAction("Index");
             }
+            _context.DangKyHocPhan.Remove(model);
+            _context.SaveChanges();
+            TempData["SuccessMessage"] = "Xóa đăng ký học phần thành công";
+            return RedirectToAction("Index");
         }
     }
 }

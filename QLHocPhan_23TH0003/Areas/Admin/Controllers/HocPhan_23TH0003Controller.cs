@@ -53,6 +53,7 @@ namespace QLHocPhan_23TH0003.Areas.Admin.Controllers
                         TenHocPhan = x.TenHocPhan,
                         TenMonHoc = x.MonHoc?.TenMonHoc ?? "",
                         TenHocKy = x.HocKy?.TenHocKy ?? "",
+                        NamHoc = x.HocKy?.NamHoc ?? "",
                         SoTinChi = x.SoTinChi,
                         NgayTao = x.NgayTao,
                         Action = editForm + deleteForm

@@ -33,6 +33,15 @@ builder.Services.AddDbContext<MainDbContext>(options =>
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
+// add dbcontext để tạo các migration
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+//end
+// add dbcontext để tạo các migration
+builder.Services.AddDbContext<QuanLyHocPhanDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+//end
+
 builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
 {
     

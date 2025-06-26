@@ -98,6 +98,7 @@ namespace QLHocPhan_23TH0003.Common.Helpers
 
             return form;
         }
+
         public static IHtmlContent DeleteButton(this IHtmlHelper htmlHelper, object id, string url, string btnClass = "btn-danger btn-sm")
         {
             // Form tag

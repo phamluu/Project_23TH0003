@@ -1,0 +1,106 @@
+﻿@using QLHocPhan_23TH0003.Common.Constants
+@using QLHocPhan_23TH0003.Common.Helpers
+@using QLHocPhan_23TH0003.Enums
+@model IEnumerable<QLHocPhan_23TH0003.Models.DangKyHocPhan>
+
+    @{
+        ViewBag.Title = "Danh sách đăng ký học phần";
+    }
+<h4 class="title">@ViewBag.Title</h4>
+<div class="head_action">
+    @Html.ModalButton("Đăng ký học phần", "btn-primary", UiConstants.btnCreateModal, UiConstants.CreateModal)
+</div>
+@Html.Partial("_AlertMessages")
+<table id="grid">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayName("Lớp học phần")
+            </th>
+            <th>
+                @Html.DisplayName("Sinh viên")
+            </th>
+            <th>
+                @Html.DisplayName("Lớp học")
+            </th>
+            <th>
+                @Html.DisplayName("Trạng thái")
+            </th>
+            <th>
+                @Html.DisplayName("Ngày đăng ký")
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null)
+        {
+            foreach (var item in Model)
+            {
+                <tr data-id="@item.Id">
+                    <td>
+                        @Html.DisplayFor(modelItem => item.LopHocPhan.TenLopHocPhan)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.SinhVien.HoTen)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.SinhVien.Lop.TenLop)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.NgayTao)
+                    </td>
+
+                    @{
+                        string url = "";
+                        string cl = "";
+                        string btnText = "";
+                        string btnClass = "";
+                        int status = item.TrangThai;
+                        switch (item.TrangThai)
+                        {
+                            case (int)TrangThaiDangKy.ChoDuyet:
+                                cl = "text-warning";
+                                btnClass = "btn btn-info";
+                                btnText = "Duyệt";
+                                status = (int)TrangThaiDangKy.DaDangKy;
+                                break;
+
+                            case (int)TrangThaiDangKy.DaDangKy:
+                                cl = "text-success";
+                                btnClass = "btn btn-danger";
+                                btnText = "Hủy";
+                                status = (int)TrangThaiDangKy.DaHuy;
+                                break;
+
+                            case (int)TrangThaiDangKy.DaHuy:
+                                cl = "text-danger";
+                                btnClass = "btn btn-info";
+                                btnText = "Duyệt";
+                                status = (int)TrangThaiDangKy.DaDangKy;
+                                break;
+                        }
+                    }
+                    <td class="@cl">
+                        @EnumExtensions.GetDisplayName((TrangThaiDangKy)item.TrangThai)
+                    </td>
+                    <td class="d-flex">
+                        <form action="@Url.Action("UpdateStatus", "DangKyHocPhan_23TH0003")" method="post">
+                            @Html.AntiForgeryToken()
+                            @Html.Hidden("id", item.Id)
+                            @Html.Hidden("status", status)
+                            <button type="submit" class="@btnClass">@btnText</button>
+                        </form>
+                        @Html.DeleteButton(item.Id, Url.Action("Delete", "DangKyHocPhan_23TH0003"))
+                    </td>
+
+                </tr>
+            }
+        }
+
+    </tbody>
+</table>
+
+<div class="modal fade" id="@UiConstants.CreateModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    @Html.Partial("Create", new QLHocPhan_23TH0003.Models.Khoa())
+</div>

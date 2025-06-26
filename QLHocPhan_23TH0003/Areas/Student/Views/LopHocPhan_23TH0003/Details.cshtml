@@ -1,0 +1,57 @@
+﻿@using QLHocPhan_23TH0003.Models
+@model LopHocPhan
+@{
+    ViewBag.Title = "Lớp học phần";
+}
+@Html.Partial("_AlertMessages")
+<div class="container p-3">
+    <h4 class="title">@Model.TenLopHocPhan</h4>
+    <div>
+        <span><strong>Mã lớp học phần : </strong> @Model.MaLopHocPhan</span>
+    </div>
+    <div>
+        @{
+            var giaoviens = Model.PhanCongGiangDays;
+          }
+        <span>
+            <strong>Giảng viên : </strong>@if (giaoviens != null)
+            {
+                foreach (var gv in giaoviens)
+                {
+                    <a href="#">@gv.GiangVien.HoTen</a>
+                }
+            }
+        </span>
+    </div>
+    <div>
+        <span><strong>Địa điểm :</strong> @Model.DiaDiemHoc</span>
+    </div>
+    <div>
+        <span><strong>Thời gian học: </strong>@Model.ThoiGianHoc</span>
+    </div>
+    <div>
+        <span><strong>Học kỳ : </strong> @Model.HocPhan.HocKy</span>
+        <span> - Năm học: @Model.HocPhan?.HocKy?.NamHoc</span>
+    </div>
+    <div>
+        <span><strong>Số tín chỉ : </strong> @Model.HocPhan.SoTinChi</span>
+    </div>
+    <div>@Model.GhiChu</div>
+    @{
+        bool IsDangKy = ViewBag.IsDangKy;
+    }
+    @if (IsDangKy != true)
+    {
+        DangKyHocPhan model = new DangKyHocPhan();
+        model.IdLopHocPhan = Model.Id;
+        <div>
+            <div class="alert alert-info">Vui lòng đăng ký học phần để tiếp tục</div>
+            <form action='@Url.Action("Create", "DangKyHocPhan_23TH0003")' method="post" onsubmit="return confirm('Bạn có chắc chắn muốn đăng ký học phần này?');">
+                @Html.AntiForgeryToken()
+                @Html.Hidden("IdLopHocPhan", model.IdLopHocPhan)
+                <button class="btn btn-primary" on>Đăng ký học phần</button>
+            </form>
+        </div>
+    }
+    
+</div>

@@ -1,7 +1,12 @@
 html {
     font-size: 14px;
 }
-
+header {
+    background: #1062ab;
+}
+header a.nav-link {
+    color: #fff;
+}
 section {
     padding: 3rem 0;
 }

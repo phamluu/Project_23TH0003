@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using QLHocPhan_23TH0003.Enums;
 
 namespace QLHocPhan_23TH0003.Areas.Identity.Pages.Account
 {
@@ -120,16 +121,16 @@ namespace QLHocPhan_23TH0003.Areas.Identity.Pages.Account
                     if (result.Succeeded)
                     {
                         var roles = await _userManager.GetRolesAsync(user);
-                        if (roles.Contains("Admin"))
+                        if (roles.Contains(AdminRole.Admin.ToString()))
                         {
                             // Nếu là Admin, chuyển hướng đến trang Admin
                             return RedirectToAction("Index", "Home", new { area = "Admin" }); // Đảm bảo AdminController đã có trong dự án
                         }
-                        if (roles.Contains("GiangVien"))
+                        if (roles.Contains(Role.GiangVien.ToString()))
                         {
                             return RedirectToAction("Index", "Home", new { area = "Instructor" });
                         }
-                        if (roles.Contains("SinhVien"))
+                        if (roles.Contains(Role.SinhVien.ToString()))
                         {
                             return RedirectToAction("Index", "Home", new { area = "Student" });
                         }

@@ -43,7 +43,7 @@
                 </td>
                
                 <td>
-                    @(item.UserId.HasValue ? "Đã có tài khoản" : "Chưa có tài khoản")
+                    @(!string.IsNullOrEmpty(item.UserId) ? "Đã có tài khoản" : "Chưa có tài khoản")
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Lop.TenLop)

@@ -14,9 +14,9 @@
         
 
         // end thông tin profile
-        public int? UserId { get; set; }
+        public string UserId { get; set; }
 
-        public int IdKhoa { get; set; }
+        public int? IdKhoa { get; set; }
         public Khoa? Khoa { get; set; }
 
         public ICollection<PhanCongGiangDay>? PhanCongGiangDays { get; set; }

@@ -1,0 +1,48 @@
+﻿@model IEnumerable<QLHocPhan_23TH0003.ViewModel.PhanCongGiangDayViewModel>
+@using QLHocPhan_23TH0003.Common.Constants
+@using QLHocPhan_23TH0003.Common.Helpers
+@{
+    ViewBag.Title = "Phân công giảng dạy";
+}
+
+<h4>@ViewBag.Title</h4>
+<div class="head_action">
+    @Html.ModalButton("Thêm mới", "btn-primary", UiConstants.btnCreateModal, UiConstants.CreateModal)
+</div>
+@Html.Partial("_AlertMessages")
+<table id="grid">
+    <thead>
+        <tr>
+            <th>Lớp học phần</th>
+            <th>Giảng viên</th>
+            <th>Chức năng</th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+
+<div class="modal fade" id="@UiConstants.CreateModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    @Html.Partial("Create", new QLHocPhan_23TH0003.Models.PhanCongGiangDay())
+</div>
+
+<div class="modal fade" id="@UiConstants.EditModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+</div>
+
+<script>
+     $(document).ready(function() {
+            $('#grid').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    url: '/Admin/PhanCongGiangDay_23TH0003/GetData',
+                    type: 'GET'
+                },
+                columns: [
+                    { data: 'tenLopHocPhan' },
+                    { data: 'hoTenGiangVien' },
+                    { data: 'action', orderable: false, searchable: false }
+                ]
+            });
+    });
+</script>

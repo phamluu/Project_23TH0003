@@ -1,0 +1,70 @@
+﻿@using QLHocPhan_23TH0003.Common.Helpers
+@model IEnumerable<QLHocPhan_23TH0003.Models.DangKyHocPhan>
+@{
+    ViewBag.Title = "Xem điểm sinh viên";
+}
+<h4>@ViewBag.Title</h4>
+
+@Html.Partial("_AlertMessages")
+
+<table id="grid">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayName("Mã sinh viên")
+            </th>
+            <th>
+                @Html.DisplayName("Họ tên")
+            </th>
+            <th>
+                @Html.DisplayName("Lớp học phần")
+            </th>
+            <th>
+                @Html.DisplayName("Lớp học")
+            </th>
+            <th>
+                @Html.DisplayName("Điểm giữa kỳ")
+            </th>
+            <th>
+                @Html.DisplayName("Điểm cuối kỳ")
+            </th>
+            <th>
+                @Html.DisplayName("Điểm trung bình")
+            </th>
+            <th>
+                @Html.DisplayName("Xếp loại")
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SinhVien.MaSinhVien)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SinhVien.HoTen)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LopHocPhan.TenLopHocPhan)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SinhVien.Lop.TenLop)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Diem.DiemGiuaKy)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Diem.DiemCuoiKy)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Diem.DiemTrungBinh)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Diem.XepLoai)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

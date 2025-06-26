@@ -11,6 +11,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using QLHocPhan_23TH0003.Data;
+using QLHocPhan_23TH0003.Enums;
+using QLHocPhan_23TH0003.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -31,13 +34,15 @@ namespace QLHocPhan_23TH0003.Areas.Identity.Pages.Account
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly MainDbContext _context;
         public RegisterModel(
             UserManager<IdentityUser> userManager,
             IUserStore<IdentityUser> userStore,
             SignInManager<IdentityUser> signInManager,
             ILogger<RegisterModel> logger,
             IEmailSender emailSender,
-            RoleManager<IdentityRole> roleManager)
+            RoleManager<IdentityRole> roleManager,
+            MainDbContext context)
         {
             _userManager = userManager;
             _userStore = userStore;
@@ -46,6 +51,7 @@ namespace QLHocPhan_23TH0003.Areas.Identity.Pages.Account
             _logger = logger;
             _emailSender = emailSender;
             _roleManager = roleManager;
+            _context = context;
         }
 
         /// <summary>
@@ -125,10 +131,46 @@ namespace QLHocPhan_23TH0003.Areas.Identity.Pages.Account
 
                 if (result.Succeeded)
                 {
-                    await _userManager.AddToRoleAsync(user, Input.Role);
+                    // Thêm role đúng theo đăng ký
+                    if (!await _roleManager.RoleExistsAsync(AdminRole.Admin.ToString()))
+                    {
+                        await _roleManager.CreateAsync(new IdentityRole(AdminRole.Admin.ToString()));
+                    }
+                    if (!await _roleManager.RoleExistsAsync(Input.Role))
+                    {
+                        await _roleManager.CreateAsync(new IdentityRole(Input.Role));
+                    }
+                    var countUser =  _userManager.Users.Count();
+                    // Nếu là ng đăng ký đầu tiên
+                    if (countUser <= 1)
+                    {
+                        await _userManager.AddToRoleAsync(user, AdminRole.Admin.ToString());
+                        
+                    }
+                    if (Input.Role != AdminRole.Admin.ToString())
+                    {
+                        await _userManager.AddToRoleAsync(user, Input.Role);
+                    }
+
                     _logger.LogInformation("User created a new account with password.");
 
                     var userId = await _userManager.GetUserIdAsync(user);
+                    if (Input.Role == Role.GiangVien.ToString())
+                    {
+                        var giangvien = new GiangVien();
+                        giangvien.HoTen = user.UserName;
+                        giangvien.UserId = userId;
+                        _context.GiangVien.Add(giangvien);
+                        await _context.SaveChangesAsync();
+                    }
+                    else if (Input.Role == Role.SinhVien.ToString())
+                    {
+                        var sinhvien = new SinhVien();
+                        sinhvien.HoTen = user.UserName;
+                        sinhvien.UserId = userId;
+                        _context.SinhVien.Add(sinhvien);
+                        await _context.SaveChangesAsync();
+                    }
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
                     var callbackUrl = Url.Page(

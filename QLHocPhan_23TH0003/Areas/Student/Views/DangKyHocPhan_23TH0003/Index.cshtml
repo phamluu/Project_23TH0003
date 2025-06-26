@@ -1,0 +1,50 @@
+﻿@using QLHocPhan_23TH0003.Common.Helpers
+@using QLHocPhan_23TH0003.Enums
+@model IEnumerable<QLHocPhan_23TH0003.Models.DangKyHocPhan>
+@{
+    ViewBag.Title = "Lớp học phần đã đăng ký";
+}
+    <div class="container">
+        <h4 class="title">@ViewBag.Title</h4>
+    <table id="grid">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayName("Lớp học phần")
+                </th>
+                
+                <th>
+                    @Html.DisplayName("Ngày đăng ký")
+                 </th>
+                <th>
+                    @Html.DisplayName("Trạng thái")
+                </th>
+                <th></th>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.LopHocPhan.TenLopHocPhan)
+                    </td>
+                    
+                    <td>
+                        @Html.DisplayFor(modelItem => item.NgayTao)
+                    </td>
+                    <td>
+                        @EnumExtensions.GetDisplayName((TrangThaiDangKy)item.TrangThai)
+                    </td>
+                    <td>
+                        <a href="@Url.Action("Details", "LopHocPhan_23TH0003", new { id = item.IdLopHocPhan })" class="btn btn-primary">Xem</a>|
+                        @if (item.TrangThai == (int)TrangThaiDangKy.ChoDuyet)
+                        {
+                            @Html.DeleteButton(item.Id, Url.Action("Delete", "DangKyHocPhan_23TH0003"))
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    </div>
+
