@@ -20,7 +20,7 @@ namespace QLHocPhan_23TH0003.Areas.Admin.Controllers
         {
             var model = _context.DangKyHocPhan.Include(x => x.LopHocPhan).ThenInclude(x => x.HocPhan)
                 .ThenInclude(x => x.HocKy)
-                .Include(x => x.SinhVien).ThenInclude(x => x.Lop).ToList();
+                .Include(x => x.SinhVien).ThenInclude(x => x.Lop).OrderByDescending(x => x.NgayTao).ToList();
             return View(model);
         }
 

@@ -1,0 +1,56 @@
+﻿@using QLHocPhan_23TH0003.Models
+@model List<DangKyHocPhan>
+
+    <div class="container">
+        @if (Model != null)
+{
+    <form method="post" asp-action="LuuDiem">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Mã SV</th>
+                    <th>Họ tên</th>
+                    <th>Chuyên cần</th>
+                    <th>Giữa kỳ</th>
+                    <th>Thực hành</th>
+                    <th>Cuối kỳ</th>
+                    <th>Trung bình</th>
+                    <th>Xếp loại</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (int i = 0; i < Model.Count; i++)
+                {
+                    var dk = Model[i];
+                    <tr>
+                        <td>@dk.SinhVien.MaSinhVien</td>
+                        <td>@dk.SinhVien.HoTen</td>
+                        <td>
+                            <input type="hidden" name="dangKyIds" value="@dk.Id" />
+                            <input type="number" step="0.1" min="0" max="10" name="diemChuyenCan" value="@dk.Diem?.DiemChuyenCan" />
+                        </td>
+                        <td>
+                            <input type="number" step="0.1" min="0" max="10" name="diemGiuaKy" value="@dk.Diem?.DiemGiuaKy" />
+                        </td>
+                        <td>
+                            <input type="number" step="0.1" min="0" max="10" name="diemThucHanh" value="@dk.Diem?.DiemThucHanh" />
+                        </td>
+                        <td>
+                            <input type="number" step="0.1" min="0" max="10" name="diemCuoiKy" value="@dk.Diem?.DiemCuoiKy" />
+                        </td>
+                        <td>@dk.Diem?.DiemTrungBinh</td>
+                        <td>@dk.Diem?.XepLoai</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <button type="submit" class="btn btn-primary">Lưu điểm</button>
+    </form>
+
+}
+else
+{
+    <p>Bạn chưa được phân công giảng dạy</p>
+}
+    </div>
+
