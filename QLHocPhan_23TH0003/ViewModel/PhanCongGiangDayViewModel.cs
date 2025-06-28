@@ -2,10 +2,11 @@
 
 namespace QLHocPhan_23TH0003.ViewModel
 {
-    public class PhanCongGiangDayViewModel:PhanCongGiangDay
+    public class PhanCongGiangDayViewModel
     {
-        public string Action { get; set; }
-        public string TenLopHocPhan { get; set; }
-        public string HoTenGiangVien { get; set; }
+        public int? IdLopHocPhan { get; set; }
+        public List<LopHocPhan>? LopHocPhans { get; set; } 
+        public List<GiangVien>? GiangViens { get; set; }
+        public List<int> GiangVienDaPhanCong { get; set; }
     }
 }

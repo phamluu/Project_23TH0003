@@ -28,7 +28,7 @@ namespace QLHocPhan_23TH0003.Areas.Instructor.Controllers
 
             if (IdLopHocPhan == null)
             {
-                return View(null);
+                IdLopHocPhan = phanCong.FirstOrDefault().LopHocPhan.Id;
             }
 
             var danhSachDangKy = await _context.DangKyHocPhan

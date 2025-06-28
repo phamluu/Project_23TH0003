@@ -14,13 +14,22 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayName("Mã lớp học phần")
+                @Html.DisplayName("Mã LHP")
             </th>
             <th>
                 @Html.DisplayName("Tên lớp học phần")
             </th>
             <th>
-                @Html.DisplayName("Học phần")
+                @Html.DisplayName("Học kì")
+            </th>
+            <th>
+                @Html.DisplayName("Năm học")
+            </th>
+            <th>
+                @Html.DisplayName("DKHP")
+            </th>
+            <th>
+                @Html.DisplayName("Giảng viên")
             </th>
             <th>
                 @Html.DisplayName("Ngày tạo")
@@ -31,6 +40,7 @@
     <tbody>
         @foreach (var item in Model)
         {
+             List<string> phancongs = item.PhanCongGiangDays?.Select(x => x.GiangVien.HoTen).ToList();
             <tr>
                 <td>
                     @Html.DisplayFor(modelItem => item.MaLopHocPhan)
@@ -38,13 +48,30 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.TenLopHocPhan)
                 </td>
-                
                 <td>
-                    @Html.DisplayFor(modelItem => item.HocPhan.TenHocPhan)
+                    @(item.HocPhan?.HocKy?.TenHocKy)
                 </td>
-                
                 <td>
-                    @Html.DisplayFor(modelItem => item.NgayTao)
+                    @(item.HocPhan?.HocKy?.NamHoc)
+                </td>
+                <td>
+                    @(item.DangKyHocPhans?.Count())
+                </td>
+                <td>
+                    @if (phancongs == null)
+                    {
+                        <span>Chưa phân công</span>
+                    }
+                    else
+                    {
+                        foreach (var gv in phancongs)
+                        {
+                            <span class="text-bg-danger" style="display: block;">@gv</span>
+                        }
+                    }
+                </td>
+                <td>
+                    @(item.NgayTao.ToString("dd/MM/yyyy"))
                 </td>
                 <td>
                     @Html.EditButton("LopHocPhan_23TH0003", item.Id)

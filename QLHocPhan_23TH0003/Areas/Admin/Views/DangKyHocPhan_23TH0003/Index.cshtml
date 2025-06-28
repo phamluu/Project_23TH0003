@@ -8,7 +8,7 @@
     }
 <h4 class="title">@ViewBag.Title</h4>
 <div class="head_action">
-    @Html.ModalButton("Đăng ký học phần", "btn-primary", UiConstants.btnCreateModal, UiConstants.CreateModal)
+<a href="@Url.Action("Create", "DangKyHocPhan_23TH0003")" class="btn btn-primary">Đăng ký học phần</a>
 </div>
 @Html.Partial("_AlertMessages")
 <table id="grid">
@@ -101,6 +101,3 @@
     </tbody>
 </table>
 
-<div class="modal fade" id="@UiConstants.CreateModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    @Html.Partial("Create", new QLHocPhan_23TH0003.Models.Khoa())
-</div>

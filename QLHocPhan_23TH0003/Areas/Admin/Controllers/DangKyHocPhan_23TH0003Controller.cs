@@ -4,6 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using QLHocPhan_23TH0003.Common.Helpers;
 using QLHocPhan_23TH0003.Data;
 using QLHocPhan_23TH0003.Enums;
+using QLHocPhan_23TH0003.Models;
+using QLHocPhan_23TH0003.ViewModel;
 
 namespace QLHocPhan_23TH0003.Areas.Admin.Controllers
 {
@@ -24,31 +26,48 @@ namespace QLHocPhan_23TH0003.Areas.Admin.Controllers
             return View(model);
         }
 
-        // GET: DangKyHocPhan_23TH0003Controller/Details/5
-        public ActionResult Details(int id)
-        {
-            return View();
-        }
-
         // GET: DangKyHocPhan_23TH0003Controller/Create
-        public ActionResult Create()
+        public ActionResult Create(int ? IdLopHocPhan)
         {
-            return View();
+            DangKyHocPhanViewModel model = new DangKyHocPhanViewModel();
+            var lhp = _context.LopHocPhan.Include(x => x.HocPhan).ThenInclude(x => x.HocKy).ToList();
+            var sinhVien = _context.SinhVien.Include(x => x.Lop).Where(x => x.IsDeleted != true).ToList();
+            var daDangKy = _context.DangKyHocPhan
+                            .Where(p => p.IdLopHocPhan == IdLopHocPhan)
+                            .Select(p => p.IdSinhVien)
+                            .ToList();
+            model.IdLopHocPhan = IdLopHocPhan;
+            if (!IdLopHocPhan.HasValue)
+            {
+                model.IdLopHocPhan = lhp.LastOrDefault().Id;
+            }
+            model.LopHocPhans = lhp.ToList();
+            model.SinhViens = sinhVien;
+            model.SinhVienDaDangKy = daDangKy;
+            return View(model);
         }
 
         // POST: DangKyHocPhan_23TH0003Controller/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public ActionResult Create(int IdLopHocPhan, int[] IdSinhVien)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                _context.DangKyHocPhan.AddRange(IdSinhVien.Select(x => new DangKyHocPhan()
+                {
+                    IdLopHocPhan = IdLopHocPhan,
+                    IdSinhVien = x,
+                    TrangThai = (int)TrangThaiDangKy.DaDangKy
+                }));
+                _context.SaveChanges();
+                TempData["SuccessMessage"] = "Đăng ký học phần thành công";
             }
             catch
             {
-                return View();
+                TempData["ErrorMessage"] = "Đăng ký học phần không thành công";
             }
+            return RedirectToAction("Create", new { IdLopHocPhan = IdLopHocPhan });
         }
 
         // GET: DangKyHocPhan_23TH0003Controller/Edit/5

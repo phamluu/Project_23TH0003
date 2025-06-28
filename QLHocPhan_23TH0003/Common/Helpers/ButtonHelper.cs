@@ -147,7 +147,7 @@ namespace QLHocPhan_23TH0003.Common.Helpers
             return $@"
             <a data-id='{id}' data-url='{actionUrl}' class='btn btn-primary {UiConstants.btnEditModal}'>Sửa</a>";
         }
-        public static IHtmlContent EditButton(this IHtmlHelper htmlHelper, string controller, object id, string action = "Edit", string btnClass = "btn-edit", string text = "Cập nhật")
+        public static IHtmlContent EditButton(this IHtmlHelper htmlHelper, string controller, object id, string action = "Edit", string btnClass = "btn-edit", string text = "Sửa")
         {
             // ✅ Lấy IUrlHelper thông qua DI để tương thích với endpoint routing
             var urlHelperFactory = htmlHelper.ViewContext.HttpContext.RequestServices.GetRequiredService<IUrlHelperFactory>();

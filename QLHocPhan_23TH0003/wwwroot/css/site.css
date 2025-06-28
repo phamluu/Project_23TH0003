@@ -42,7 +42,10 @@ footer {
 .giaovien {
     padding: 0.5rem 0;
 }
-
+.nhapdiem .nav-item.active a {
+    background: #ff6200;
+    color: #fff;
+}
 .text-bg-success {
     background: green;
     color: #fff;
@@ -131,7 +134,16 @@ html {
 .main-panel > .content {
     margin-top: 0;
 }
-
+.lophocphan a {
+    background: #a8a8b029;
+    padding: 0.5rem 1rem;
+    display: block;
+    border-bottom: #33333330 1px solid;
+}
+.lophocphan .active a{
+    background: #ff0055;
+    color: #fff;
+}
 @media(max-width:490px) {
     .logo img {
         max-height: 40px;

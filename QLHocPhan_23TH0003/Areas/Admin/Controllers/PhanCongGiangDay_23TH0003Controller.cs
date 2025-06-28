@@ -18,115 +18,67 @@ namespace QLHocPhan_23TH0003.Areas.Admin.Controllers
         {
             _context = context;
         }
-        public ActionResult Index()
+        public ActionResult Index(int? IdLopHocPhan)
         {
-            return View();
+            
+            var lhp = _context.LopHocPhan.Include(x => x.HocPhan).ThenInclude(x => x.HocKy)
+                .Include(x => x.PhanCongGiangDays).ThenInclude(x => x.GiangVien).Where(x => x.IsDeleted != true).ToList();
+            var giangVien = _context.GiangVien.Include(x => x.Khoa).Where(x => x.IsDeleted != true).ToList();
+            var daPhanCong = _context.PhanCongGiangDay
+                             .Where(p => p.IdLopHocPhan == IdLopHocPhan)
+                             .Select(p => p.IdGiangVien)
+                             .ToList();
+            PhanCongGiangDayViewModel model = new PhanCongGiangDayViewModel();
+            model.LopHocPhans = lhp;
+            model.GiangViens = giangVien;
+            model.IdLopHocPhan = IdLopHocPhan;
+            model.GiangVienDaPhanCong = daPhanCong;
+            if (!IdLopHocPhan.HasValue)
+            {
+                model.IdLopHocPhan = lhp.LastOrDefault().Id;
+            }
+            return View(model);
         }
 
-        [HttpGet]
-        public ActionResult GetData(int draw, int start, int length, string searchValue)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult PhanCong(int IdLopHocPhan, int[] IdGiangVien)
         {
-            var query = _context.PhanCongGiangDay.Include(x => x.LopHocPhan).Include(x => x.GiangVien).AsQueryable();
+            // Lấy các phân công hiện tại
+            var phanCongHienTai = _context.PhanCongGiangDay
+                .Where(p => p.IdLopHocPhan == IdLopHocPhan)
+                .ToList();
 
-            var recordsTotal = query.Count();
-            var antiforgery = HttpContext.RequestServices.GetService<Microsoft.AspNetCore.Antiforgery.IAntiforgery>();
-            var tokens = antiforgery.GetAndStoreTokens(HttpContext);
-            string token = tokens.RequestToken;
+            // Nếu người dùng không chọn gì thì xem như danh sách trống
+            var idGuiTuForm = IdGiangVien?.ToList() ?? new List<int>();
 
-            var data = query.Skip(start).Take(length).ToList()
-                .Select(x =>
+            // Danh sách các IdGiangVien đã có trong DB
+            var idTrongDb = phanCongHienTai.Select(p => p.IdGiangVien).ToList();
+
+            // 1. Thêm mới nếu có trong form nhưng không có trong DB
+            var canThem = idGuiTuForm.Except(idTrongDb).ToList();
+            foreach (var idGV in canThem)
+            {
+                var newPhanCong = new PhanCongGiangDay
                 {
-                    var deleteForm = ButtonHelper.BuildDeleteFormHtml(
-                        x.Id,
-                        "/Admin/PhanCongGiangDay_23TH0003/Delete",
-                        token
-                    );
-                    var editForm = ButtonHelper.BuildEditFormHtml(x.Id, "/Admin/PhanCongGiangDay_23TH0003/Edit");
-                    return new PhanCongGiangDayViewModel
-                    {
-                        Id = x.Id,
-                        TenLopHocPhan = x.LopHocPhan?.TenLopHocPhan ?? "",
-                        HoTenGiangVien = x.GiangVien?.HoTen ?? "",
-                        Action = editForm + deleteForm
-                    };
-                }).ToList();
-
-            return Json(new
-            {
-                draw,
-                recordsFiltered = recordsTotal,
-                recordsTotal,
-                data
-            });
-        }
-
-        // GET: PhanCongGiangDay_23TH0003Controller/Details/5
-        public ActionResult Details(int id)
-        {
-            return View();
-        }
-
-        // GET: PhanCongGiangDay_23TH0003Controller/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: PhanCongGiangDay_23TH0003Controller/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
+                    IdLopHocPhan = IdLopHocPhan,
+                    IdGiangVien = idGV
+                };
+                _context.PhanCongGiangDay.Add(newPhanCong);
             }
-            catch
-            {
-                return View();
-            }
+
+            // 2. Xoá nếu có trong DB nhưng không có trong form
+            var canXoa = phanCongHienTai
+                .Where(p => !idGuiTuForm.Contains(p.IdGiangVien))
+                .ToList();
+            _context.PhanCongGiangDay.RemoveRange(canXoa);
+
+            
+            _context.SaveChanges();
+            TempData["SuccessMessage"] = "Phân công giảng viên thành công";
+            return RedirectToAction("Index", new { IdLopHocPhan });
         }
 
-        // GET: PhanCongGiangDay_23TH0003Controller/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
 
-        // POST: PhanCongGiangDay_23TH0003Controller/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: PhanCongGiangDay_23TH0003Controller/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: PhanCongGiangDay_23TH0003Controller/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
     }
 }
