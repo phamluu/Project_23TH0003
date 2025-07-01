@@ -27,7 +27,10 @@ namespace QLHocPhan_23TH0003.Areas.Student.Controllers
             {
                 TempData["ErrorMessage"] = "Sinh viên chưa có hồ sơ";
             }
-            var model = _context.DangKyHocPhan.Include(x => x.LopHocPhan).Include(x => x.SinhVien).Where(x => x.IdSinhVien == sinhVien.Id).ToList();
+            var model = _context.DangKyHocPhan
+                .Include(x => x.LopHocPhan).ThenInclude(x => x.HocPhan).ThenInclude(x => x.HocKy)
+                .Include(x => x.LopHocPhan).ThenInclude(x => x.PhanCongGiangDays).ThenInclude(x => x.GiangVien)
+                .Include(x => x.SinhVien).Where(x => x.IdSinhVien == sinhVien.Id).ToList();
             return View(model);
         }
 
@@ -91,10 +94,10 @@ namespace QLHocPhan_23TH0003.Areas.Student.Controllers
             }
         }
 
-
+        // Hủy
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id)
+        public ActionResult Cancel(int id)
         {
             var dk = _context.DangKyHocPhan.Find(id);
             if (dk == null)
@@ -104,13 +107,14 @@ namespace QLHocPhan_23TH0003.Areas.Student.Controllers
             }
             if (dk.TrangThai != (int)TrangThaiDangKy.ChoDuyet)
             {
-                TempData["ErrorMessage"] = "không được xóa lớp học phần " + EnumExtensions.GetDisplayName((TrangThaiDangKy)dk.TrangThai);
+                TempData["ErrorMessage"] = "không được hủy lớp học phần " + EnumExtensions.GetDisplayName((TrangThaiDangKy)dk.TrangThai);
                 return RedirectToAction("Index");
             }
-            _context.DangKyHocPhan.Remove(dk);
+            dk.TrangThai = (int)TrangThaiDangKy.DaHuy;
             _context.SaveChanges();
-            TempData["SuccessMessage"] = "Xóa đăng ký học phần thành công";
+            TempData["SuccessMessage"] = "Hủy đăng ký học phần thành công";
             return RedirectToAction("Index");
         }
+
     }
 }

@@ -6,6 +6,7 @@
     <title>@ViewData["Title"] - Quản lý học phần</title>
     <script type="importmap"></script>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link href="~/lib/summernote/summernote-bs4.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/QLHocPhan_23TH0003.styles.css" asp-append-version="true" />
 </head>
@@ -32,7 +33,7 @@
                                 <a class="nav-link" href="/">Trang chủ</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="/Home/Privacy">Lớp học phần</a>
+                                <a class="nav-link" href="@Url.Action("Index", "PhanCongGiangDay_23TH0003", new { area = "Instructor" })">Giảng dạy</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="@Url.Action("Index", "NhapDiem_23TH0003", new { area = "Instructor" })">Nhập điểm</a>
@@ -85,7 +86,16 @@
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/summernote/summernote-bs4.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
+    <script>
+        $(document).ready(function() {
+            $('#content').summernote({
+                height: 300, // chiều cao khung soạn thảo
+                placeholder: 'Nhập nội dung phim ở đây...'
+            });
+        });
+    </script>
 </body>
 </html>

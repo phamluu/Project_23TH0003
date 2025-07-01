@@ -1,49 +1,52 @@
 ﻿@using QLHocPhan_23TH0003.Models
-@model LopHocPhan
+@using QLHocPhan_23TH0003.ViewModel
+@model HocViewModel
 @{
     ViewBag.Title = "Lớp học phần";
 }
 @Html.Partial("_AlertMessages")
+<div class="page-header">
+    <div class="container">
+        <h4 class="title">@Model.LopHocPhan?.TenLopHocPhan</h4>
+    </div>
+</div>
 <div class="container p-3">
-    <h4 class="title">@Model.TenLopHocPhan</h4>
     <div>
-        <span><strong>Mã lớp học phần : </strong> @Model.MaLopHocPhan</span>
+        <span><strong>Mã lớp học phần : </strong> @Model.LopHocPhan.MaLopHocPhan</span>
     </div>
     <div>
         @{
-            var giaoviens = Model.PhanCongGiangDays;
+            var giaoviens = Model.LopHocPhan.PhanCongGiangDays;
           }
         <span>
             <strong>Giảng viên : </strong>@if (giaoviens != null)
             {
-                foreach (var gv in giaoviens)
-                {
-                    <a href="#">@gv.GiangVien.HoTen</a>
-                }
+                var a = string.Join(", ", giaoviens.Select(gv => gv.GiangVien.HoTen));
+                @a
             }
         </span>
     </div>
     <div>
-        <span><strong>Địa điểm :</strong> @Model.DiaDiemHoc</span>
+        <span><strong>Địa điểm :</strong> @Model.LopHocPhan.DiaDiemHoc</span>
     </div>
     <div>
-        <span><strong>Thời gian học: </strong>@Model.ThoiGianHoc</span>
+        <span><strong>Thời gian học: </strong>@Model.LopHocPhan.ThoiGianHoc</span>
     </div>
     <div>
-        <span><strong>Học kỳ : </strong> @Model.HocPhan.HocKy</span>
-        <span> - Năm học: @Model.HocPhan?.HocKy?.NamHoc</span>
+        <span><strong>Học kỳ : </strong> @Model.LopHocPhan.HocPhan?.HocKy?.TenHocKy</span>
+        <span> - Năm học: @Model.LopHocPhan.HocPhan?.HocKy?.NamHoc</span>
     </div>
     <div>
-        <span><strong>Số tín chỉ : </strong> @Model.HocPhan.SoTinChi</span>
+        <span><strong>Số tín chỉ : </strong> @Model.LopHocPhan.HocPhan?.SoTinChi</span>
     </div>
-    <div>@Model.GhiChu</div>
+    <div>@Model.LopHocPhan.GhiChu</div>
     @{
         bool IsDangKy = ViewBag.IsDangKy;
     }
     @if (IsDangKy != true)
     {
         DangKyHocPhan model = new DangKyHocPhan();
-        model.IdLopHocPhan = Model.Id;
+        model.IdLopHocPhan = Model.LopHocPhan.Id;
         <div>
             <div class="alert alert-info">Vui lòng đăng ký học phần để tiếp tục</div>
             <form action='@Url.Action("Create", "DangKyHocPhan_23TH0003")' method="post" onsubmit="return confirm('Bạn có chắc chắn muốn đăng ký học phần này?');">
@@ -53,5 +56,39 @@
             </form>
         </div>
     }
-    
+    else if(Model.BaiHocs != null && Model.BaiHocs.Count() > 0)
+    {
+        <div class="row mt-5">
+            @foreach(var item in Model.BaiHocs)
+            {
+            <div class="col col-md-12">
+                <div class="card-group">
+                        <a href="" class="title">@item.TenBaiHoc</a>
+                </div>
+                    @if (item.DropboxFile != null)
+                    {
+                        <div class="card-group">
+                            <a href="@item.DropboxFile?.DownloadUrl" target="_blank">
+                                <img src="@item.DropboxFile?.IconUrl" class="icon-file" />
+                                @item.DropboxFile?.Name
+                            </a>
+                        </div>
+                    }
+                    @if (item.DropboxVideo != null)
+                    {
+                        <div class="card-group">
+                            <a href="@item.DropboxVideo?.DownloadUrl" target="_blank">
+                                <img src="@item.DropboxVideo?.IconUrl" class="icon-file" />
+                                @item.DropboxVideo?.Name
+                            </a>
+                        </div>
+                    }
+                    
+                <div>@Html.Raw(item.NoiDung)</div>
+            </div>
+            }
+        </div>
+        
+    }
+
 </div>

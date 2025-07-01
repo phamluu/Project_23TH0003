@@ -5,41 +5,63 @@
     ViewBag.Title = "Lớp học phần đã đăng ký";
 }
     <div class="container">
-        <h4 class="title">@ViewBag.Title</h4>
+        <div class="page-header">
+        <h4 class="title text-center">@ViewBag.Title</h4>
+        </div>
+        
     <table id="grid">
         <thead>
             <tr>
                 <th>
                     @Html.DisplayName("Lớp học phần")
                 </th>
-                
+                <th>Giảng viên</th>
+                <th>Học kỳ</th>
                 <th>
                     @Html.DisplayName("Ngày đăng ký")
                  </th>
                 <th>
                     @Html.DisplayName("Trạng thái")
                 </th>
-                <th></th>
+                <th style="width: 200px">Thao tác</th>
         </thead>
         <tbody>
             @foreach (var item in Model)
             {
                 <tr>
                     <td>
-                        @Html.DisplayFor(modelItem => item.LopHocPhan.TenLopHocPhan)
+                    <div class="form-group">@Html.DisplayFor(modelItem => item.LopHocPhan.TenLopHocPhan)</div>
                     </td>
-                    
                     <td>
-                        @Html.DisplayFor(modelItem => item.NgayTao)
+                        <div class="form-group">
+                            @string.Join(", ", item.LopHocPhan?.PhanCongGiangDays?
+                                                    .Where(x => x.GiangVien != null)
+                                                    .Select(x => x.GiangVien.HoTen) ?? new List<string> { "" })
+                        </div>
+                    </td>
+                    <td>@item.LopHocPhan?.HocPhan?.HocKy?.TenHocKy</td>
+                    <td>
+                        @(item.NgayTao == null ? "" : item.NgayTao.ToString("dd/MM/yyyy"))
                     </td>
                     <td>
                         @EnumExtensions.GetDisplayName((TrangThaiDangKy)item.TrangThai)
                     </td>
                     <td>
-                        <a href="@Url.Action("Details", "LopHocPhan_23TH0003", new { id = item.IdLopHocPhan })" class="btn btn-primary">Xem</a>|
+                        @if (item.TrangThai == (int)TrangThaiDangKy.DaDangKy)
+                        {
+                            <a href="@Url.Action("Details", "LopHocPhan_23TH0003", new { id = item.IdLopHocPhan })" class="btn btn-sm btn-info">Vào học</a>
+                        }
+                        else
+                        {
+                            <a href="@Url.Action("Details", "LopHocPhan_23TH0003", new { id = item.IdLopHocPhan })" class="btn btn-sm btn-primary">Xem</a>
+                        }
+
                         @if (item.TrangThai == (int)TrangThaiDangKy.ChoDuyet)
                         {
-                            @Html.DeleteButton(item.Id, Url.Action("Delete", "DangKyHocPhan_23TH0003"))
+                            <form action="@Url.Action("Cancel", "DangKyHocPhan_23TH0003", new { id = item.Id})" class = "d-inline"   method="post" onsubmit="return confirm('Bạn có chắc chắn muốn hủy?');">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="btn btn-sm btn-danger">Hủy</button>
+                            </form>
                         }
                     </td>
                 </tr>

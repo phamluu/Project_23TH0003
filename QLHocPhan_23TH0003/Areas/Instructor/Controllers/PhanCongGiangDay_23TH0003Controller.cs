@@ -1,15 +1,26 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace QLHocPhan_23TH0003.Areas.Instructor.Controllers
 {
-    public class PhanCongGiangDay_23TH0003Controller : Controller
+    public class PhanCongGiangDay_23TH0003Controller : BaseInstructorController
     {
-        // GET: LopHocPhan_23TH0003Controller
+        private readonly QLHocPhan_23TH0003.Data.MainDbContext _context;
+        public PhanCongGiangDay_23TH0003Controller(QLHocPhan_23TH0003.Data.MainDbContext context)
+        {
+            _context = context;
+        }
         public ActionResult Index()
         {
-            
-            return View();
+            string UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var GiangVien = _context.GiangVien.FirstOrDefault(x => x.UserId == UserId);
+            var model = _context.PhanCongGiangDay.Include(p => p.LopHocPhan).ThenInclude(p => p.HocPhan)
+                                                                            .ThenInclude(p => p.HocKy)
+                                                  .Include(p => p.LopHocPhan).ThenInclude(p => p.DangKyHocPhans)
+                .Where(p => p.IdGiangVien == GiangVien.Id).ToList();
+            return View(model);
         }
 
         // GET: LopHocPhan_23TH0003Controller/Details/5

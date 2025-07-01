@@ -1,0 +1,19 @@
+﻿@using QLHocPhan_23TH0003.Models
+@model BaiHoc
+
+@{
+    ViewBag.Title = "Sửa bài học";
+}
+<div class="container">
+    <h4 class="text-center mt-3 mb-3">@ViewBag.Title</h4>
+    @Html.Partial("_AlertMessages")
+    <form action="@Url.Action("Edit", "BaiHoc_23TH0003")" method="post" enctype="multipart/form-data">
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(model => model.Id)
+        <div class="form-group mt-3 mb-3">
+            <input type="submit" value="Lưu" class="btn btn-danger" />
+            <a href="@Url.Action("Index", "BaiHoc_23TH0003", new { IdLopHocPhan = Model.IdLopHocPhan })" class="btn btn-danger">Quay lại</a>
+        </div>
+        @Html.Partial("_Fields", Model)
+    </form>
+</div>

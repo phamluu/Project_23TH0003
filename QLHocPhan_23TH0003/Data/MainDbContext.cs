@@ -20,7 +20,7 @@ namespace QLHocPhan_23TH0003.Data
         public DbSet<DangKyHocPhan> DangKyHocPhan { get; set; }
         public DbSet<PhanCongGiangDay> PhanCongGiangDay { get; set; }
         public DbSet<LopHocPhan> LopHocPhan { get; set; }
-
+        public DbSet<BaiHoc> BaiHoc { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -115,6 +115,12 @@ namespace QLHocPhan_23TH0003.Data
                 entity.HasKey(e => e.Id);
                 entity.HasOne(e => e.Lop).WithMany(e => e.SinhViens).HasForeignKey(e => e.IdLop);
                 entity.HasMany(e => e.DangKyHocPhans).WithOne(e => e.SinhVien).HasForeignKey(e => e.IdSinhVien);
+            });
+            modelBuilder.Entity<BaiHoc>(entity =>
+            {
+                entity.ToTable("BaiHoc");
+                entity.HasKey(e => e.Id);
+                entity.HasOne(e => e.LopHocPhan).WithMany(e => e.BaiHocs).HasForeignKey(e => e.IdLopHocPhan);
             });
         }
     }

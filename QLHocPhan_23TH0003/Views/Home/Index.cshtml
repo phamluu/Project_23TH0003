@@ -1,43 +1,97 @@
-﻿@model IEnumerable<QLHocPhan_23TH0003.Models.LopHocPhan>
+﻿@using QLHocPhan_23TH0003.ViewModel
+@model List<HocKyLopHocPhanViewModel>
 @{
     ViewData["Title"] = "Trang chủ";
+    int i = 0;
 }
 
-<div class="banner">
-    <img src="~/img/banner2.png" style="width: 100%"/>
+<div class="banner mb-4">
+    <img src="~/img/banner2.png" style="width: 100%;" />
 </div>
 
 <section id="khoahoc">
     <div class="container">
         <h4 class="title"><span>CÁC KHÓA HỌC HIỆN TẠI</span></h4>
-        @if (Model != null && Model.Count() > 0)
+
+        @if (Model != null && Model.Any())
         {
-            <div class="row">
-                @foreach (var item in Model)
+            <div class="accordion" id="accordionHocKy">
+                @foreach (var hk in Model)
                 {
-                    var giaoviens = item.PhanCongGiangDays;
-                    <div class="col-md-6">
-                        <div class="col my-3">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h5 class="card-title">@item.TenLopHocPhan</h5>
-                                    <div class="card-text">@item.GhiChu</div>
-                                    <div class="giaovien">
-                                        Giáo viên:
-                                        @if (giaoviens != null)
-                                        {
-                                            foreach (var gv in giaoviens)
-                                            {
-                                                <a href="#">@gv.GiangVien.HoTen</a>
-                                            }
-                                        }
-                                    </div>
-                                    <a href='@Url.Action("Details", "LopHocPhan_23TH0003", new {area="Student", id = item.Id })' class="btn btn-primary">Nhấn vào đây để truy cập khóa học</a>
+                    var hkId = $"hk-{hk.HocKy.Id}";
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="heading-@hkId">
+                            <button class="accordion-button @(i != 0 ? "collapsed" : "")" type="button"
+                                    data-bs-toggle="collapse" data-bs-target="#collapse-@hkId"
+                                    aria-expanded="@(i == 0 ? "true" : "false")" aria-controls="collapse-@hkId">
+                                @hk.HocKy?.TenHocKy (@hk.HocKy?.NamHoc)
+                            </button>
+                        </h2>
+                        <div id="collapse-@hkId" class="accordion-collapse collapse @(i == 0 ? "show" : "")"
+                             aria-labelledby="heading-@hkId" data-bs-parent="#accordionHocKy">
+                            <div class="accordion-body">
+                                <div class="accordion" id="accordionKhoa-@hkId">
+                                    @foreach (var khoa in hk.Khoas)
+                                    {
+                                        var khoaId = $"{hkId}-khoa-{khoa.Khoa.Id}";
+                                        <div class="accordion-item">
+                                            <h2 class="accordion-header" id="heading-@khoaId">
+                                                <button class="accordion-button collapsed" type="button"
+                                                        data-bs-toggle="collapse" data-bs-target="#collapse-@khoaId"
+                                                        aria-expanded="false" aria-controls="collapse-@khoaId">
+                                                    @khoa.Khoa.TenKhoa
+                                                </button>
+                                            </h2>
+                                            <div id="collapse-@khoaId" class="accordion-collapse collapse"
+                                                 aria-labelledby="heading-@khoaId" data-bs-parent="#accordionKhoa-@hkId">
+                                                <div class="accordion-body">
+                                                    <div class="row">
+                                                        @foreach (var item in khoa.LopHocPhans)
+                                                        {
+                                                            <div class="col-md-6 mb-4">
+                                                                <div class="card shadow-sm h-100">
+                                                                    <div class="card-body">
+                                                                        <h5 class="card-title">@item.TenLopHocPhan</h5>
+                                                                        <p class="card-text">@item.GhiChu</p>
+                                                                        <p class="card-text">
+                                                                            <strong>Giảng viên:</strong>
+                                                                            @if (item.PhanCongGiangDays != null && item.PhanCongGiangDays.Any())
+                                                                            {
+                                                                                @foreach (var gv in item.PhanCongGiangDays)
+                                                                                {
+                                                                                    <span class="badge bg-info text-dark me-1">@gv.GiangVien?.HoTen</span>
+                                                                                }
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                <span class="text-muted">Chưa có phân công</span>
+                                                                            }
+                                                                        </p>
+                                                                        <a href="@Url.Action("Details", "LopHocPhan_23TH0003", new { area = "Student", id = item.Id })"
+                                                                           class="btn btn-primary mt-2">
+                                                                            Truy cập khóa học
+                                                                        </a>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        }
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
                                 </div>
                             </div>
                         </div>
                     </div>
+                    i++;
                 }
+            </div>
+        }
+        else
+        {
+            <div class="alert alert-warning mt-4">
+                Không có lớp học phần nào được tìm thấy.
             </div>
         }
     </div>

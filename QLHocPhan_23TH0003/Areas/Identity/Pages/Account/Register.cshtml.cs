@@ -154,29 +154,43 @@ namespace QLHocPhan_23TH0003.Areas.Identity.Pages.Account
 
                     _logger.LogInformation("User created a new account with password.");
 
-                    var userId = await _userManager.GetUserIdAsync(user);
-                    if (Input.Role == Role.GiangVien.ToString())
+
+                    if (user == null)
                     {
-                        var giangvien = new GiangVien();
-                        giangvien.HoTen = user.UserName;
-                        giangvien.UserId = userId;
-                        _context.GiangVien.Add(giangvien);
-                        await _context.SaveChangesAsync();
+                        throw new Exception("User chưa được tạo hoặc bị null");
                     }
-                    else if (Input.Role == Role.SinhVien.ToString())
+                    try
                     {
-                        var sinhvien = new SinhVien();
-                        sinhvien.HoTen = user.UserName;
-                        sinhvien.UserId = userId;
-                        _context.SinhVien.Add(sinhvien);
-                        await _context.SaveChangesAsync();
+                        var userId = await _userManager.GetUserIdAsync(user);
+                        if (Input.Role == Role.GiangVien.ToString())
+                        {
+                            var giangvien = new GiangVien();
+                            giangvien.HoTen = user.UserName;
+                            giangvien.UserId = userId;
+                            _context.GiangVien.Add(giangvien);
+                            await _context.SaveChangesAsync();
+                        }
+                        else if (Input.Role == Role.SinhVien.ToString())
+                        {
+                            var sinhvien = new SinhVien();
+                            sinhvien.HoTen = user.UserName;
+                            sinhvien.UserId = userId;
+                            _context.SinhVien.Add(sinhvien);
+                            await _context.SaveChangesAsync();
+                        }
+                    }catch (Exception ex)
+                    {
+                        _logger.LogError(ex, "Lỗi khi lưu thông tin Giảng viên, sinh viên.");
+                        ModelState.AddModelError(string.Empty, $"Lỗi tạo sinh viên, giảng viên: {ex.Message}");
+                        return Page();
                     }
+                    var userIdFinal = await _userManager.GetUserIdAsync(user);
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
                     var callbackUrl = Url.Page(
                         "/Account/ConfirmEmail",
                         pageHandler: null,
-                        values: new { area = "Identity", userId = userId, code = code, returnUrl = returnUrl },
+                        values: new { area = "Identity", userId = userIdFinal, code = code, returnUrl = returnUrl },
                         protocol: Request.Scheme);
 
                     await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",

@@ -132,25 +132,42 @@ namespace QLHocPhan_23TH0003.Areas.Admin.Controllers
             }
         }
 
-        // GET: User_23TH0003Controller/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
 
         // POST: User_23TH0003Controller/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public ActionResult Delete(string id)
         {
+            var user = _context.Users.Find(id);
+            if (user == null)
+            {
+                TempData["ErrorMessage"] = "Học phần không tồn tại";
+                return RedirectToAction("Index");
+            }
             try
             {
-                return RedirectToAction(nameof(Index));
+                var hsGiangVien = _context.GiangVien.Any(hs => hs.UserId == id);
+                var hsSinhVien = _context.SinhVien.Any(hs => hs.UserId == id);
+                if (hsGiangVien)
+                {
+                    TempData["ErrorMessage"] = "Tồn tại hồ sơ giảng viên. Vui lòng xóa hồ sơ giảng viên";
+                    return RedirectToAction("Index");
+                }
+                if (hsSinhVien)
+                {
+                    TempData["ErrorMessage"] = "Tồn tại hồ sơ sinh viên. Vui lòng xóa hồ sơ sinh viên";
+                    return RedirectToAction("Index");
+                }
+                _context.Users.Remove(user);
+                _context.SaveChanges();
+                TempData["SuccessMessage"] = "Xóa tài khoản người dùng thành công";
             }
-            catch
+            catch (Exception ex)
             {
-                return View();
+                TempData["ErrorMessage"] = "Có lỗi xảy ra";
             }
+            // Xóa hồ sơ giảng viên, sinh viên
+            return RedirectToAction("Index");
         }
 
         [HttpPost]

@@ -1,5 +1,47 @@
-﻿@{
-    ViewData["Title"] = "Trang sinh viên";
+﻿@model IEnumerable<QLHocPhan_23TH0003.Models.LopHocPhan>
+@{
+    ViewData["Title"] = "Trang chủ";
 }
 
+<div class="banner">
+    <img src="~/img/banner2.png" style="width: 100%" />
+</div>
 
+<section id="khoahoc">
+    <div class="container">
+        <h4 class="title"><span>CÁC KHÓA HỌC ĐANG THAM GIA</span></h4>
+        @if (Model != null && Model.Count() > 0)
+        {
+            <div class="row">
+                @foreach (var item in Model)
+                {
+                    var giaoviens = item.PhanCongGiangDays;
+                    <div class="col-md-6">
+                        <div class="col my-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">@item.TenLopHocPhan</h5>
+                                    <div class="card-text">@item.GhiChu</div>
+                                    <div class="giaovien">
+                                        Giáo viên:
+                                        @if (giaoviens != null)
+                                        {
+                                            foreach (var gv in giaoviens)
+                                            {
+                                                <a href="#">@gv.GiangVien.HoTen</a>
+                                            }
+                                        }
+                                    </div>
+                                    <div class="card-text">@item.HocPhan?.HocKy?.TenHocKy - Năm học: @item.HocPhan?.HocKy?.NamHoc
+                                    - Khoa: @item.HocPhan?.MonHoc?.Khoa?.TenKhoa
+                                    </div>
+                                    <a href='@Url.Action("Details", "LopHocPhan_23TH0003", new { area = "Student", id = item.Id })' class="btn btn-primary mt-2">Nhấn vào đây để truy cập khóa học</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</section>

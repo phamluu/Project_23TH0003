@@ -111,6 +111,7 @@ namespace QLHocPhan_23TH0003.Areas.Admin.Controllers
 
         // Khôi phục
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Restore(int id)
         {
             var mon = _context.GiangVien.Find(id);
@@ -125,6 +126,7 @@ namespace QLHocPhan_23TH0003.Areas.Admin.Controllers
 
         // Xóa vĩnh viễn
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult HardDelete(int id)
         {
             var mon = _context.GiangVien.Find(id);

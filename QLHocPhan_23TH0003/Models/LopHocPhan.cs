@@ -22,7 +22,7 @@
 
         public ICollection<DangKyHocPhan>? DangKyHocPhans { get; set; }
         public ICollection<PhanCongGiangDay>? PhanCongGiangDays { get; set; }
-
+        public ICollection<BaiHoc>? BaiHocs { get; set; } 
         public bool IsDeleted { get; set; }
         public DateTime NgayTao { get; set; } = DateTime.UtcNow;
         public DateTime? NgayCapNhat { get; set; }

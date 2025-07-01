@@ -1,0 +1,80 @@
+﻿@using QLHocPhan_23TH0003.Common.Helpers
+@using QLHocPhan_23TH0003.ViewModel
+@using QLHocPhan_23TH0003.Models
+@model IEnumerable<BaiHocViewModel>
+@{
+    ViewBag.Title = "Quản lý bài học";
+    LopHocPhan lopHocPhan = (LopHocPhan)ViewBag.LopHocPhan;
+}
+<div class="container">
+    <h4 class="text-center mt-3 mb-3">@ViewBag.Title</h4>
+    <div class="bg-info p-3">
+        <div class="content">
+            <div class="form-group">
+                <strong>Lớp: </strong>
+                @lopHocPhan.TenLopHocPhan
+            </div>
+            <div class="form-group">
+                <strong>Giảng viên:</strong> @(
+                lopHocPhan.PhanCongGiangDays != null
+                ? string.Join(", ", lopHocPhan.PhanCongGiangDays
+                .Where(x => x.GiangVien != null && !string.IsNullOrEmpty(x.GiangVien.HoTen))
+                .Select(x => x.GiangVien.HoTen))
+                : "Chưa có giảng viên"
+                                )
+            </div>
+            <div class="form-group">
+                <strong>Địa điểm học: </strong>
+                @lopHocPhan.DiaDiemHoc
+            </div>
+            <div class="form-group">
+                <strong>Thời gian học: </strong>
+                @lopHocPhan.ThoiGianHoc
+            </div>
+        </div>
+    </div>
+    <div class="p-3">
+        <div class="form-group">@lopHocPhan.GhiChu</div>
+    </div>
+    <div class="mt-3 mb-3">
+        <div class="box">
+            <div class="box-header mb-3">
+                <a href="@Url.Action("Create", new { IdLopHocPhan = lopHocPhan.Id })" class="btn btn-danger">Tạo bài học</a>
+            </div>
+            @Html.Partial("_AlertMessages")
+            @if (Model != null)
+            {
+                int STT = 1;
+                <div class="box-body">
+                    <table class="table table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th style="width: 10px">STT</th>
+                                <th>Tên bài học</th>
+                                <th style="width: 100px;">Tài liệu</th>
+                                <th style="width: 100px;">Video</th>
+                                <th style="width: 200px;">Chức năng</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>@(STT++)</td>
+                                    <td>@item.TenBaiHoc</td>
+                                    <td><img src="@item.DropboxFile?.IconUrl"/></td>
+                                    <td><img src="@item.DropboxVideo?.IconUrl" /></td>
+                                    <td>
+                                        <a href="@Url.Action("Edit", new { id = item.Id })" class="btn btn-primary">Sửa</a>
+                                        @Html.DeleteButton(item.Id, Url.Action("Delete", "BaiHoc_23TH0003"))
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            
+        </div>
+    </div>
+</div>

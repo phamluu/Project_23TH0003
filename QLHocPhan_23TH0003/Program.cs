@@ -64,8 +64,15 @@ builder.Services.AddScoped<IRazorViewToStringRenderer, RazorViewToStringRenderer
 builder.Services.AddRazorPages(); // Bổ sugng khi dùng razor page với Identity
 
 builder.Services.AddTransient<IEmailSender, FakeEmailSender>(); // Đăng ký tạm thời fake email sender trong môi trường phát triển
+
+// Quản lý các service
+builder.Services.AddHttpClient();
+builder.Services.AddSingleton<DropboxService>();
+// Quản lý các service
+
 // Lưu key
 builder.Services.ConfigureDataProtection(builder.Environment);
+
 var app = builder.Build();
 
 // Configure the HTTP request pipelines

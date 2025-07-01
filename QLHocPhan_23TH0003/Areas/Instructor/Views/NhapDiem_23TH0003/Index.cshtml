@@ -2,10 +2,11 @@
 @model List<DangKyHocPhan>
 
     @{
+        ViewBag.Title = "Nhập điểm môn học";
        var ListPhanCong =  (List<LopHocPhan>)ViewBag.ListLopHocPhan;
     }
-
     <div class="container nhapdiem">
+        @Html.Partial("_AlertMessages")
         <h4 class="title mt-5 mb-3 text-center">Nhập điểm môn học</h4>
         @if (Model != null)
 {
@@ -13,53 +14,61 @@
             @foreach (var item in ListPhanCong)
             {
                 string active = item.Id == (int)ViewBag.LopHocPhanId ? "active" : "";
-                <li class="nav-item @active"><a href="" class="nav-link">@item.TenLopHocPhan</a></li>
+                <li class="nav-item @active"><a href="@Url.Action("Index", "NhapDiem_23TH0003", new { IdLopHocPhan = item.Id })" class="nav-link">@item.TenLopHocPhan</a></li>
             }
         </ul>
-    <form method="post" asp-action="LuuDiem">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Mã SV</th>
-                    <th>Họ tên</th>
-                    <th>Chuyên cần</th>
-                    <th>Giữa kỳ</th>
-                    <th>Thực hành</th>
-                    <th>Cuối kỳ</th>
-                    <th>Trung bình</th>
-                    <th>Xếp loại</th>
-                </tr>
-            </thead>
-            <tbody>
-                @for (int i = 0; i < Model.Count; i++)
-                {
-                    var dk = Model[i];
-                    <tr>
-                        <td>@dk.SinhVien.MaSinhVien</td>
-                        <td>@dk.SinhVien.HoTen</td>
-                        <td>
-                            <input type="hidden" name="dangKyIds" value="@dk.Id" />
-                            <input type="number" step="0.1" min="0" max="10" name="diemChuyenCan" value="@dk.Diem?.DiemChuyenCan" class="form-control"/>
-                        </td>
-                        <td>
-                            <input type="number" step="0.1" min="0" max="10" name="diemGiuaKy" value="@dk.Diem?.DiemGiuaKy"  class="form-control"/>
-                        </td>
-                        <td>
-                            <input type="number" step="0.1" min="0" max="10" name="diemThucHanh" value="@dk.Diem?.DiemThucHanh"  class="form-control"/>
-                        </td>
-                        <td>
-                            <input type="number" step="0.1" min="0" max="10" name="diemCuoiKy" value="@dk.Diem?.DiemCuoiKy"  class="form-control"/>
-                        </td>
-                        <td>@dk.Diem?.DiemTrungBinh</td>
-                        <td>@dk.Diem?.XepLoai</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-        <button type="submit" class="btn btn-primary">Lưu điểm</button>
-    </form>
-
-}
+        @if (Model.Count > 0)
+        {
+            <form method="post" action='@Url.Action("LuuDiem", "NhapDiem_23TH0003")'>
+                @Html.AntiForgeryToken()
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Mã SV</th>
+                            <th>Họ tên</th>
+                            <th>Chuyên cần</th>
+                            <th>Giữa kỳ</th>
+                            <th>Thực hành</th>
+                            <th>Cuối kỳ</th>
+                            <th>Trung bình</th>
+                            <th>Xếp loại</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (int i = 0; i < Model.Count; i++)
+                        {
+                            var dk = Model[i];
+                            <tr>
+                                <td>@dk.SinhVien.MaSinhVien</td>
+                                <td>@dk.SinhVien.HoTen</td>
+                                 <td>
+                                    <input type="hidden" name="diemList[@i].IdDangKyHocPhan" value="@dk.Id" />
+                                    <input type="number" step="0.1" min="0" max="10" name="diemList[@i].DiemChuyenCan" value="@dk.Diem?.DiemChuyenCan" class="form-control"/>
+                                </td>
+                                <td>
+                                    <input type="number" step="0.1" min="0" max="10" name="diemList[@i].DiemGiuaKy" value="@dk.Diem?.DiemGiuaKy"  class="form-control"/>
+                                </td>
+                                <td>
+                                    <input type="number" step="0.1" min="0" max="10" name="diemList[@i].DiemThucHanh" value="@dk.Diem?.DiemThucHanh"  class="form-control"/>
+                                </td>
+                                <td>
+                                    <input type="number" step="0.1" min="0" max="10" name="diemList[@i].DiemCuoiKy" value="@dk.Diem?.DiemCuoiKy"  class="form-control"/>
+                                </td>
+                                <td>@dk.Diem?.DiemTrungBinh</td>
+                                <td>@dk.Diem?.XepLoai</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                <button type="submit" class="btn btn-primary">Lưu điểm</button>
+                
+            </form>
+        }
+        else
+        {
+            <p>Chưa có học viên đăng ký</p>
+        }
+    }
 else
 {
     <p>Bạn chưa được phân công giảng dạy</p>

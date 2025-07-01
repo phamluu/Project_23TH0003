@@ -363,3 +363,6 @@ MigrationBackup/
 FodyWeavers.xsd
 
 Project_23TH0003/Web.config
+credentials.json
+token.json/
+appsettings.json

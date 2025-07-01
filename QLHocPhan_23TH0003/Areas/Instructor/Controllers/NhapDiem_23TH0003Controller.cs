@@ -23,6 +23,11 @@ namespace QLHocPhan_23TH0003.Areas.Instructor.Controllers
                 .Where(p => p.IdGiangVien == giangVien.Id)
                 .Include(p => p.LopHocPhan)
                 .ToListAsync();
+            if(phanCong == null || phanCong.Count == 0)
+            {
+               TempData["ErrorMessage"] = "Chưa có lớp học phần nào được phân công cho bạn";
+                return View();
+            }
 
             ViewBag.ListLopHocPhan = phanCong.Select(p => p.LopHocPhan).Distinct().ToList();
 
@@ -64,37 +69,67 @@ namespace QLHocPhan_23TH0003.Areas.Instructor.Controllers
             return "Yếu";
         }
 
-
         [HttpPost]
-        public async Task<IActionResult> LuuDiem(int[] dangKyIds, decimal?[] diemChuyenCan,
-            decimal?[] diemGiuaKy, decimal?[] diemThucHanh, decimal?[] diemCuoiKy)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> LuuDiem(List<Diem> diemList)
         {
-            for (int i = 0; i < dangKyIds.Length; i++)
+            foreach (var item in diemList)
             {
-                var dkId = dangKyIds[i];
-                var diem = await _context.Diem.FirstOrDefaultAsync(d => d.IdDangKyHocPhan == dkId);
-
+                var diem = await _context.Diem.FirstOrDefaultAsync(d => d.IdDangKyHocPhan == item.IdDangKyHocPhan);
                 if (diem == null)
                 {
-                    diem = new Diem
-                    {
-                        IdDangKyHocPhan = dkId
-                    };
+                    diem = new Diem { IdDangKyHocPhan = item.IdDangKyHocPhan, NgayTao = DateTime.UtcNow };
                     _context.Diem.Add(diem);
                 }
+                else
+                {
+                    diem.NgayCapNhat = DateTime.UtcNow;
+                }
 
-                diem.DiemChuyenCan = diemChuyenCan[i];
-                diem.DiemGiuaKy = diemGiuaKy[i];
-                diem.DiemThucHanh = diemThucHanh[i];
-                diem.DiemCuoiKy = diemCuoiKy[i];
+                diem.DiemChuyenCan = item.DiemChuyenCan;
+                diem.DiemGiuaKy = item.DiemGiuaKy;
+                diem.DiemThucHanh = item.DiemThucHanh;
+                diem.DiemCuoiKy = item.DiemCuoiKy;
                 diem.DiemTrungBinh = TinhDiemTrungBinh(diem);
                 diem.XepLoai = TinhXepLoai(diem.DiemTrungBinh);
-                diem.NgayCapNhat = DateTime.UtcNow;
             }
 
             await _context.SaveChangesAsync();
+            TempData["SuccessMessage"] = "Lưu điểm thành công";
             return RedirectToAction(nameof(Index));
         }
+
+
+        //[HttpPost]
+        //public async Task<IActionResult> LuuDiem(int[] dangKyIds, decimal?[] diemChuyenCan,
+        //    decimal?[] diemGiuaKy, decimal?[] diemThucHanh, decimal?[] diemCuoiKy)
+        //{
+        //    for (int i = 0; i < dangKyIds.Length; i++)
+        //    {
+        //        var dkId = dangKyIds[i];
+        //        var diem = await _context.Diem.FirstOrDefaultAsync(d => d.IdDangKyHocPhan == dkId);
+
+        //        if (diem == null)
+        //        {
+        //            diem = new Diem
+        //            {
+        //                IdDangKyHocPhan = dkId
+        //            };
+        //            _context.Diem.Add(diem);
+        //        }
+
+        //        diem.DiemChuyenCan = diemChuyenCan[i];
+        //        diem.DiemGiuaKy = diemGiuaKy[i];
+        //        diem.DiemThucHanh = diemThucHanh[i];
+        //        diem.DiemCuoiKy = diemCuoiKy[i];
+        //        diem.DiemTrungBinh = TinhDiemTrungBinh(diem);
+        //        diem.XepLoai = TinhXepLoai(diem.DiemTrungBinh);
+        //        diem.NgayCapNhat = DateTime.UtcNow;
+        //    }
+
+        //    await _context.SaveChangesAsync();
+        //    return RedirectToAction(nameof(Index));
+        //}
 
 
         // GET: NhapDiem_23TH0003Controller/Details/5
