@@ -2,12 +2,15 @@
 @using QLHocPhan_23TH0003.ViewModel
 @model UserViewModel
 @{
-    ViewBag.Title = "Xem chi tiết";
+   if (User.Identity.Name == Model.UserName)
+    {
+        ViewBag.Title = "Quản lý tài khoản của tôi";
+    }
+    else
+    ViewBag.Title = "Quản lý tài khoản của " + Model.UserName;
 }
-<h4>@ViewBag.Title</h4>
-<div class="head_action">
-   
-</div>
+<h4 class="card-title title mb-4 text-center">@ViewBag.Title</h4>
+
 @Html.Partial("_AlertMessages")
 
 <div class="row">
