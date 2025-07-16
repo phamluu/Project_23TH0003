@@ -146,19 +146,44 @@ namespace QLHocPhan_23TH0003.Areas.Admin.Controllers
                 if (khoa == null)
                 {
                     TempData["ErrorMessage"] = "Khoa không tồn tại";
-                    RedirectToAction("Index");
+                    return RedirectToAction("Index");
                 }
 
+                // ✅ Kiểm tra ràng buộc trước khi xóa
+                var errors = new List<string>();
+                if (_context.Lop.Any(x => x.IdKhoa == id))
+                    errors.Add("Tồn tại lớp thuộc khoa");
+                if (_context.MonHoc.Any(x => x.IdKhoa == id))
+                    errors.Add("Tồn tại môn học thuộc khoa");
+                if (_context.GiangVien.Any(x => x.IdKhoa == id))
+                    errors.Add("Tồn tại giảng viên thuộc khoa");
+
+                if (errors.Any())
+                {
+                    TempData["ErrorMessage"] = "Không thể xóa khoa. " + string.Join("; ", errors);
+                    return RedirectToAction("Index");
+                }
+
+                // ✅ Xóa nếu không có ràng buộc
                 _context.Khoa.Remove(khoa);
-                _context.SaveChanges();
-                TempData["SuccessMessage"] = "Xóa khoa thành công";
-                return RedirectToAction("Index");
+                var affectedRows = _context.SaveChanges();
+
+                if (affectedRows > 0)
+                {
+                    TempData["SuccessMessage"] = "Xóa khoa thành công";
+                }
+                else
+                {
+                    TempData["ErrorMessage"] = "Không có thay đổi nào được lưu.";
+                }
             }
             catch (Exception ex)
             {
-                return Json(new { status = false, message = "Lỗi khi xóa: " + ex.Message });
+                TempData["ErrorMessage"] = "Lỗi khi xóa: " + ex.Message;
             }
 
+            return RedirectToAction("Index");
         }
+
     }
 }
