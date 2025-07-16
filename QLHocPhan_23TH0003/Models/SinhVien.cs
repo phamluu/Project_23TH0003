@@ -19,6 +19,7 @@
         public Lop? Lop { get; set; }
 
         public ICollection<DangKyHocPhan>? DangKyHocPhans { get; set; }
+        public ICollection<ThanhToanHocPhi>? ThanhToanHocPhis { get; set; }
 
         public bool IsDeleted { get; set; }
         public DateTime NgayTao { get; set; } = DateTime.UtcNow;

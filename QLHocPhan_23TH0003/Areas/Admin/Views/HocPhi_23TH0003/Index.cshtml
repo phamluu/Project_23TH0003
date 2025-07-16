@@ -1,0 +1,72 @@
+﻿@using QLHocPhan_23TH0003.Common.Helpers
+@using QLHocPhan_23TH0003.Enums
+@using QLHocPhan_23TH0003.Models
+@model IEnumerable<QLHocPhan_23TH0003.Models.ThanhToanHocPhi>
+
+@{
+    ViewBag.Title = "Thanh toán học phí";
+}
+<h3>@ViewBag.Title</h3>
+
+@Html.Partial("_AlertMessages")
+<table id="grid">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayName("Số hóa đơn")
+            </th>
+            <th>
+                @Html.DisplayName("Sinh viên")
+            </th>
+            <th>
+                @Html.DisplayName("Học kỳ")
+            </th>
+            <th>
+                @Html.DisplayName("Số tiền")
+            </th>
+            <th>
+                @Html.DisplayName("Phương thức")
+            </th>
+            <th>
+                @Html.DisplayName("Trạng thái")
+            </th>
+            <th>
+                @Html.DisplayName("Ngày thanh toán")
+            </th>
+            <th>Chức năng</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var item in Model){
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SinhVien.HoTen)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.HocKy.TenHocKy)
+                </td>
+                <td>
+                    @item.SoTien.ToString("N0")
+                </td>
+                <td>
+                    @EnumExtensions.GetDisplayName((PhuongThucThanhToan)item.PhuongThuc)
+                </td>
+                <td>
+                    @{
+                        var displayName = EnumExtensions.GetDisplayName((TrangThaiThanhToan)item.TrangThai);
+                    }
+                    <span class="badge @((TrangThaiThanhToan)item.TrangThai == TrangThaiThanhToan.DaThanhToan ? "badge-success": "badge-danger")">@(string.IsNullOrWhiteSpace(displayName) ? "Chưa thanh toán" : displayName)</span>
+                </td>
+                <td>
+                    @item.NgayThanhToan.ToString("dd/MM/yyyy HH:mm:ss")
+                    </td>
+                <td><a href="@Url.Action("Details", "HocPhi_23TH0003", new { id = item.Id })" class="btn btn-primary">Xem</a>
+                    @Html.DeleteButton(item.Id, Url.Action("Delete", "HocPhi_23TH0003"))
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

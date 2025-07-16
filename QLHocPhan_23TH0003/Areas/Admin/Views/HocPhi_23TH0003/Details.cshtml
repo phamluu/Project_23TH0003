@@ -1,0 +1,119 @@
+﻿@using QLHocPhan_23TH0003.Common.Helpers
+@using QLHocPhan_23TH0003.Enums
+@using QLHocPhan_23TH0003.Models
+@model ThanhToanHocPhi
+
+@{
+    ViewBag.Title = "Thanh toán học phí";
+}
+<style>
+     .dropdown-menu.show {
+         display: block !important;
+         opacity: 1 !important;
+         visibility: visible !important;
+     }
+
+     .dropdown-toggle::after {
+         display: none;
+     }
+</style>
+<h3 class="title mt-4 align-content-center">@ViewBag.Title</h3>
+
+@Html.Partial("_AlertMessages")
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card shadow p-4">
+            <h4 class="mb-4 text-center">THÔNG TIN SINH VIÊN</h4>
+            <div class="card-body">
+                <div class="form-group">
+                    <strong>MSSV : </strong>
+                    <span>@Model.SinhVien.MaSinhVien</span>
+                </div>
+                <div class="form-group">
+                    <strong>Họ tên : </strong>
+                    <span>@Model.SinhVien.HoTen</span>
+                </div>
+                <div class="form-group">
+                    <strong>Lớp : </strong>
+                    <span>@Model.SinhVien?.Lop?.TenLop</span>
+                </div>
+                <div class="form-group">
+                    <strong>Khoa : </strong>
+                    <span>@Model.SinhVien?.Lop?.Khoa?.TenKhoa</span>
+                </div>
+              </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card shadow p-4">
+            <h4 class="mb-4 text-center">THÔNG TIN HÓA ĐƠN</h4>
+            <div class="card-body">
+                <div class="form-group">
+                    <strong>Số hóa đơn : </strong>
+                    <span>@Model.Id</span>
+                </div>
+                <div class="form-group">
+                    <strong>Năm học : </strong>
+                    <span>@Model.HocKy.NamHoc</span>
+                </div>
+                <div class="form-group">
+                    <strong>Học kỳ : </strong>
+                    <span>@Model.HocKy.TenHocKy</span>
+                </div>
+                <div class="form-group">
+                    <strong>Số tiền : </strong>
+                    <span>@Model.SoTien.ToString("N0")</span>
+                </div>
+                <div class="form-group">
+                    <strong>Phương thức : </strong>
+                    <span>@EnumExtensions.GetDisplayName((PhuongThucThanhToan)Model.PhuongThuc)</span>
+                </div>
+                <div class="form-group">
+                    <strong>Ngày thanh toán : </strong>
+                    <span>@Model.NgayThanhToan.ToString("dd/MM/yyyy HH:mm")</span>
+                </div>
+                <div class="form-group">
+                    <strong>Trạng thái : </strong>
+                    @{
+                        var displayName = EnumExtensions.GetDisplayName((TrangThaiThanhToan)Model.TrangThai);
+                    }
+                    <span class="badge @((TrangThaiThanhToan)Model.TrangThai == TrangThaiThanhToan.DaThanhToan ? "badge-success" : "badge-danger")">@(string.IsNullOrWhiteSpace(displayName) ? "Chưa thanh toán" : displayName)</span>
+                    <div class="dropdown ms-2" style="display: inline-block;">
+                        <button class="btn btn-light btn-sm px-2 py-0 dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            &#8942;
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <form method="post" action="@Url.Action("UpdateTrangThai", "HocPhi_23TH0003")">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="id" value="@Model.Id" />
+                                    <input type="hidden" name="Status" value="@((int)TrangThaiThanhToan.DaHoanTien)" />
+                                    <button type="submit" class="dropdown-item text-danger">Hoàn tiền</button>
+                                </form>
+                            </li>
+                            <li>
+                                <form method="post" action="@Url.Action("UpdateTrangThai", "HocPhi_23TH0003")">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="id" value="@Model.Id" />
+                                    <input type="hidden" name="Status" value="@((int)TrangThaiThanhToan.DamgXuLy)" />
+                                    <button type="submit" class="dropdown-item">Đang xử lý</button>
+                                </form>
+                            </li>
+                            <li>
+                                <form method="post" action="@Url.Action("UpdateTrangThai", "HocPhi_23TH0003")">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="id" value="@Model.Id" />
+                                    <input type="hidden" name="Status" value="@((int)TrangThaiThanhToan.DaThanhToan)" />
+                                    <button type="submit" class="dropdown-item text-success">Hoàn tất</button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -83,8 +83,9 @@ namespace QLHocPhan_23TH0003.Areas.Instructor.Controllers
                 TempData["SuccessMessage"] = "Thêm bài học thành công";
                 return RedirectToAction(nameof(Index), new { IdLopHocPhan = model.IdLopHocPhan });
             }
-            catch
+            catch(Exception ex)
             {
+                Console.WriteLine(ex.Message);
                 TempData["ErrorMessage"] = "Thêm bài học không thành công";
                 return View(model);
             }

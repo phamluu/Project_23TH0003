@@ -20,6 +20,7 @@ namespace QLHocPhan_23TH0003.Data
         public DbSet<PhanCongGiangDay> PhanCongGiangDay { get; set; }
         public DbSet<LopHocPhan> LopHocPhan { get; set; }
         public DbSet<BaiHoc> BaiHoc { get; set; }
+        public DbSet<ThanhToanHocPhi> ThanhToanHocPhi { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -28,6 +29,7 @@ namespace QLHocPhan_23TH0003.Data
                 entity.ToTable("HocKy");
                 entity.HasKey(e => e.Id);
                 entity.HasMany(e => e.HocPhans).WithOne(e => e.HocKy).HasForeignKey(e => e.IdHocKy);
+                entity.HasMany(e => e.ThanhToanHocPhis).WithOne(e => e.HocKy).HasForeignKey(e => e.IdHocKy);
             });
             modelBuilder.Entity<Khoa>(entity =>
             {
@@ -114,12 +116,20 @@ namespace QLHocPhan_23TH0003.Data
                 entity.HasKey(e => e.Id);
                 entity.HasOne(e => e.Lop).WithMany(e => e.SinhViens).HasForeignKey(e => e.IdLop);
                 entity.HasMany(e => e.DangKyHocPhans).WithOne(e => e.SinhVien).HasForeignKey(e => e.IdSinhVien);
+                entity.HasMany(e => e.ThanhToanHocPhis).WithOne(e => e.SinhVien).HasForeignKey(e => e.IdSinhVien);
             });
             modelBuilder.Entity<BaiHoc>(entity =>
             {
                 entity.ToTable("BaiHoc");
                 entity.HasKey(e => e.Id);
                 entity.HasOne(e => e.LopHocPhan).WithMany(e => e.BaiHocs).HasForeignKey(e => e.IdLopHocPhan);
+            });
+            modelBuilder.Entity<ThanhToanHocPhi>(entity =>
+            {
+                entity.ToTable("ThanhToanHocPhi");
+                entity.HasKey(e => e.Id);
+                entity.HasOne(e => e.SinhVien).WithMany(e => e.ThanhToanHocPhis).HasForeignKey(e => e.IdSinhVien);
+                entity.HasOne(e => e.HocKy).WithMany(e => e.ThanhToanHocPhis).HasForeignKey(e => e.IdHocKy);
             });
         }
     }

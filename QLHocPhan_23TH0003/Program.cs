@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using QLHocPhan_23TH0003.Data;
 using QLHocPhan_23TH0003.Extensions;
 using QLHocPhan_23TH0003.Service;
+using QLHocPhan_23TH0003.Service.Api;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -68,6 +69,8 @@ builder.Services.AddTransient<IEmailSender, FakeEmailSender>(); // Đăng ký t�
 // Quản lý các service
 builder.Services.AddHttpClient();
 builder.Services.AddSingleton<DropboxService>();
+builder.Services.AddScoped<HocPhiService>();
+builder.Services.AddSingleton<VietQRPaymentService>();
 // Quản lý các service
 
 // Lưu key

@@ -13,6 +13,7 @@
         public int ThuTu { get; set; }
 
         public ICollection<HocPhan>? HocPhans { get; set; }
+        public ICollection<ThanhToanHocPhi>? ThanhToanHocPhis { get; set; }
         public DateTime NgayTao { get; set; } = DateTime.UtcNow;
         public DateTime? NgayCapNhat { get; set; }
     }

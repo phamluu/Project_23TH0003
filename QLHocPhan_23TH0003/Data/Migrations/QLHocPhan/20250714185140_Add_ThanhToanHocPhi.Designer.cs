@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using QLHocPhan_23TH0003.Data;
 
@@ -11,9 +12,11 @@ using QLHocPhan_23TH0003.Data;
 namespace QLHocPhan_23TH0003.Data.Migrations.QLHocPhan
 {
     [DbContext(typeof(QuanLyHocPhanDbContext))]
-    partial class QuanLyHocPhanDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250714185140_Add_ThanhToanHocPhi")]
+    partial class Add_ThanhToanHocPhi
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -505,9 +508,10 @@ namespace QLHocPhan_23TH0003.Data.Migrations.QLHocPhan
                     b.Property<DateTime>("NgayThanhToan")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("PhuongThuc")
+                    b.Property<string>("PhuongThuc")
+                        .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("int");
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<decimal>("SoTien")
                         .HasColumnType("decimal(18,2)");

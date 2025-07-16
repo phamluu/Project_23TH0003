@@ -1,0 +1,17 @@
+﻿@using QLHocPhan_23TH0003.ViewModel
+@model HocPhiHocKyViewModel
+
+<div class="container mt-5">
+    <div class="card shadow p-4">
+        <h3 class="mb-4 text-center">THÔNG TIN HỌC PHÍ</h3>
+        <p style="margin:0 auto;">
+            <strong>Học kỳ: </strong> @Model.HocKy </br>
+            <strong>Năm học: </strong> @Model.NamHoc
+        </p>
+        <div class="qr-img" style="margin:auto; text-align:center">
+            <h5>Quét QR bên dưới để thanh toán</h5>
+            <img src="@ViewBag.VietQrCode" style="max-width:400px;" />
+        </div>
+    </div>
+</div>
+
