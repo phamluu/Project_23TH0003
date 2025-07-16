@@ -1,7 +1,11 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using QLHocPhan_23TH0003.Common.Helpers;
 using QLHocPhan_23TH0003.Data;
 using QLHocPhan_23TH0003.Models;
+using QLHocPhan_23TH0003.ViewModel;
 
 namespace QLHocPhan_23TH0003.Areas.Admin.Controllers
 {
@@ -15,8 +19,56 @@ namespace QLHocPhan_23TH0003.Areas.Admin.Controllers
         }
         public ActionResult Index()
         {
-            var model = _context.Khoa.Where(x => x.IsDeleted != true).ToList();
+            var model = _context.Khoa.Where(x => x.IsDeleted != true).OrderByDescending(x => x.NgayTao).ToList();
             return View(model);
+        }
+
+        [HttpGet]
+        public ActionResult GetData(int draw, int start, int length, string searchValue)
+        {
+            var query = _context.Khoa.Include(x => x.TruongKhoa).AsQueryable();
+
+            if (!string.IsNullOrEmpty(searchValue))
+            {
+                query = query.Where(x => x.TenKhoa.Contains(searchValue) || x.MaKhoa.Contains(searchValue));
+            }
+
+            var recordsTotal = query.Count();
+
+            // 👉 Thêm sắp xếp giảm dần theo NgayTao
+            query = query.OrderByDescending(x => x.NgayTao);
+
+            var antiforgery = HttpContext.RequestServices.GetService<Microsoft.AspNetCore.Antiforgery.IAntiforgery>();
+            var tokens = antiforgery.GetAndStoreTokens(HttpContext);
+            string token = tokens.RequestToken;
+
+            var data = query.Skip(start).Take(length).ToList()
+                .Select(x =>
+                {
+                    var deleteForm = ButtonHelper.BuildDeleteFormHtml(
+                        x.Id,
+                        "/Admin/Khoa_23TH0003/Delete",
+                        token
+                    );
+                    var editForm = ButtonHelper.BuildEditFormHtml(x.Id, "/Admin/Khoa_23TH0003/Edit");
+                    return new KhoaViewModel
+                    {
+                        Id = x.Id,
+                        MaKhoa = x.MaKhoa,
+                        TenKhoa = x.TenKhoa,
+                        TenTruongKhoa = x.TruongKhoa?.HoTen ?? "",
+                        NgayTao = x.NgayTao,
+                        Action = editForm + deleteForm
+                    };
+                }).ToList();
+
+            return Json(new
+            {
+                draw,
+                recordsFiltered = recordsTotal,
+                recordsTotal,
+                data
+            });
         }
 
 
@@ -46,13 +98,17 @@ namespace QLHocPhan_23TH0003.Areas.Admin.Controllers
         public ActionResult Edit(int id)
         {
             var model = _context.Khoa.Find(id);
+            var truongKhoaList = _context.GiangVien.Where(nv => nv.IdKhoa == id)
+                                .Select(nv => new { nv.Id, nv.HoTen })
+                                .ToList();
+
+            ViewBag.IdTruongKhoa = new SelectList(truongKhoaList, "Id", "HoTen", model.IdTruongKhoa);
             return View(model);
         }
 
-        // POST: Khoa_23TH0003Controller/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(Khoa model)
+        public async Task<ActionResult> Edit(Khoa model)
         {
             try
             {
@@ -62,22 +118,25 @@ namespace QLHocPhan_23TH0003.Areas.Admin.Controllers
                     TempData["ErrorMessage"] = "Khoa không tồn tại";
                     return View(model);
                 }
-                data.TenKhoa = model.TenKhoa;
                 data.MaKhoa = model.MaKhoa;
+                data.TenKhoa = model.TenKhoa;
                 data.IdTruongKhoa = model.IdTruongKhoa;
+                data.NgayCapNhat = DateTime.UtcNow;
+
+                _context.Update(data);
                 _context.SaveChanges();
                 TempData["SuccessMessage"] = "Cập nhật khoa thành công";
-                return RedirectToAction(nameof(Index));
+                return Json(new { status = true, message = TempData["SuccessMessage"] });
             }
-            catch
+            catch (Exception ex)
             {
-                Console.WriteLine("Lỗi" + model.Id);
+                Console.WriteLine("Lỗi" + ex.Message);
             }
             TempData["ErrorMessage"] = "Cập nhật khoa không thành công";
-            return View(model);
+            return Json(new { status = false, message = TempData["ErrorMessage"] });
         }
 
-        // POST: Khoa_23TH0003Controller/Delete/5
+
         [HttpPost]
         public ActionResult Delete(int id)
         {
@@ -85,16 +144,21 @@ namespace QLHocPhan_23TH0003.Areas.Admin.Controllers
             {
                 var khoa = _context.Khoa.Find(id);
                 if (khoa == null)
-                    return Json(new { status = false, message = "Khoa không tồn tại." });
-                khoa.IsDeleted = true;
-                _context.SaveChanges();
+                {
+                    TempData["ErrorMessage"] = "Khoa không tồn tại";
+                    RedirectToAction("Index");
+                }
 
-                return Json(new { status = true });
+                _context.Khoa.Remove(khoa);
+                _context.SaveChanges();
+                TempData["SuccessMessage"] = "Xóa khoa thành công";
+                return RedirectToAction("Index");
             }
             catch (Exception ex)
             {
                 return Json(new { status = false, message = "Lỗi khi xóa: " + ex.Message });
             }
+
         }
     }
 }

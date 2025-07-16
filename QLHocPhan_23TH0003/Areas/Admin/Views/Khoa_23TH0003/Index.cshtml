@@ -40,13 +40,10 @@
                         @Html.DisplayFor(modelItem => item.TenKhoa)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.TruongKhoa.HoTen)
+                        @* @Html.DisplayFor(modelItem => item.TruongKhoa.HoTen) *@
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.NgayTao)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.NgayCapNhat)
                     </td>
                     <td>
                         @Html.EditButton("Khoa_23TH0003", item.Id)
@@ -62,3 +59,25 @@
 <div class="modal fade" id="@UiConstants.CreateModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     @Html.Partial("Create", new QLHocPhan_23TH0003.Models.Khoa())
 </div>
+
+<div class="modal fade" id="@UiConstants.EditModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+</div>
+<script>
+     $(document).ready(function() {
+            $('#grid').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    url: '/Admin/Khoa_23TH0003/GetData',
+                    type: 'GET'
+                },
+                columns: [
+                    { data: 'maKhoa' },
+                    { data: 'tenKhoa' },
+                    { data: 'tenTruongKhoa' },
+                    { data: 'ngayTao' },
+                    { data: 'action', orderable: false, searchable: false }
+                ]
+            });
+    });
+</script>
