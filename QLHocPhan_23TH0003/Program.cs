@@ -70,11 +70,18 @@ builder.Services.AddTransient<IEmailSender, FakeEmailSender>(); // Đăng ký t�
 builder.Services.AddHttpClient();
 builder.Services.AddSingleton<DropboxService>();
 builder.Services.AddScoped<HocPhiService>();
+builder.Services.AddScoped<UserService>();
 builder.Services.AddSingleton<VietQRPaymentService>();
 // Quản lý các service
 
 // Lưu key
 builder.Services.ConfigureDataProtection(builder.Environment);
+
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = "/Identity/Account/Login";        // khi chưa đăng nhập
+    options.AccessDeniedPath = "/Identity/Account/AccessDenied"; // khi không đủ quyền
+});
 
 var app = builder.Build();
 

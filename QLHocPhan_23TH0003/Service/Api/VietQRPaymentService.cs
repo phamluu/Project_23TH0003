@@ -4,8 +4,8 @@
     {
         public string PaymentQRCode(int AMOUNT, string INFO)
         {
-            string BANK = "ACB";
-            string ACCOUNT = "250830909";
+            string BANK = "vietcombank";
+            string ACCOUNT = "0061001084333";
             return "https://img.vietqr.io/image/" + $"{BANK}-{ACCOUNT}-compact2.png?amount={AMOUNT}&addInfo={INFO}";
         }
     }

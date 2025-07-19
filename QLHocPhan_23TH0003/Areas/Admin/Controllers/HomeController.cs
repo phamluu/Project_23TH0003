@@ -2,6 +2,10 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using QLHocPhan_23TH0003.Data;
+using QLHocPhan_23TH0003.Service;
+using QLHocPhan_23TH0003.ViewModel;
+using System.Security.Claims;
 
 namespace QLHocPhan_23TH0003.Areas.Admin.Controllers
 {
@@ -9,9 +13,14 @@ namespace QLHocPhan_23TH0003.Areas.Admin.Controllers
     public class HomeController : BaseAdminController
     {
         private readonly SignInManager<IdentityUser> _signInManager;
-        public HomeController(SignInManager<IdentityUser> signInManager)
+        private readonly QuanLyHocPhanDbContext _context;
+        private readonly UserService _service;
+        public HomeController(SignInManager<IdentityUser> signInManager, QuanLyHocPhanDbContext context,
+            UserService service)
         {
             _signInManager = signInManager;
+            _context = context;
+            _service = service;
         }
         // GET: HomeController
         public ActionResult Index()
@@ -19,10 +28,12 @@ namespace QLHocPhan_23TH0003.Areas.Admin.Controllers
             return View();
         }
 
-        // GET: HomeController/Details/5
-        public ActionResult Details(int id)
+        // Phải có tài khoản đăng nhập mới tự xem được hồ sơ người dùng
+        public ActionResult Profile(string id)
         {
-            return View();
+            string UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var model = _service.GetUserInfo(UserId);
+            return View(model);
         }
 
         // GET: HomeController/Create
