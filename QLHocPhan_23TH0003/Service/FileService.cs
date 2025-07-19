@@ -1,0 +1,36 @@
+﻿using Microsoft.AspNetCore.Hosting;
+
+namespace QLHocPhan_23TH0003.Service
+{
+    public class FileService
+    {
+        private readonly IWebHostEnvironment _webHostEnvironment;
+        public FileService(IWebHostEnvironment webHostEnvironment)
+        {
+            _webHostEnvironment = webHostEnvironment;
+        }
+        public async Task<string> UploadAndGetResultStringAsync(IFormFile file)
+        {
+            if (file != null && file.Length > 0)
+            {
+                var uploads = Path.Combine(_webHostEnvironment.WebRootPath, "Uploads");
+                if (!Directory.Exists(uploads))
+                {
+                    Directory.CreateDirectory(uploads);
+                }
+
+                var fileName = Path.GetFileName(file.FileName);
+                var filePath = Path.Combine(uploads, fileName);
+
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    await file.CopyToAsync(fileStream);
+                }
+
+                return fileName;
+
+            }
+            return null;
+        }
+    }
+}

@@ -1,6 +1,7 @@
 ﻿using Google.Apis.Drive.v3.Data;
 using Microsoft.AspNetCore.Identity;
 using QLHocPhan_23TH0003.Data;
+using QLHocPhan_23TH0003.Models;
 using QLHocPhan_23TH0003.ViewModel;
 using System.Security.Claims;
 
@@ -39,6 +40,46 @@ namespace QLHocPhan_23TH0003.Service
                 model.SinhVien = sinhVien;
             }
             return model;
+        }
+        public GiangVien GetGiangVienInfo(string userId)
+        {
+            var giangVien = _context.GiangVien.FirstOrDefault(x => x.UserId == userId);
+            return giangVien;
+        }
+
+        public SinhVien GetSinhVienInfo(string userId)
+        {
+            var sinhVien = _context.SinhVien.FirstOrDefault(x => x.UserId == userId);
+            return sinhVien;
+        }
+        public async Task<bool> UpdateGiangVien(GiangVien model)
+        {
+           var giangVien = _context.GiangVien.FirstOrDefault(x => x.UserId == model.UserId);
+            if (giangVien == null)
+            {
+                return false;
+            }
+            giangVien.HoTen = model.HoTen;
+            giangVien.GioiTinh = model.GioiTinh;
+            giangVien.NgaySinh = model.NgaySinh;
+            giangVien.DiaChi = model.DiaChi;
+            giangVien.HinhDaiDien = model.HinhDaiDien;
+            _context.GiangVien.Update(giangVien);
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<bool> UpdateSinhVien(SinhVien model)
+        {
+            var sinhVien = _context.SinhVien.FirstOrDefault(x => x.UserId == model.UserId);
+            if (sinhVien == null)
+            {
+                return false;
+            }
+            sinhVien = model;
+            _context.SinhVien.Update(sinhVien);
+            await _context.SaveChangesAsync();
+            return true;
         }
     }
 }

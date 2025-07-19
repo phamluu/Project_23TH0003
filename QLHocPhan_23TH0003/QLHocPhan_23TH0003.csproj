@@ -36,6 +36,7 @@
     <Folder Include="Areas\Student\Models\" />
     <Folder Include="logs\" />
     <Folder Include="wwwroot\lib\summernote\" />
+    <Folder Include="wwwroot\Uploads\" />
   </ItemGroup>
 
   <ItemGroup>

@@ -71,6 +71,7 @@ builder.Services.AddHttpClient();
 builder.Services.AddSingleton<DropboxService>();
 builder.Services.AddScoped<HocPhiService>();
 builder.Services.AddScoped<UserService>();
+builder.Services.AddScoped<FileService>();
 builder.Services.AddSingleton<VietQRPaymentService>();
 // Quản lý các service
 

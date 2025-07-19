@@ -28,13 +28,7 @@ namespace QLHocPhan_23TH0003.Areas.Admin.Controllers
             return View();
         }
 
-        // Phải có tài khoản đăng nhập mới tự xem được hồ sơ người dùng
-        public ActionResult Profile(string id)
-        {
-            string UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var model = _service.GetUserInfo(UserId);
-            return View(model);
-        }
+       
 
         // GET: HomeController/Create
         public ActionResult Create()
