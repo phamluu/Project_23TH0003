@@ -6,14 +6,15 @@
 @Html.Partial("_AlertMessages")
 <form action="@Url.Action("Edit", "GiangVien_23TH0003")" method="post">
     @Html.AntiForgeryToken()
-
+    <div class="form-group">
+        <input type="submit" value="Lưu" class="btn btn-primary" />
+        <a href="@Url.Action("Details", "User_23TH0003", new { id = Model.UserId })" class="btn btn-default">Tài khoản</a>
+    </div>
     @{
         ViewData["Khoa"] = ViewBag.IdKhoa;
     }
     @Html.HiddenFor(x => x.Id)
     @Html.Partial("_Fields", Model, ViewData)
 
-    <div class="form-group">
-        <input type="submit" value="Lưu" class="btn btn-primary" />
-    </div>
+    
 </form>

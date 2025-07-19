@@ -76,7 +76,11 @@ namespace QLHocPhan_23TH0003.Service
             {
                 return false;
             }
-            sinhVien = model;
+            sinhVien.HoTen = model.HoTen;
+            sinhVien.GioiTinh = model.GioiTinh;
+            sinhVien.NgaySinh = model.NgaySinh;
+            sinhVien.DiaChi = model.DiaChi;
+            sinhVien.HinhDaiDien = model.HinhDaiDien;
             _context.SinhVien.Update(sinhVien);
             await _context.SaveChangesAsync();
             return true;

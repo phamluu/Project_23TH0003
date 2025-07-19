@@ -161,6 +161,9 @@ html {
     background: #ff0055;
     color: #fff;
 }
+.form-group{
+    margin-bottom:1rem;
+}
 @media(max-width:490px) {
     .logo img {
         max-height: 40px;

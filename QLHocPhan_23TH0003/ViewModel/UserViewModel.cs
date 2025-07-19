@@ -11,4 +11,14 @@ namespace QLHocPhan_23TH0003.ViewModel
         public GiangVien GiangVien { get; set; }
         public SinhVien SinhVien { get; set; }
     }
+
+    public class GiangVienViewModel:GiangVien
+    {
+        public IdentityUser User{ get; set; }
+    }
+
+    public class SinhVienViewModel : SinhVien
+    {
+        public IdentityUser User { get; set; }
+    }
 }

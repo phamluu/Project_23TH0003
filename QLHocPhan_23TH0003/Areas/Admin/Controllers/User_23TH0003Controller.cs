@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using QLHocPhan_23TH0003.Data;
+using QLHocPhan_23TH0003.Enums;
+using QLHocPhan_23TH0003.Models;
 using QLHocPhan_23TH0003.ViewModel;
 
 namespace QLHocPhan_23TH0003.Areas.Admin.Controllers
@@ -70,6 +72,16 @@ namespace QLHocPhan_23TH0003.Areas.Admin.Controllers
 
 
             var model = new UserViewModel();
+            var giangVien = _context.GiangVien.Include(x => x.Khoa).Where(x => x.IsDeleted != true && x.UserId == id).FirstOrDefault();
+            if (giangVien != null)
+            {
+                model.GiangVien = giangVien;
+            }
+            var sinhVien = _context.SinhVien.Include(x => x.Lop).Where(x => x.IsDeleted != true && x.UserId == id).FirstOrDefault();
+            if (sinhVien != null)
+            {
+                model.SinhVien = sinhVien;
+            }
             model.Id = user.Id;
             model.UserName = user.UserName;
             model.Email = user.Email;
@@ -180,21 +192,71 @@ namespace QLHocPhan_23TH0003.Areas.Admin.Controllers
             var currentRoles = await _userManager.GetRolesAsync(user);
             var rolesToAdd = selectedRoles.Except(currentRoles).ToList();
             var rolesToRemove = currentRoles.Except(selectedRoles).ToList();
+
+            // Xử lý thêm vai trò
             if (rolesToAdd.Any())
             {
                 var addResult = await _userManager.AddToRolesAsync(user, rolesToAdd);
                 if (!addResult.Succeeded)
                     return BadRequest("Thêm vai trò thất bại.");
+
+                foreach (var role in rolesToAdd)
+                {
+                    switch (role)
+                    {
+                        case "GiangVien":
+                            _context.GiangVien.Add(new GiangVien
+                            {
+                                UserId = user.Id,
+                                NgayTao = DateTime.Now
+                            });
+                            break;
+
+                        case "SinhVien":
+                            _context.SinhVien.Add(new SinhVien
+                            {
+                                UserId = user.Id,
+                                NgayTao = DateTime.Now
+                            });
+                            break;
+                    }
+                }
             }
+
+            // Xử lý xoá vai trò
             if (rolesToRemove.Any())
             {
                 var removeResult = await _userManager.RemoveFromRolesAsync(user, rolesToRemove);
                 if (!removeResult.Succeeded)
                     return BadRequest("Xoá vai trò thất bại.");
+
+                foreach (var role in rolesToRemove)
+                {
+                    switch (role)
+                    {
+                        case "GiangVien":
+                            var gv =  _context.GiangVien.Where(x => x.UserId == user.Id).ToList();
+                            if (gv.Any())
+                                _context.GiangVien.RemoveRange(gv);
+                            break;
+
+                        case "SinhVien":
+                            var svList = _context.SinhVien.Where(x => x.UserId == user.Id).ToList();
+                            if (svList.Any())
+                                _context.SinhVien.RemoveRange(svList);
+                            break;
+                    }
+                }
             }
+
+            // Chỉ lưu khi có thay đổi
+            if (rolesToAdd.Any() || rolesToRemove.Any())
+                await _context.SaveChangesAsync();
+
             TempData["SuccessMessage"] = "Cập nhật vai trò người dùng thành công.";
             return Redirect(Request.Headers["Referer"].ToString());
         }
+
 
 
     }

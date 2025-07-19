@@ -1,13 +1,15 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @using QLHocPhan_23TH0003.ViewModel
 @model UserViewModel
+
+
 @{
-   if (User.Identity.Name == Model.UserName)
+    if (User.Identity.Name == Model.UserName)
     {
         ViewBag.Title = "Quản lý tài khoản của tôi";
     }
     else
-    ViewBag.Title = "Quản lý tài khoản của " + Model.UserName;
+        ViewBag.Title = "Quản lý tài khoản của " + Model.UserName;
 }
 <h4 class="card-title title mb-4 text-center">@ViewBag.Title</h4>
 
@@ -19,7 +21,7 @@
             <label><strong>Tên đăng nhập:</strong></label>
             <span>@Model.UserName</span>
         </div>
-        
+
         <div class="form-group">
             <label><strong>EmailConfirmed: </strong></label>
             <span>@Model.EmailConfirmed</span>
@@ -28,7 +30,7 @@
             <label><strong>Số lần đăng nhập thất bại: </strong></label>
             <span>@Model.AccessFailedCount</span>
         </div>
-        
+
         <div class="form-group">
             <label><strong>LockoutEnabled: </strong></label>
             <span>@Model.LockoutEnabled</span>
@@ -41,37 +43,40 @@
         {
             <div class="form-group">
                 <label><strong>Xem hồ sơ giảng viên: </strong></label>
-                <a href="@Url.Action("Edit", "GiangVien_23TH0003", new { id = Model.GiangVien.Id })" class="btn btn-primary">Xem</a>
+                <a href="@Url.Action("EditProfileGiangVien", "MyProfile_23TH0003")" class="btn btn-primary btn-sm">Sửa</a>
             </div>
         }
         @if (Model.SinhVien != null)
         {
             <div class="form-group">
                 <label><strong>Xem hồ sơ sinh viên: </strong></label>
-                <a href="@Url.Action("Edit", "SinhVien_23TH0003", new { id = Model.SinhVien.Id })" class="btn btn-primary">Xem</a>
+                <a href="@Url.Action("EditProfileSinhVien", "MyProfile_23TH0003")" class="btn btn-primary btn-sm">Sửa</a>
             </div>
         }
-        
+        @if (Model.GiangVien == null && Model.SinhVien == null)
+        {
+            <label><strong>Chưa có hồ sơ </strong></label>
+        }
     </div>
     <div class="col-md-6">
         <div class="form-group">
             <label><strong>Email: </strong></label>
             <span>@Model.Email</span>
-            <a href="" class="btn btn-primary">Đổi Email</a>
+            <a href="" class="btn btn-primary btn-sm">Đổi Email</a>
         </div>
         <div class="form-group">
             <label><strong>Số điện thoại: </strong></label>
             <span>@Model.PhoneNumber</span>
-            <a href="" class="btn btn-primary">Đổi số điện thoại</a>
+            <a href="" class="btn btn-primary btn-sm">Đổi số điện thoại</a>
         </div>
-        <div class="form-group">
+        <!--<div class="form-group">
             <label><strong>Vai trò: </strong></label>
-            <span>@(Model.Roles.Count == 0 ? "Chưa phân quyền" : string.Join(", ", Model.Roles) )</span>
-            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#DoiVaiTro">Đổi vai trò</button>
-        </div>
+
+            <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#DoiVaiTro">Đổi vai trò</button>
+        </div>-->
         <div class="form-group">
             <label><strong>Mật khẩu: </strong></label>
-            <a href="" class="btn btn-primary">Tạo mật khẩu mới</a>
+            <a href="" class="btn btn-primary btn-sm">Tạo mật khẩu mới</a>
         </div>
     </div>
 </div>
@@ -87,52 +92,39 @@
                 <h4 class="modal-title fs-5" id="exampleModalLabel">Đổi vai trò</h4>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            
+            @if (User.Identity.Name == Model.UserName)
+            {
+                <div class="modal-body">
+                    <p>Bạn không thể tự đổi vai trò của chính mình</p>
+                </div>
+            }
+            else
+            {
                 <form action="@Url.Action("UpdateUserRoles", "User_23TH0003")" method="post">
                     <div class="modal-body">
                         <input type="hidden" name="email" value="@Model.Email" />
-                    <div class="form-group">
-                        <label>Vai trò người dùng:</label><br />
-                        @foreach (var role in allRoles)
-                        {
-                            bool isCurrentUser = User.Identity.Name == Model.UserName;
-                            bool isAdminRole = role.Name == "Admin";
-                            bool isUserInRole = userRoles.Contains(role.Name);
-
-                            if (isAdminRole && isCurrentUser)
+                        <div class="form-group">
+                            <label>Vai trò người dùng:</label><br />
+                            @foreach (var role in allRoles)
                             {
-                                <!-- Không cho phép bỏ chọn "Admin" nếu là chính mình -->
-                                <label class="form-check-label mb-2" style="display: block">
+                                <label class="form-check-label; mb-2" style="display: block">
                                     <input class="mr-2" type="checkbox"
                                            name="selectedRoles"
                                            value="@role.Name"
-                                           checked
-                                           disabled />@role.Name
+                                           @(userRoles.Contains(role.Name) ? "checked" : "") />@role.Name
                                 </label>
-                                <!-- Hidden field để server vẫn nhận được giá trị "Admin" -->
-                                <input type="hidden" name="selectedRoles" value="Admin" />
-                            }
-                            else
-                            {
-                                <label class="form-check-label mb-2" style="display: block">
-                                    <input class="mr-2" type="checkbox"
-                                           name="selectedRoles"
-                                           value="@role.Name"
-                                           @(isUserInRole ? "checked" : "") />@role.Name
-                                </label>
-                            }
-                        }
-                    </div>
 
+                            }
+                        </div>
                         <div class="modal-footer">
-                            <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+                            <button type="submit" class="btn btn-primary btn-sm">Lưu thay đổi</button>
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
                         </div>
                     </div>
 
                 </form>
-            
-            
+            }
+
         </div>
     </div>
 </div>

@@ -1,0 +1,82 @@
+﻿@model QLHocPhan_23TH0003.Models.GiangVien
+
+<h4 class="text-danger text-center title">Cập nhật hồ sơ giảng viên của tôi</h4>
+@Html.Partial("_AlertMessages")
+        <form action="@Url.Action("EditProfileGiangVien", "MyProfile_23TH0003")" method="post" enctype="multipart/form-data">
+            @Html.AntiForgeryToken()
+
+            @Html.HiddenFor(model => model.Id)
+            @Html.HiddenFor(model => model.UserId)
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <input type="submit" value="Lưu" class="btn btn-primary btn-sm" />
+        <a href="@Url.Action("Index", "MyProfile_23TH0003")" class="btn  btn-primary btn-default btn-sm">Tài khoản</a>
+            </div>
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="form-group">
+                        <strong asp-for="MaGiangVien" class="control-label">Mã Giảng Viên : </strong>
+                        <span>@Model.MaGiangVien</span>
+                    </div>
+                    <div class="form-group">
+                        <strong asp-for="IdKhoa" class="control-label">Khoa : </strong>
+                        <span>@Model.Khoa?.TenKhoa</span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="HoTen" class="control-label">Họ tên</label>
+                        @Html.EditorFor(model => model.HoTen, new { htmlAttributes = new { @class = "form-control" } })
+                        <span asp-validation-for="HoTen" class="text-danger"></span>
+                    </div>
+            <div class="form-group">
+                <label asp-for="NgaySinh" class="control-label">Ngày sinh</label>
+                @Html.EditorFor(model => model.NgaySinh, new { htmlAttributes = new { @class = "form-control" } })
+                <span asp-validation-for="NgaySinh" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="GioiTinh" class="control-label">Giới tính</label>
+                <div class="">
+                    <label for="gioitinh-nam" class="form-check-label">@Html.RadioButtonFor(model => model.GioiTinh, true, new { @class = "", id = "gioitinh-nam" })<span style="margin-left:5px;">Nam</span></label>
+                    <label for="gioitinh-nu" class="form-check-label">@Html.RadioButtonFor(model => model.GioiTinh, false, new { @class = "", id = "gioitinh-nu" })<span style="margin-left:5px;">Nữ</span></label>
+                </div>
+                <span asp-validation-for="GioiTinh" class="text-danger"></span>
+            </div>
+
+
+            <div class="form-group">
+                <label asp-for="DiaChi" class="control-label">Địa chỉ</label>
+                @Html.EditorFor(model => model.DiaChi, new { htmlAttributes = new { @class = "form-control" } })
+                <span asp-validation-for="DiaChi" class="text-danger"></span>
+            </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label asp-for="HinhDaiDien" class="control-label">Hình đại diện</label><br />
+                        <img id="previewImage" src="/Uploads/@Model.HinhDaiDien" style="width: 100px; height: 100px; object-fit: cover; border: 1px solid #ccc;" />
+                        @Html.HiddenFor(model => model.HinhDaiDien)
+                        <input type="file" id="HinhDaiDienFile" name="HinhDaiDienFile" class="form-control file" accept="image/*" />
+                        <span asp-validation-for="HinhDaiDien" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            
+            
+        </form>
+
+
+    <script>
+        document.getElementById('HinhDaiDienFile').addEventListener('change', function (event) {
+            const fileInput = event.target;
+            const preview = document.getElementById('previewImage');
+
+            if (fileInput.files && fileInput.files[0]) {
+                const reader = new FileReader();
+
+                reader.onload = function (e) {
+                    preview.src = e.target.result;
+                }
+
+                reader.readAsDataURL(fileInput.files[0]);
+            }
+        });
+    </script>
+

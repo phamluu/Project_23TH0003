@@ -4,15 +4,18 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using QLHocPhan_23TH0003.Data;
 using QLHocPhan_23TH0003.Models;
+using QLHocPhan_23TH0003.Service;
 
 namespace QLHocPhan_23TH0003.Areas.Admin.Controllers
 {
     public class GiangVien_23TH0003Controller : BaseAdminController
     {
         private readonly MainDbContext _context;
-        public GiangVien_23TH0003Controller(MainDbContext context)
+        private readonly FileService _file;
+        public GiangVien_23TH0003Controller(MainDbContext context, FileService file)
         {
             _context = context;
+            _file = file;
         }
 
         // GET: GiangVien_23TH0003
@@ -38,10 +41,15 @@ namespace QLHocPhan_23TH0003.Areas.Admin.Controllers
         // POST: GiangVien_23TH0003/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(GiangVien model)
+        public async Task<ActionResult> CreateAsync(GiangVien model, IFormFile HinhDaiDienFile)
         {
             try
             {
+                if (HinhDaiDienFile != null && HinhDaiDienFile.Length > 0)
+                {
+                    string fileName = await _file.UploadAndGetResultStringAsync(HinhDaiDienFile, model.HinhDaiDien);
+                    model.HinhDaiDien = fileName;
+                }
                 _context.GiangVien.Add(model);
                 _context.SaveChanges();
                 TempData["SuccessMessage"] = "Thêm giảng viên thành công";
@@ -69,10 +77,15 @@ namespace QLHocPhan_23TH0003.Areas.Admin.Controllers
         // POST: GiangVien_23TH0003/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(GiangVien model)
+        public async Task<ActionResult> EditAsync(GiangVien model, IFormFile HinhDaiDienFile)
         {
             try
             {
+                if (HinhDaiDienFile != null && HinhDaiDienFile.Length > 0)
+                {
+                    string fileName = await _file.UploadAndGetResultStringAsync(HinhDaiDienFile, model.HinhDaiDien);
+                    model.HinhDaiDien = fileName;
+                }
                 _context.Update(model);
                 _context.SaveChanges();
                 TempData["SuccessMessage"] = "Cập nhật giảng viên thành công";
@@ -80,6 +93,7 @@ namespace QLHocPhan_23TH0003.Areas.Admin.Controllers
             }
             catch
             {
+                ViewBag.IdKhoa = new SelectList(_context.Khoa.ToList(), "Id", "TenKhoa");
                 return View(model);
             }
         }
@@ -134,6 +148,7 @@ namespace QLHocPhan_23TH0003.Areas.Admin.Controllers
             {
                 _context.GiangVien.Remove(mon);
                 _context.SaveChanges();
+                _file.DeleteFile(mon.HinhDaiDien);
                 TempData["SuccessMessage"] = "Xóa vĩnh viễn giảng viên thành công";
             }
             return RedirectToAction("Trash");

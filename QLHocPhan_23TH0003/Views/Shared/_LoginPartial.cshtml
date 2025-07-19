@@ -8,18 +8,20 @@
         <li class="nav-item">
             @if (User.IsInRole("Admin"))
             {
-                <a class="nav-link " asp-area="Admin" asp-page="/Home/Index" title="Manage">Hello @User.Identity?.Name!</a>
-            }else if(User.IsInRole("GiangVien")){
-                <a class="nav-link " asp-area="Instructor" asp-page="/Home/Index" title="Manage">Hello @User.Identity?.Name!</a>
+                <a class="nav-link " href="@Url.Action("Index", "MyProfile_23TH0003", new { area = "Admin" })" title="Manage">Hello @User.Identity?.Name!</a>
+            }
+            else if (User.IsInRole("GiangVien"))
+            {
+                <a class="nav-link " href="@Url.Action("Index", "MyProfile_23TH0003", new  { area = "Instructor" } )" title="Manage">Hello @User.Identity?.Name!</a>
             }else if (User.IsInRole("SinhVien"))
             {
-                <a class="nav-link " asp-area="Student" asp-page="/Home/Index" title="Manage">Hello @User.Identity?.Name!</a>
+                <a class="nav-link " href="@Url.Action("Index", "MyProfile_23TH0003", new { area = "Student" })" title="Manage">Hello @User.Identity?.Name!</a>
             }
             else
             {
                 <a class="nav-link " asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @User.Identity?.Name!</a>
             }
-        
+            
     </li>
     <li class="nav-item">
         <form  class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">

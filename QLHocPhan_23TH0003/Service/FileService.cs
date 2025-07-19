@@ -9,7 +9,7 @@ namespace QLHocPhan_23TH0003.Service
         {
             _webHostEnvironment = webHostEnvironment;
         }
-        public async Task<string> UploadAndGetResultStringAsync(IFormFile file)
+        public async Task<string> UploadAndGetResultStringAsync(IFormFile file, string oldFileName = null)
         {
             if (file != null && file.Length > 0)
             {
@@ -26,11 +26,24 @@ namespace QLHocPhan_23TH0003.Service
                 {
                     await file.CopyToAsync(fileStream);
                 }
-
+                // remove file cũ
+                DeleteFile(oldFileName);
                 return fileName;
-
             }
             return null;
+        }
+
+        public bool DeleteFile(string fileName)
+        {
+            if (fileName == null) return false;
+            var uploads = Path.Combine(_webHostEnvironment.WebRootPath, "Uploads");
+            var filePath = Path.Combine(uploads, fileName);
+            if (System.IO.File.Exists(filePath))
+            {
+                System.IO.File.Delete(filePath);
+                return true;
+            }
+            return false;
         }
     }
 }
