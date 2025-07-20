@@ -56,7 +56,7 @@ namespace QLHocPhan_23TH0003.Areas.Identity.Pages.Account
                 var user = await _userManager.FindByEmailAsync(Input.Email);
                 if (user == null)
                 {
-                    ModelState.AddModelError(string.Empty, "Tài khoản không tồn tại.");
+                    ModelState.AddModelError(string.Empty, "Tài khoản chưa đăng ký trên hệ thống.");
                     return Page();
                 }
                 //if(!await _userManager.IsEmailConfirmedAsync(user))
@@ -77,8 +77,9 @@ namespace QLHocPhan_23TH0003.Areas.Identity.Pages.Account
 
                 await _emailSender.SendEmailAsync(
                     Input.Email,
-                    "Reset Password",
-                    $"Please reset your password by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                    "Yêu cầu đặt lại mật khẩu",
+                    $"Chúng tôi nhận được yêu cầu đặt lại mật khẩu cho tài khoản của bạn. Vui lòng <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>nhấn vào đây</a> để tiến hành. Nếu bạn không yêu cầu điều này, hãy bỏ qua email này.");
+
 
                 return RedirectToPage("./ForgotPasswordConfirmation");
             }
