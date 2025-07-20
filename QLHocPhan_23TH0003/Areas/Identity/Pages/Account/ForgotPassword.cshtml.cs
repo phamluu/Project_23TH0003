@@ -54,11 +54,16 @@ namespace QLHocPhan_23TH0003.Areas.Identity.Pages.Account
             if (ModelState.IsValid)
             {
                 var user = await _userManager.FindByEmailAsync(Input.Email);
-                if (user == null || !(await _userManager.IsEmailConfirmedAsync(user)))
+                if (user == null)
                 {
-                    // Don't reveal that the user does not exist or is not confirmed
-                    return RedirectToPage("./ForgotPasswordConfirmation");
+                    ModelState.AddModelError(string.Empty, "Tài khoản không tồn tại.");
+                    return Page();
                 }
+                //if(!await _userManager.IsEmailConfirmedAsync(user))
+                //{
+                //    ModelState.AddModelError(string.Empty, "Tài khoản chưa xác nhận email. Vui lòng kiểm tra hộp thư của bạn.");
+                //    return Page();
+                //}
 
                 // For more information on how to enable account confirmation and password reset please
                 // visit https://go.microsoft.com/fwlink/?LinkID=532713

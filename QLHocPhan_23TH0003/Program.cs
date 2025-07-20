@@ -64,7 +64,7 @@ builder.Services.AddControllersWithViews()
 builder.Services.AddScoped<IRazorViewToStringRenderer, RazorViewToStringRenderer>(); // Đăng ký tập view với ký tập string
 builder.Services.AddRazorPages(); // Bổ sugng khi dùng razor page với Identity
 
-builder.Services.AddTransient<IEmailSender, FakeEmailSender>(); // Đăng ký tạm thời fake email sender trong môi trường phát triển
+builder.Services.AddTransient<IEmailSender, SmtpEmailSender>(); // Đăng ký tạm thời fake email sender trong môi trường phát triển
 
 // Quản lý các service
 builder.Services.AddHttpClient();
