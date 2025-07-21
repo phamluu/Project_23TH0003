@@ -1,0 +1,51 @@
+﻿@model IEnumerable<QLHocPhan_23TH0003.Models.CauHinhHeThong>
+@using QLHocPhan_23TH0003.Common.Constants
+@using QLHocPhan_23TH0003.Common.Helpers
+@{
+    ViewBag.Title = "Quản lý cấu hình hệ thống";
+}
+
+<h4>@ViewBag.Title</h4>
+<div class="head_action">
+    @Html.ModalButton("Thêm mới", "btn-primary", UiConstants.btnCreateModal, UiConstants.CreateModal)
+    <a href="@Url.Action("CaiDat", "CauHinh_23TH0003")" id="btnDelete" class="btn btn-danger">Cài đặt</a>
+</div>
+@Html.Partial("_AlertMessages")
+<table id="grid">
+    <thead>
+        <tr>
+            <th>Mã cấu hình</th>
+            <th>Tên cấu hình</th>
+            <th>Mô tả</th>
+            <th>Thao tác</th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+
+<div class="modal fade" id="@UiConstants.CreateModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    @Html.Partial("Create", new QLHocPhan_23TH0003.Models.CauHinhHeThong())
+</div>
+
+<div class="modal fade" id="@UiConstants.EditModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+</div>
+
+<script>
+     $(document).ready(function() {
+            $('#grid').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    url: '/Admin/CauHinh_23TH0003/GetData',
+                    type: 'GET'
+                },
+                columns: [
+                    { data: 'maCauHinh' },
+                    { data: 'tenCauHinh' },
+                    { data: 'moTa' },
+                    { data: 'action', orderable: false, searchable: false }
+                ]
+            });
+    });
+</script>

@@ -1,0 +1,17 @@
+﻿@model QLHocPhan_23TH0003.Models.CauHinhHeThong
+
+<div class="mb-3">
+    @Html.LabelFor(model => model.MaCauHinh, "Mã cấu hình", htmlAttributes: new { @class = "control-label col-md-4" })
+    @Html.EditorFor(model => model.MaCauHinh, new { htmlAttributes = new { @class = "form-control" } })
+    @Html.ValidationMessageFor(model => model.MaCauHinh, "", new { @class = "text-danger" })
+</div>
+<div class="mb-3">
+    @Html.LabelFor(model => model.TenCauHinh, "Tên cấu hình", htmlAttributes: new { @class = "control-label col-md-4" })
+    @Html.EditorFor(model => model.TenCauHinh, new { htmlAttributes = new { @class = "form-control" } })
+    @Html.ValidationMessageFor(model => model.TenCauHinh, "", new { @class = "text-danger" })
+</div>
+<div class="mb-3">
+    @Html.LabelFor(model => model.MoTa, "Mô tả", htmlAttributes: new { @class = "control-label col-md-4" })
+    @Html.EditorFor(model => model.MoTa, new { htmlAttributes = new { @class = "form-control" } })
+    @Html.ValidationMessageFor(model => model.MoTa, "", new { @class = "text-danger" })
+</div>

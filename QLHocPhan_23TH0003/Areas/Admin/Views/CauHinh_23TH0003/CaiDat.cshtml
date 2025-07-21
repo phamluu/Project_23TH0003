@@ -1,0 +1,79 @@
+﻿@model IEnumerable<QLHocPhan_23TH0003.ViewModel.CauHinhViewModel>
+@using QLHocPhan_23TH0003.Enums
+@using QLHocPhan_23TH0003.ViewModel
+@{
+    ViewBag.Title = "Quản lý cấu hình hệ thống";
+}
+<style>
+    .form-control {
+        background: #fff;
+    }
+</style>
+<h4>@ViewBag.Title</h4>
+<div class="head_action">
+    <a href="@Url.Action("Index", "CauHinh_23TH0003")" class="btn btn-danger">Thêm cấu hình</a>
+</div>
+@Html.Partial("_AlertMessages")
+
+@if (Model != null)
+{
+    <form id="frmList" method="post" enctype="multipart/form-data">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th width="200"></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (int i = 0; i < Model.Count(); i++)
+                {
+                    var item = Model.ElementAt(i);
+                    <tr>
+                        <td>@item.TenCauHinh</td>
+                        <td>
+                            @switch (item.LoaiCauHinh)
+                            {
+                                case LoaiCauHinh.Text:
+                                    <input type="text" name="GiaTri[@i]" value="@item.GiaTri" class="form-control" />
+                                    break;
+                                case LoaiCauHinh.Editor:
+                                    <textarea name="GiaTri[@i]" class="form-control" rows="5">@item.GiaTri</textarea>
+                                    break;
+                                case LoaiCauHinh.Number:
+                                    <input type="number" name="GiaTri[@i]" value="@item.GiaTri" class="form-control" />
+                                    break;
+                                case LoaiCauHinh.Image:
+                                    <div class="form-group">
+                                        <img src="/Uploads/@item.GiaTri" class="previewImage" style="width: 100px; height: 100px; object-fit: cover; border: 1px solid #ccc;" />
+                                        <input type="hidden" name="GiaTri[@i]" value="@item.GiaTri" />
+                                        <input type="file" name="HinhDaiDienFile[@i]" class="form-control file imageInput" accept="image/*" />
+                                    </div>
+                                    break;
+                                default:
+                                    <input type="text" name="GiaTri[@i]" value="@item.GiaTri" class="form-control" />
+                                    break;
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </form>
+}
+<script>
+    document.querySelectorAll('.imageInput').forEach(function (input) {
+        input.addEventListener('change', function (event) {
+            const fileInput = event.target;
+            const previewImage = fileInput.closest('.form-group').querySelector('.previewImage');
+
+            if (fileInput.files && fileInput.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    previewImage.src = e.target.result;
+                };
+                reader.readAsDataURL(fileInput.files[0]);
+            }
+        });
+    });
+</script>

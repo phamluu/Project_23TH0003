@@ -1,0 +1,24 @@
+﻿@using QLHocPhan_23TH0003.Common.Constants
+@model QLHocPhan_23TH0003.Models.CauHinhHeThong
+@{
+    Layout = null;
+}
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title fs-5" id="exampleModalLabel">Cập nhật cấu hình</h4>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form id="@UiConstants.CreateEditForm" action="/Admin/HocKy_23TH0003/Edit" method="post">
+            @Html.AntiForgeryToken()
+            <div class="modal-body">
+                @Html.HiddenFor(model => model.Id)
+                @Html.Partial("_Fields", Model)
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="btnSave">Lưu thay đổi</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+            </div>
+        </form>
+    </div>
+</div>
