@@ -35,7 +35,8 @@ namespace QLHocPhan_23TH0003.Areas.Admin.Controllers
         public ActionResult Create()
         {
             ViewBag.IdKhoa = new SelectList(_context.Khoa.ToList(), "Id", "TenKhoa");
-            return View();
+            var model = new GiangVien();
+            return View(model);
         }
 
         // POST: GiangVien_23TH0003/Create

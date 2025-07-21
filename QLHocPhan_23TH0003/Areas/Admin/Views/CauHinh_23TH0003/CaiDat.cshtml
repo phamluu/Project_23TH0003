@@ -32,28 +32,35 @@
                     <tr>
                         <td>@item.TenCauHinh</td>
                         <td>
-                            @switch (item.LoaiCauHinh)
-                            {
-                                case LoaiCauHinh.Text:
-                                    <input type="text" name="GiaTri[@i]" value="@item.GiaTri" class="form-control" />
-                                    break;
-                                case LoaiCauHinh.Editor:
-                                    <textarea name="GiaTri[@i]" class="form-control" rows="5">@item.GiaTri</textarea>
-                                    break;
-                                case LoaiCauHinh.Number:
-                                    <input type="number" name="GiaTri[@i]" value="@item.GiaTri" class="form-control" />
-                                    break;
-                                case LoaiCauHinh.Image:
-                                    <div class="form-group">
-                                        <img src="/Uploads/@item.GiaTri" class="previewImage" style="width: 100px; height: 100px; object-fit: cover; border: 1px solid #ccc;" />
-                                        <input type="hidden" name="GiaTri[@i]" value="@item.GiaTri" />
-                                        <input type="file" name="HinhDaiDienFile[@i]" class="form-control file imageInput" accept="image/*" />
-                                    </div>
-                                    break;
-                                default:
-                                    <input type="text" name="GiaTri[@i]" value="@item.GiaTri" class="form-control" />
-                                    break;
-                            }
+                            <input type="hidden" name="model[@i].Id" value="@item.Id" />
+                            <input type="hidden" name="model[@i].MaCauHinh" value="@item.MaCauHinh" />
+                            <input type="hidden" name="model[@i].TenCauHinh" value="@item.TenCauHinh" />
+                            <input type="hidden" name="model[@i].MoTa" value="@item.MoTa" />
+                            <input type="hidden" name="model[@i].LoaiCauHinh" value="@item.LoaiCauHinh" />
+
+                                @switch (item.LoaiCauHinh)
+                                {
+                                    case LoaiCauHinh.Text:
+                                        <input type="text" name="model[@i].GiaTri" value="@item.GiaTri" class="form-control" />
+                                        break;
+                                    case LoaiCauHinh.Editor:
+                                        <textarea name="model[@i].GiaTri" class="form-control summernote-editor" rows="5">@item.GiaTri</textarea>
+                                        break;
+                                    case LoaiCauHinh.Number:
+                                        <input type="number" name="model[@i].GiaTri" value="@item.GiaTri" class="form-control" />
+                                        break;
+                                    case LoaiCauHinh.Image:
+                                        <div class="form-group">
+                                            <img src="/Uploads/@item.GiaTri" class="previewImage" style="width: 100px; height: 100px; object-fit: cover; border: 1px solid #ccc;" />
+                                            <input type="hidden" name="model[@i].GiaTri" value="@item.GiaTri" />
+                                            <input type="file" name="HinhDaiDienFile[@i]" class="form-control file imageInput" accept="image/*" />
+                                        </div>
+                                        break;
+                                    default:
+                                        <input type="text" name="model[@i].GiaTri" value="@item.GiaTri" class="form-control" />
+                                        break;
+                                }
+
                         </td>
                     </tr>
                 }
@@ -61,19 +68,30 @@
         </table>
     </form>
 }
-<script>
-    document.querySelectorAll('.imageInput').forEach(function (input) {
-        input.addEventListener('change', function (event) {
-            const fileInput = event.target;
-            const previewImage = fileInput.closest('.form-group').querySelector('.previewImage');
 
-            if (fileInput.files && fileInput.files[0]) {
-                const reader = new FileReader();
-                reader.onload = function (e) {
-                    previewImage.src = e.target.result;
-                };
-                reader.readAsDataURL(fileInput.files[0]);
-            }
+<script>
+    // Khởi tạo Summernote cho các textarea có class .summernote-editor
+    $(document).ready(function () {
+        $('.summernote-editor').summernote({
+            height: 300,
+            placeholder: 'Nhập nội dung ở đây...'
+        });
+
+        // Khởi tạo preview ảnh cho mỗi input ảnh
+        document.querySelectorAll('.imageInput').forEach(function (input) {
+            input.addEventListener('change', function (event) {
+                const fileInput = event.target;
+                const previewImage = fileInput.closest('.form-group').querySelector('.previewImage');
+
+                if (fileInput.files && fileInput.files[0]) {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        previewImage.src = e.target.result;
+                    };
+                    reader.readAsDataURL(fileInput.files[0]);
+                }
+            });
         });
     });
 </script>
+

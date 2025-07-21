@@ -14,6 +14,15 @@ CREATE TABLE BaiHoc (
 
 CREATE INDEX IX_BaiHoc_IdLopHocPhan ON BaiHoc(IdLopHocPhan);
 
+-- Tạo bảng CauHinhHeThong
+CREATE TABLE CauHinhHeThong (
+    Id INT PRIMARY KEY IDENTITY(1,1),
+    MaCauHinh NVARCHAR(100) NOT NULL,
+    TenCauHinh NVARCHAR(255) NOT NULL,
+    MoTa NVARCHAR(MAX) NULL,
+    GiaTri NVARCHAR(MAX) NULL
+);
+
 
 DELETE FROM [dbo].DangKyHocPhan;
 DBCC CHECKIDENT ('dbo.DangKyHocPhan', RESEED, 0);
