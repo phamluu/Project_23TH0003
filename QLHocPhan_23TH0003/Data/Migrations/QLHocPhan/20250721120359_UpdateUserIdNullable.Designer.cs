@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using QLHocPhan_23TH0003.Data;
 
@@ -11,9 +12,11 @@ using QLHocPhan_23TH0003.Data;
 namespace QLHocPhan_23TH0003.Data.Migrations.QLHocPhan
 {
     [DbContext(typeof(QuanLyHocPhanDbContext))]
-    partial class QuanLyHocPhanDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250721120359_UpdateUserIdNullable")]
+    partial class UpdateUserIdNullable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -149,9 +152,6 @@ namespace QLHocPhan_23TH0003.Data.Migrations.QLHocPhan
 
                     b.Property<int?>("IdKhoa")
                         .HasColumnType("int");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");

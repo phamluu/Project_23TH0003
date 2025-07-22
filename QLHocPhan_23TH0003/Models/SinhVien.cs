@@ -13,7 +13,7 @@
         public string? DiaChi { get; set; }
         // Thông tin profile
 
-        public string UserId { get; set; }
+        public string? UserId { get; set; }
 
         public int? IdLop { get; set; }
         public Lop? Lop { get; set; }

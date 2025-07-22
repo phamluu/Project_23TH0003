@@ -55,7 +55,7 @@
                     @(item.HocPhan?.HocKy?.NamHoc)
                 </td>
                 <td>
-                    @(item.DangKyHocPhans?.Count())
+                    <a href="@Url.Action("Index", "DangKyHocPhan_23TH0003", new { IdLopHocPhan = item.Id })">@(item.DangKyHocPhans?.Count())</a>
                 </td>
                 <td>
                     @if (phancongs == null)

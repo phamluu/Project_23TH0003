@@ -21,4 +21,18 @@ namespace QLHocPhan_23TH0003.ViewModel
     {
         public IdentityUser User { get; set; }
     }
+
+    public class TaiKhoanGiangVien
+    {
+        public int IdGiangVien { get; set; }
+        public string Email { get; set; }
+        public string Password { get; set; }
+    }
+
+    public class TaiKhoanSinhVien
+    {
+        public int IdSinhVien { get; set; }
+        public string Email { get; set; }
+        public string Password { get; set; }
+    }
 }

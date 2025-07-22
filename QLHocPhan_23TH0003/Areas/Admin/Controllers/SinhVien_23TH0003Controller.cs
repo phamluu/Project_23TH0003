@@ -1,10 +1,14 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using QLHocPhan_23TH0003.Data;
+using QLHocPhan_23TH0003.Enums;
 using QLHocPhan_23TH0003.Models;
 using QLHocPhan_23TH0003.Service;
+using QLHocPhan_23TH0003.ViewModel;
+using System.Text;
 
 namespace QLHocPhan_23TH0003.Areas.Admin.Controllers
 {
@@ -12,12 +16,71 @@ namespace QLHocPhan_23TH0003.Areas.Admin.Controllers
     {
         private readonly MainDbContext _context;
         private readonly FileService _file;
-        public SinhVien_23TH0003Controller(MainDbContext context, FileService file)
+        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserService _userService;
+        public SinhVien_23TH0003Controller(MainDbContext context, FileService file, UserManager<IdentityUser> userManager, UserService userService)
         {
             _context = context;
             _file = file;
+            _userManager = userManager;
+            _userService = userService;
         }
 
+        #region Tài khoản
+        public ActionResult TaiKhoan(int IdSinhVien)
+        {
+            var sinhVien = _context.SinhVien.Find(IdSinhVien);
+            if (sinhVien == null)
+            {
+                return NotFound();
+            }
+            TaiKhoanSinhVien model = new TaiKhoanSinhVien();
+            model.IdSinhVien = IdSinhVien;
+            if (!string.IsNullOrEmpty(sinhVien.UserId))
+            {
+                var user = _userManager.FindByIdAsync(sinhVien.UserId).Result;
+                if (user != null)
+                {
+                    model.Email = user.Email;
+                }
+            }
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> TaiKhoanAsync(TaiKhoanSinhVien model)
+        {
+            var sinhVien = await _context.SinhVien.FindAsync(model.IdSinhVien);
+            if (sinhVien == null)
+            {
+                return NotFound();
+            }
+            var user = _context.Users.Find(sinhVien.UserId);
+            // Nếu chưa có tài khoản, tạo mới
+            if (user == null)
+            {
+                Task<IdentityResult> result = _userService.ThemTaiKhoanAsync(Role.SinhVien.ToString(), model.Email, model.Password);
+                if (!result.Result.Succeeded)
+                {
+                    ModelState.AddModelError("", result.Result.Errors.First().Description);
+                    return View(model);
+                }
+                sinhVien.UserId = _userManager.FindByEmailAsync(model.Email).Result.Id;
+                _context.Update(sinhVien);
+                _context.SaveChanges();
+                TempData["SuccessMessage"] = "Thêm tài khoản sinh viên thành công";
+                return RedirectToAction("Edit", new { id = model.IdSinhVien });
+            }
+            // Cập nhật tài khoản gồm email, pass, số điện thoại
+            else
+            {
+                _userService.UpdateTaiKhoan(sinhVien.UserId, model.Email, model.Password);
+            }
+
+            return RedirectToAction("TaiKhoan", new { IdSinhVien = model.IdSinhVien });
+        }
+        #endregion
         // GET: GiangVien_23TH0003
         public ActionResult Index()
         {
@@ -35,7 +98,8 @@ namespace QLHocPhan_23TH0003.Areas.Admin.Controllers
         public ActionResult Create()
         {
             ViewBag.IdLop = new SelectList(_context.Lop.ToList(), "Id", "TenLop");
-            return View();
+            var model = new SinhVien();
+            return View(model);
         }
 
         // POST: GiangVien_23TH0003/Create
@@ -55,9 +119,27 @@ namespace QLHocPhan_23TH0003.Areas.Admin.Controllers
                 TempData["SuccessMessage"] = "Thêm sinh viên thành công";
                 return RedirectToAction(nameof(Index));
             }
-            catch
+            catch(Exception ex)
             {
-                TempData["ErrorMessage"] = "Thêm sinh viên không thành công";
+                var sb = new StringBuilder();
+
+                sb.AppendLine("Thêm giảng viên không thành công.");
+                sb.AppendLine("Thông báo lỗi: " + ex.Message);
+
+                if (ex.InnerException != null)
+                {
+                    sb.AppendLine("Chi tiết lỗi bên trong: " + ex.InnerException.Message);
+                    if (ex.InnerException.InnerException != null)
+                    {
+                        sb.AppendLine("Lỗi sâu hơn: " + ex.InnerException.InnerException.Message);
+                    }
+                }
+
+                sb.AppendLine("Nguồn lỗi: " + ex.Source);
+                sb.AppendLine("StackTrace: " + ex.StackTrace);
+
+                TempData["ErrorMessage"] = sb.ToString();
+                ViewBag.IdLop = new SelectList(_context.Lop.ToList(), "Id", "TenLop");
                 return View(model);
             }
         }
@@ -91,8 +173,27 @@ namespace QLHocPhan_23TH0003.Areas.Admin.Controllers
                 TempData["SuccessMessage"] = "Cập nhật sinh viên thành công";
                 return RedirectToAction(nameof(Index));
             }
-            catch
+            catch(Exception ex)
             {
+                var sb = new StringBuilder();
+
+                sb.AppendLine("Thêm giảng viên không thành công.");
+                sb.AppendLine("Thông báo lỗi: " + ex.Message);
+
+                if (ex.InnerException != null)
+                {
+                    sb.AppendLine("Chi tiết lỗi bên trong: " + ex.InnerException.Message);
+                    if (ex.InnerException.InnerException != null)
+                    {
+                        sb.AppendLine("Lỗi sâu hơn: " + ex.InnerException.InnerException.Message);
+                    }
+                }
+
+                sb.AppendLine("Nguồn lỗi: " + ex.Source);
+                sb.AppendLine("StackTrace: " + ex.StackTrace);
+
+                TempData["ErrorMessage"] = sb.ToString();
+                ViewBag.IdLop = new SelectList(_context.Lop.ToList(), "Id", "TenLop");
                 return View(model);
             }
         }

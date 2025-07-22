@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿
+using Microsoft.EntityFrameworkCore;
 using QLHocPhan_23TH0003.Models;
 
 namespace QLHocPhan_23TH0003.Data

@@ -8,7 +8,15 @@
     @Html.AntiForgeryToken()
     <div class="form-group">
         <input type="submit" value="Lưu" class="btn btn-primary" />
-        <a href="@Url.Action("Details", "User_23TH0003", new { id = Model.UserId })" class="btn btn-default">Tài khoản</a>
+        @if (string.IsNullOrEmpty(Model.UserId))
+        {
+            <a href="@Url.Action("TaiKhoan", "GiangVien_23TH0003", new { IdGiangVien = Model.Id })" class="btn btn-default">Tạo tài khoản</a>
+        }
+        else
+        {
+            <a href="@Url.Action("Details", "User_23TH0003", new { id = Model.UserId })" class="btn btn-default">Xem tài khoản</a>
+        }
+
     </div>
     @{
         ViewData["Khoa"] = ViewBag.IdKhoa;

@@ -24,7 +24,8 @@
             <th>
                 @Html.DisplayName("Ngày tạo")
             </th>
-            <th></th>
+            <th style="width:100px"></th>
+            <th style="width:100px"></th>
         </tr>
     </thead>
     <tbody>
@@ -46,6 +47,16 @@
                 
                 <td>
                     @Html.DisplayFor(modelItem => item.NgayTao)
+                </td>
+                <td>
+                    @if (item.IsActive)
+                    {
+                        <a href="@Url.Action("Duyet", "GiangVien_23TH0003", new { id = item.Id, IsActive = false })" class="btn btn-danger">Hủy Duyệt</a>
+                    }
+                    else
+                    {
+                        <a href="@Url.Action("Duyet", "GiangVien_23TH0003", new { id = item.Id, IsActive = true })" class="btn btn-info">Duyệt</a>
+                    }
                 </td>
                 <td>
                     @Html.EditButton("GiangVien_23TH0003", item.Id)

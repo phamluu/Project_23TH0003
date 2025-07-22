@@ -18,11 +18,13 @@ namespace QLHocPhan_23TH0003.Areas.Admin.Controllers
             _context = context;
         }
         // GET: DangKyHocPhan_23TH0003Controller
-        public ActionResult Index()
+        public ActionResult Index(int? IdLopHocPhan = null)
         {
             var model = _context.DangKyHocPhan.Include(x => x.LopHocPhan).ThenInclude(x => x.HocPhan)
                 .ThenInclude(x => x.HocKy)
-                .Include(x => x.SinhVien).ThenInclude(x => x.Lop).OrderByDescending(x => x.NgayTao).ToList();
+                .Include(x => x.SinhVien).ThenInclude(x => x.Lop)
+                .Where(x => (!IdLopHocPhan.HasValue || x.IdLopHocPhan == IdLopHocPhan))
+                .OrderByDescending(x => x.NgayTao).ToList();
             return View(model);
         }
 

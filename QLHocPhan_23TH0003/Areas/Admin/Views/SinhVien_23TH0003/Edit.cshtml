@@ -7,7 +7,15 @@
 <form action="@Url.Action("Edit", "SinhVien_23TH0003")" method="post">
     <div class="form-group">
         <input type="submit" value="Lưu" class="btn btn-primary" />
-        <a href="@Url.Action("Details", "User_23TH0003", new { id = Model.UserId })" class="btn btn-default">Tài khoản</a>
+        @if (string.IsNullOrEmpty(Model.UserId))
+        {
+            <a href="@Url.Action("TaiKhoan", "SinhVien_23TH0003", new { IdSinhVien = Model.Id })" class="btn btn-default">Thêm Tài khoản</a>
+        }
+        else
+        {
+            <a href="@Url.Action("Details", "User_23TH0003", new { id = Model.UserId })" class="btn btn-default">Xem Tài khoản</a>
+        }
+
     </div>
     @Html.AntiForgeryToken()
 

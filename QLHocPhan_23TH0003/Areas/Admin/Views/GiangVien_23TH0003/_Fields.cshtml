@@ -37,7 +37,7 @@
 
         <div class="form-group">
             <label asp-for="IdKhoa" class="control-label"><strong>Khoa</strong></label>
-            @Html.DropDownList("IdKhoa", (SelectList)ViewData["Khoa"], new { @class = "form-control" })
+            @Html.DropDownListFor(model => model.IdKhoa, (SelectList)ViewBag.IdKhoa, "-- Chọn khoa --", new { @class = "form-control" })
         </div>
     </div>
     <div class="col-md-4">
@@ -47,28 +47,6 @@
             @Html.HiddenFor(model => model.HinhDaiDien)
             <input type="file" id="HinhDaiDienFile" name="HinhDaiDienFile" class="form-control file" accept="image/*" />
             <span asp-validation-for="HinhDaiDien" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <label asp-for="UserId" class="control-label">Tài khoản</label>
-            <div class="" style="width:100%">
-                @if (Model != null)
-                {
-                    @Html.HiddenFor(model => model.UserId)
-                    if (Model.UserId != null)
-                    {
-                        <button class="btn btn-primary" type="button">Đổi tài khoản</button>
-                    }
-                    else
-                    {
-                        <button class="btn btn-primary" type="button">Tạo tài khoản</button>
-                    }
-                }
-                else
-                {
-                    <span class="btn btn-primary">Chưa có tài khoản</span>
-                }
-                <span asp-validation-for="UserId" class="text-danger"></span>
-            </div>
         </div>
     </div>
 </div>
