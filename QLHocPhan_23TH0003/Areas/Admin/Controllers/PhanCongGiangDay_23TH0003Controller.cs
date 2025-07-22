@@ -23,7 +23,7 @@ namespace QLHocPhan_23TH0003.Areas.Admin.Controllers
             
             var lhp = _context.LopHocPhan.Include(x => x.HocPhan).ThenInclude(x => x.HocKy)
                 .Include(x => x.PhanCongGiangDays).ThenInclude(x => x.GiangVien).Where(x => x.IsDeleted != true).ToList();
-            var giangVien = _context.GiangVien.Include(x => x.Khoa).Where(x => x.IsDeleted != true).ToList();
+            var giangVien = _context.GiangVien.Include(x => x.Khoa).Where(x => x.IsActive == true && x.IsDeleted != true).ToList();
             var daPhanCong = _context.PhanCongGiangDay
                              .Where(p => p.IdLopHocPhan == IdLopHocPhan)
                              .Select(p => p.IdGiangVien)
