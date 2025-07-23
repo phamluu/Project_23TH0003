@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using QLHocPhan_23TH0003.Data;
 
@@ -10,9 +11,11 @@ using QLHocPhan_23TH0003.Data;
 namespace QLHocPhan_23TH0003.Data.Migrations.CauHinh
 {
     [DbContext(typeof(CaiDatHeThongDbContext))]
-    partial class CaiDatHeThongDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250723092245_UpdateCauHinh_TenCauHinhNotNull")]
+    partial class UpdateCauHinh_TenCauHinhNotNull
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
