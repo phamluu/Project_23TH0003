@@ -61,8 +61,6 @@ namespace QLHocPhan_23TH0003.Controllers
             }
         }
 
-
-
         public IActionResult Privacy()
         {
             return View();

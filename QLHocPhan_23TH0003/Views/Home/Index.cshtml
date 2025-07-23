@@ -1,13 +1,19 @@
-﻿@using QLHocPhan_23TH0003.ViewModel
+﻿@using QLHocPhan_23TH0003.Common.Helpers
+@using QLHocPhan_23TH0003.ViewModel
 @model List<HocKyLopHocPhanViewModel>
 @{
     ViewData["Title"] = "Trang chủ";
     int i = 0;
+    string banner = CauHinhHelper.Get("Banner");
 }
 
-<div class="banner mb-4">
-    <img src="~/img/banner2.png" style="width: 100%;" />
-</div>
+@if (!string.IsNullOrEmpty(banner))
+{
+    <div class="banner mb-4">
+        <img src="~/Uploads/@banner" style="width: 100%;" />
+    </div>
+}
+
 
 <section id="khoahoc">
     <div class="container">

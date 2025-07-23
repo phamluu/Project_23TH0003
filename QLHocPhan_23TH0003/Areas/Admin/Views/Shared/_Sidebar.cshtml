@@ -16,100 +16,149 @@
                     <p>Dashboard</p>
                 </a>
             </li>
-            <li class="@Html.IsActive("HocKy_23TH0003")">
-                <a href="@Url.Action("Index", "HocKy_23TH0003")">
-                    <i class="now-ui-icons location_map-big"></i>
-                    <p>Học kỳ</p>
+            @* danh mục *@
+            <li class="nav-item">
+                <a class="nav-link dropdown-toggle" data-toggle="collapse" href="#danhmuc" role="button" aria-expanded="false" aria-controls="danhmuc">
+                    <i class="now-ui-icons now-ui-icons files_box"></i>
+                    <span>Quản lý danh mục</span>
                 </a>
+                <div class="collapse" id="danhmuc">
+                    <ul class="nav flex-column ml-3">
+                        <li class="@Html.IsActive("HocKy_23TH0003")">
+                            <a href="@Url.Action("Index", "HocKy_23TH0003")">
+                                <i class="now-ui-icons location_map-big"></i>
+                                <p>Học kỳ</p>
+                            </a>
+                        </li>
+                        <li class="@Html.IsActive("Khoa_23TH0003")">
+                            <a href="@Url.Action("Index", "Khoa_23TH0003")">
+                                <i class="now-ui-icons ui-1_bell-53"></i>
+                                <p>Khoa</p>
+                            </a>
+                        </li>
+                        <li class="@Html.IsActive("LopHoc_23TH0003")">
+                            <a href="@Url.Action("Index", "LopHoc_23TH0003")">
+                                <i class="now-ui-icons education_atom"></i>
+                                <p>Lớp học</p>
+                            </a>
+                        </li>
+                        <li class="@Html.IsActive("MonHoc_23TH0003")">
+                            <a href="@Url.Action("Index", "MonHoc_23TH0003")">
+                                <i class="now-ui-icons education_agenda-bookmark"></i>
+                                <p>Môn học</p>
+                            </a>
+                        </li>
+                        <li class="@Html.IsActive("HocPhan_23TH0003")">
+                            <a href="@Url.Action("Index", "HocPhan_23TH0003")">
+                                <i class="now-ui-icons education_paper"></i>
+                                <p>Học phần</p>
+                            </a>
+                        </li>
+                        
+                    </ul>
+                </div>
             </li>
-            <li class="@Html.IsActive("Khoa_23TH0003")">
-                <a href="@Url.Action("Index", "Khoa_23TH0003")">
-                    <i class="now-ui-icons ui-1_bell-53"></i>
-                    <p>Khoa</p>
+            @* end danh mục *@
+            <li class="nav-item">
+                <a class="nav-link dropdown-toggle" data-toggle="collapse" href="#hocphan" role="button" aria-expanded="false" aria-controls="hocphan">
+                    <i class="now-ui-icons now-ui-icons education_hat"></i>
+                    <span>Quản lý học phần</span>
                 </a>
+                <div class="collapse" id="hocphan">
+                    <ul class="nav flex-column ml-3">
+                        <li class="@Html.IsActive("LopHocPhan_23TH0003")">
+                            <a href="@Url.Action("Index", "LopHocPhan_23TH0003")">
+                                <i class="now-ui-icons design_bullet-list-67"></i>
+                                <p>Lớp Học phần</p>
+                            </a>
+                        </li>
+                        <li class="@Html.IsActive("PhanCongGiangDay_23TH0003")">
+                            <a href="@Url.Action("Index", "PhanCongGiangDay_23TH0003")">
+                                <i class="now-ui-icons users_single-02"></i>
+                                <p>Phân công giảng dạy</p>
+                            </a>
+                        </li>
+                        <li class="@Html.IsActive("PhanCongGiangDay_23TH0003")">
+                            <a href="@Url.Action("Index", "PhanCongGiangDay_23TH0003")">
+                                <i class="now-ui-icons ui-1_calendar-60"></i>
+                                <p>Lịch dạy giảng viên</p>
+                            </a>
+                        </li>
+                        <li class="@Html.IsActive("DangKyHocPhan_23TH0003")">
+                            <a href="@Url.Action("Index", "DangKyHocPhan_23TH0003")">
+                                <i class="now-ui-icons ui-1_simple-add"></i>
+                                <p>Đăng ký học phần</p>
+                            </a>
+                        </li>
+                        
+                    </ul>
+                </div>
             </li>
-            <li class="@Html.IsActive("LopHoc_23TH0003")">
-                <a href="@Url.Action("Index", "LopHoc_23TH0003")">
-                    <i class="now-ui-icons education_atom"></i>
-                    <p>Lớp học</p>
+            
+            @* người dùng *@
+            <li class="nav-item">
+                <a class="nav-link dropdown-toggle" data-toggle="collapse" href="#user" role="button" aria-expanded="false" aria-controls="user">
+                    <i class="now-ui-icons now-ui-icons users_circle-08"></i>
+                    <span>Người dùng</span>
                 </a>
+                 <div class="collapse" id="user">
+                    <ul class="nav flex-column ml-3">
+                        <li class="@Html.IsActive("User_23TH0003")">
+                            <a href="@Url.Action("Index", "User_23TH0003")">
+                                <i class="now-ui-icons users_single-02"></i>
+                                <p>Người dùng - Phân quyền</p>
+                            </a>
+                        </li>
+                        <li class="@Html.IsActive("GiangVien_23TH0003")">
+                            <a href="@Url.Action("Index", "GiangVien_23TH0003")">
+                                <i class="now-ui-icons users_single-02"></i>
+                                <p>Giảng viên</p>
+                            </a>
+                        </li>
+                        <li class="@Html.IsActive("SinhVien_23TH0003")">
+                            <a href="@Url.Action("Index", "SinhVien_23TH0003")">
+                                <i class="now-ui-icons design_bullet-list-67"></i>
+                                <p>Sinh viên</p>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
             </li>
-            <li class="@Html.IsActive("User_23TH0003")">
-                <a href="@Url.Action("Index", "User_23TH0003")">
-                    <i class="now-ui-icons users_single-02"></i>
-                    <p>Người dùng - Phân quyền</p>
+            @* end người dùng *@
+
+            <li class="nav-item">
+                <a class="nav-link dropdown-toggle" data-toggle="collapse" href="#thongke" role="button" aria-expanded="false" aria-controls="thongke">
+                    <i class="now-ui-icons business_chart-bar-32"></i>
+                    <span>Báo cáo thống kê</span>
                 </a>
+                 <div class="collapse" id="thongke">
+                    <ul class="nav flex-column ml-3">
+                        <li class="@Html.IsActive("HocPhi_23TH0003")">
+                            <a href="@Url.Action("Index", "HocPhi_23TH0003")">
+                                <i class="now-ui-icons business_money-coins"></i>
+                                <p>Học phí</p>
+                            </a>
+                        </li>
+                        <li class="@Html.IsActive("Diem_23TH0003")">
+                            <a href="@Url.Action("Index", "Diem_23TH0003")">
+                                <i class="now-ui-icons files_paper"></i>
+                                <p>Xem điểm</p>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="./upgrade.html">
+                                <i class="now-ui-icons business_chart-bar-32"></i>
+                                <p>Báo cáo tổng thể</p>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
             </li>
-            <li class="@Html.IsActive("GiangVien_23TH0003")">
-                <a href="@Url.Action("Index", "GiangVien_23TH0003")">
-                    <i class="now-ui-icons users_single-02"></i>
-                    <p>Giảng viên</p>
-                </a>
-            </li>
-            <li class="@Html.IsActive("SinhVien_23TH0003")">
-                <a href="@Url.Action("Index", "SinhVien_23TH0003")">
-                    <i class="now-ui-icons design_bullet-list-67"></i>
-                    <p>Sinh viên</p>
-                </a>
-            </li>
-            <li class="@Html.IsActive("MonHoc_23TH0003")">
-                <a href="@Url.Action("Index", "MonHoc_23TH0003")">
-                    <i class="now-ui-icons text_caps-small"></i>
-                    <p>Môn học</p>
-                </a>
-            </li>
-            <li class="@Html.IsActive("HocPhan_23TH0003")">
-                <a href="@Url.Action("Index", "HocPhan_23TH0003")">
-                    <i class="now-ui-icons text_caps-small"></i>
-                    <p>Học phần</p>
-                </a>
-            </li>
-            <li class="@Html.IsActive("LopHocPhan_23TH0003")">
-                <a href="@Url.Action("Index", "LopHocPhan_23TH0003")">
-                    <i class="now-ui-icons text_caps-small"></i>
-                    <p>Lớp Học phần</p>
-                </a>
-            </li>
-            <li class="@Html.IsActive("PhanCongGiangDay_23TH0003")">
-                <a href="@Url.Action("Index", "PhanCongGiangDay_23TH0003")">
-                    <i class="now-ui-icons text_caps-small"></i>
-                    <p>Phân công giảng dạy</p>
-                </a>
-            </li>
-            <li class="@Html.IsActive("PhanCongGiangDay_23TH0003")">
-                <a href="@Url.Action("Index", "PhanCongGiangDay_23TH0003")">
-                    <i class="now-ui-icons text_caps-small"></i>
-                    <p>Lịch dạy giảng viên</p>
-                </a>
-            </li>
-            <li class="@Html.IsActive("DangKyHocPhan_23TH0003")">
-                <a href="@Url.Action("Index", "DangKyHocPhan_23TH0003")">
-                    <i class="now-ui-icons text_caps-small"></i>
-                    <p>Đăng ký học phần</p>
-                </a>
-            </li>
-            <li class="@Html.IsActive("Diem_23TH0003")">
-                <a href="@Url.Action("Index", "Diem_23TH0003")">
-                    <i class="now-ui-icons text_caps-small"></i>
-                    <p>Xem điểm</p>
-                </a>
-            </li>
-            <li class="@Html.IsActive("HocPhi_23TH0003")">
-                <a href="@Url.Action("Index", "HocPhi_23TH0003")">
-                    <i class="now-ui-icons text_caps-small"></i>
-                    <p>Học phí</p>
-                </a>
-            </li>
+
             <li class="@Html.IsActive("CauHinh_23TH0003")">
-                <a href="@Url.Action("Index", "CauHinh_23TH0003")">
-                    <i class="now-ui-icons text_caps-small"></i>
-                    <p>Cấu hình</p>
-                </a>
-            </li>
-            <li>
-                <a href="./upgrade.html">
-                    <i class="now-ui-icons arrows-1_cloud-download-93"></i>
-                    <p>Báo cáo thống kê</p>
+                <a href="@Url.Action("CaiDat", "CauHinh_23TH0003")">
+                    <i class="now-ui-icons  ui-2_settings-90"></i>
+                    <p>Cài đặt</p>
                 </a>
             </li>
         </ul>

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity.UI.Services;
+using QLHocPhan_23TH0003.Common.Helpers;
 using System.Net;
 using System.Net.Mail;
 
@@ -24,24 +25,66 @@ namespace QLHocPhan_23TH0003.Service
 
         public async Task SendEmailAsync(string email, string subject, string htmlMessage)
         {
-            var smtpClient = new SmtpClient("smtp.gmail.com")  // thay thế bằng SMTP bạn dùng
-            {
-                Port = 587,
-                Credentials = new NetworkCredential(_config["Email:User"], _config["Email:Password"]),
-                EnableSsl = true,
-            };
+            string? userMail = CauHinhHelper.Get("smtp_user");
+            string? userPass = CauHinhHelper.Get("smtp_pass");
 
-            var mail = new MailMessage
+            if (string.IsNullOrWhiteSpace(userMail) || string.IsNullOrWhiteSpace(userPass))
             {
-                From = new MailAddress(_config["Email:User"]),
-                Subject = subject,
-                Body = htmlMessage,
-                IsBodyHtml = true
-            };
-            mail.To.Add(email);
+                // Không throw nữa
+                Console.WriteLine("Lỗi: smtp_user hoặc smtp_pass chưa được cấu hình.");
+                return;
+            }
 
-            await smtpClient.SendMailAsync(mail);
+            try
+            {
+                using var smtpClient = new SmtpClient("smtp.gmail.com")
+                {
+                    Port = 587,
+                    Credentials = new NetworkCredential(userMail, userPass),
+                    EnableSsl = true,
+                };
+
+                var mail = new MailMessage
+                {
+                    From = new MailAddress(userMail),
+                    Subject = subject,
+                    Body = htmlMessage,
+                    IsBodyHtml = true
+                };
+                mail.To.Add(email);
+
+                await smtpClient.SendMailAsync(mail);
+            }
+            catch (Exception ex)
+            {
+                // Log lỗi, nhưng không ném exception nữa
+                Console.WriteLine($"Gửi email thất bại: {ex.Message}");
+            }
         }
+
+        //public async Task SendEmailAsync(string email, string subject, string htmlMessage)
+        //{
+        //    string UserMail = CauHinhHelper.Get("smtp_user");
+        //    string UserPass = CauHinhHelper.Get("smtp_pass");
+        //    var smtpClient = new SmtpClient("smtp.gmail.com")  // thay thế bằng SMTP bạn dùng
+        //    {
+        //        Port = 587,
+        //        //Credentials = new NetworkCredential(_config["Email:User"], _config["Email:Password"]),
+        //        Credentials = new NetworkCredential(UserMail, UserPass),
+        //        EnableSsl = true,
+        //    };
+
+        //    var mail = new MailMessage
+        //    {
+        //        From = new MailAddress(UserMail),
+        //        Subject = subject,
+        //        Body = htmlMessage,
+        //        IsBodyHtml = true
+        //    };
+        //    mail.To.Add(email);
+
+        //    await smtpClient.SendMailAsync(mail);
+        //}
     }
 
 }

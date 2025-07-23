@@ -164,6 +164,9 @@ html {
 .form-group{
     margin-bottom:1rem;
 }
+.nav-item .dropdown-toggle::after {
+    font-size:1rem;
+}
 @media(max-width:490px) {
     .logo img {
         max-height: 40px;

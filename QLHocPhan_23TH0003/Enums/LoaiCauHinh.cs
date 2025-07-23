@@ -5,6 +5,7 @@
         Image = 1,
         Editor = 2,
         Text = 3,
-        Number = 4
+        Number = 4,
+        TextArea = 5,
     }
 }

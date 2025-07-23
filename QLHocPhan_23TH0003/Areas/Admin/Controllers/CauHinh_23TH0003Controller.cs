@@ -3,20 +3,24 @@ using QLHocPhan_23TH0003.Common.Helpers;
 using QLHocPhan_23TH0003.Data;
 using QLHocPhan_23TH0003.Enums;
 using QLHocPhan_23TH0003.Models;
+using QLHocPhan_23TH0003.Service;
 using QLHocPhan_23TH0003.ViewModel;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 namespace QLHocPhan_23TH0003.Areas.Admin.Controllers
 {
     public class CauHinh_23TH0003Controller : BaseAdminController
     {
         private readonly MainDbContext _context;
-        public CauHinh_23TH0003Controller(MainDbContext context)
+        private readonly FileService _fileService;
+        private readonly CauHinhService _cauHinhService;
+        public CauHinh_23TH0003Controller(MainDbContext context, FileService fileService, CauHinhService cauHinhService)
         {
             _context = context;
+            _fileService = fileService;
+            _cauHinhService = cauHinhService;
         }
         
         #region Cấu hình
-
-        
 
         public IActionResult Index()
         {
@@ -157,28 +161,81 @@ namespace QLHocPhan_23TH0003.Areas.Admin.Controllers
 
         #region Cài đặt hệ thống
 
-       
-        
         public ActionResult CaiDat()
         {
-            List<CauHinhViewModel> ch = new List<CauHinhViewModel>();
-            ch.Add(new CauHinhViewModel() { MaCauHinh = "smtp_user", TenCauHinh = "Email gửi SMTP", LoaiCauHinh = LoaiCauHinh.Text });
-            ch.Add(new CauHinhViewModel() { MaCauHinh = "smtp_pass", TenCauHinh = "Mật khâu Email SMTP", LoaiCauHinh = LoaiCauHinh.Text });
-            ch.Add(new CauHinhViewModel() { MaCauHinh = "dropbox_token", TenCauHinh = "Dropbox token", LoaiCauHinh = LoaiCauHinh.Text });
-            ch.Add(new CauHinhViewModel() { MaCauHinh = "HocPhi", TenCauHinh = "Học phí 1 tín chỉ", LoaiCauHinh = LoaiCauHinh.Number });
-            ch.Add(new CauHinhViewModel() { MaCauHinh = "Banner", TenCauHinh = "Banner", LoaiCauHinh = LoaiCauHinh.Image });
-            ch.Add(new CauHinhViewModel() { MaCauHinh = "Footer", TenCauHinh = "Nội dung chân web", LoaiCauHinh = LoaiCauHinh.Editor });
-            var model = ch;
-            return View(model);
+            var ch = _cauHinhService.GetTatCa();
+            return View(ch);
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult CaiDat(List<CauHinhHeThong> model)
+        public async Task<IActionResult> CaiDatAsync(List<CauHinhViewModel> model)
         {
-            _context.CauHinhHeThong.UpdateRange(model);
-            _context.SaveChanges();
-            return View(model);
+            if (!ModelState.IsValid)
+            {
+                // Thu thập tất cả lỗi từ ModelState
+                var errorMessages = ModelState.Values
+                    .SelectMany(v => v.Errors)
+                    .Select(e => e.ErrorMessage)
+                    .Where(msg => !string.IsNullOrWhiteSpace(msg))
+                    .ToList();
+
+                // Gộp lại thành 1 chuỗi
+                string fullErrorMessage = string.Join(" | ", errorMessages);
+
+                // Đưa vào TempData để hiển thị ở View (hoặc log)
+                TempData["ErrorMessage"] = "Dữ liệu không hợp lệ: " + fullErrorMessage;
+
+                return View(model);
+            }
+
+            for (int i = 0; i < model.Count; i++)
+            {
+                var item = model[i];
+
+                // ✅ Xử lý upload ảnh nếu có
+                if (item.LoaiCauHinh == LoaiCauHinh.Image && item.HinhDaiDienFile != null)
+                {
+                    _fileService.DeleteFile(item.GiaTri);
+                    string fileName = await _fileService.UploadAndGetResultStringAsync(item.HinhDaiDienFile);
+                    item.GiaTri = fileName;
+                }
+
+                // ✅ Cập nhật vào DB
+                var entity = _context.CauHinhHeThong.FirstOrDefault(x => x.MaCauHinh == item.MaCauHinh);
+                if (entity != null)
+                {
+                    entity.GiaTri = item.GiaTri;
+                    _context.CauHinhHeThong.Update(entity);
+                }
+                else
+                {
+                    _context.CauHinhHeThong.Add(new CauHinhHeThong
+                    {
+                        MaCauHinh = item.MaCauHinh,
+                        GiaTri = item.GiaTri
+                    });
+                }
+            }
+
+            try
+            {
+                await _context.SaveChangesAsync();
+                TempData["SuccessMessage"] = "Cập nhật cấu hình thành công!";
+                return RedirectToAction("CaiDat");
+            }
+            catch (Exception ex)
+            {
+                var errorMessage = ex.InnerException != null
+                    ? $"{ex.Message} - Chi tiết: {ex.InnerException.Message}"
+                    : ex.Message;
+                ModelState.AddModelError(string.Empty, errorMessage);
+                TempData["ErrorMessage"] = "Lỗi khi lưu dữ liệu: " + errorMessage;
+
+                return View(model);
+            }
         }
+
         #endregion
     }
 }

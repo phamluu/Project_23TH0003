@@ -5,8 +5,9 @@ namespace QLHocPhan_23TH0003.ViewModel
 {
     public class CauHinhViewModel:CauHinhHeThong
     {
-        public string Action { get; set; }
+        public string? Action { get; set; }
         public LoaiCauHinh LoaiCauHinh { get; set; }
+        public IFormFile? HinhDaiDienFile { get; set; }
     }
     
 }

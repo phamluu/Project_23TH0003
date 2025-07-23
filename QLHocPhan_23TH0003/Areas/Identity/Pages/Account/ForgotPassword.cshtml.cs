@@ -75,11 +75,19 @@ namespace QLHocPhan_23TH0003.Areas.Identity.Pages.Account
                     values: new { area = "Identity", code },
                     protocol: Request.Scheme);
 
-                await _emailSender.SendEmailAsync(
-                    Input.Email,
-                    "Yêu cầu đặt lại mật khẩu",
-                    $"Chúng tôi nhận được yêu cầu đặt lại mật khẩu cho tài khoản của bạn. Vui lòng <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>nhấn vào đây</a> để tiến hành. Nếu bạn không yêu cầu điều này, hãy bỏ qua email này.");
-
+                try
+                {
+                    await _emailSender.SendEmailAsync(
+                        Input.Email,
+                        "Yêu cầu đặt lại mật khẩu",
+                        $"Chúng tôi nhận được yêu cầu đặt lại mật khẩu cho tài khoản của bạn. Vui lòng <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>nhấn vào đây</a> để tiến hành. Nếu bạn không yêu cầu điều này, hãy bỏ qua email này.");
+                }
+                catch (Exception ex)
+                {
+                    // Trường hợp bạn vẫn muốn catch đề phòng
+                    ModelState.AddModelError(string.Empty, $"Lỗi khi gửi email: {ex.Message}");
+                    return Page();
+                }
 
                 return RedirectToPage("./ForgotPasswordConfirmation");
             }

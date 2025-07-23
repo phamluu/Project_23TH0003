@@ -2,8 +2,10 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using QLHocPhan_23TH0003.Common.Helpers;
 using QLHocPhan_23TH0003.Data;
 using QLHocPhan_23TH0003.Extensions;
+using QLHocPhan_23TH0003.Middleware;
 using QLHocPhan_23TH0003.Service;
 using QLHocPhan_23TH0003.Service.Api;
 using Serilog;
@@ -75,6 +77,7 @@ builder.Services.AddSingleton<DropboxService>();
 builder.Services.AddScoped<HocPhiService>();
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<FileService>();
+builder.Services.AddScoped<CauHinhService>();
 builder.Services.AddSingleton<VietQRPaymentService>();
 // Quản lý các service
 
@@ -87,7 +90,15 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.AccessDeniedPath = "/Identity/Account/AccessDenied"; // khi không đủ quyền
 });
 
+builder.Services.AddHttpContextAccessor(); // Đăng ký HttpContextAccessor
 var app = builder.Build();
+
+
+// Gán vào Helper sau khi app tạo xong
+var httpAccessor = app.Services.GetRequiredService<IHttpContextAccessor>();
+CauHinhHelper.Configure(httpAccessor);
+
+app.UseMiddleware<CauHinhLayoutMiddleware>(); //Đăng ký middleware
 
 // Configure the HTTP request pipelines
 if (app.Environment.IsDevelopment())

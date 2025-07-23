@@ -1,4 +1,5 @@
-﻿using QLHocPhan_23TH0003.ViewModel;
+﻿using QLHocPhan_23TH0003.Common.Helpers;
+using QLHocPhan_23TH0003.ViewModel;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
@@ -13,7 +14,8 @@ namespace QLHocPhan_23TH0003.Service
         public DropboxService(IHttpClientFactory factory, IConfiguration config)
         {
             _client = factory.CreateClient();
-            _accessToken = config["Dropbox:AccessToken"]; // Đặt trong appsettings.json
+            _accessToken = CauHinhHelper.Get("dropbox_token");
+            //_accessToken =  config["Dropbox:AccessToken"]; // Đặt trong appsettings.json
         }
 
         public async Task<string> UploadAndGetResultStringAsync(IFormFile file)

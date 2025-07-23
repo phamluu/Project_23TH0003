@@ -11,13 +11,17 @@
 </style>
 <h4>@ViewBag.Title</h4>
 <div class="head_action">
-    <a href="@Url.Action("Index", "CauHinh_23TH0003")" class="btn btn-danger">Thêm cấu hình</a>
+   
 </div>
 @Html.Partial("_AlertMessages")
 
 @if (Model != null)
 {
     <form id="frmList" method="post" enctype="multipart/form-data">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        @Html.AntiForgeryToken()
+        <button type="submit" class="btn btn-primary">Lưu cài đặt</button>
         <table class="table table-hover">
             <thead>
                 <tr>
@@ -32,16 +36,19 @@
                     <tr>
                         <td>@item.TenCauHinh</td>
                         <td>
+                            
                             <input type="hidden" name="model[@i].Id" value="@item.Id" />
                             <input type="hidden" name="model[@i].MaCauHinh" value="@item.MaCauHinh" />
                             <input type="hidden" name="model[@i].TenCauHinh" value="@item.TenCauHinh" />
                             <input type="hidden" name="model[@i].MoTa" value="@item.MoTa" />
-                            <input type="hidden" name="model[@i].LoaiCauHinh" value="@item.LoaiCauHinh" />
-
-                                @switch (item.LoaiCauHinh)
+                            <input type="hidden" name="model[@i].LoaiCauHinh" value="@item.LoaiCauHinh" /> 
+                              @switch (item.LoaiCauHinh)
                                 {
                                     case LoaiCauHinh.Text:
                                         <input type="text" name="model[@i].GiaTri" value="@item.GiaTri" class="form-control" />
+                                        break;
+                                    case LoaiCauHinh.TextArea:
+                                        <textarea name="model[@i].GiaTri" class="form-control" rows="10">@item.GiaTri</textarea>
                                         break;
                                     case LoaiCauHinh.Editor:
                                         <textarea name="model[@i].GiaTri" class="form-control summernote-editor" rows="5">@item.GiaTri</textarea>
@@ -53,7 +60,7 @@
                                         <div class="form-group">
                                             <img src="/Uploads/@item.GiaTri" class="previewImage" style="width: 100px; height: 100px; object-fit: cover; border: 1px solid #ccc;" />
                                             <input type="hidden" name="model[@i].GiaTri" value="@item.GiaTri" />
-                                            <input type="file" name="HinhDaiDienFile[@i]" class="form-control file imageInput" accept="image/*" />
+                                            <input type="file" name="model[@i].HinhDaiDienFile" class="form-control file imageInput" accept="image/*" />
                                         </div>
                                         break;
                                     default:

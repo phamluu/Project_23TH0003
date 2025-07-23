@@ -1,4 +1,5 @@
-﻿using QLHocPhan_23TH0003.Models;
+﻿using QLHocPhan_23TH0003.Common.Helpers;
+using QLHocPhan_23TH0003.Models;
 
 namespace QLHocPhan_23TH0003.ViewModel
 {
@@ -27,9 +28,17 @@ namespace QLHocPhan_23TH0003.ViewModel
     }
     public class HocPhiViewModel:DangKyHocPhan
     {
-        public decimal DonGia { get {
-                return 500000;
-            } 
+        
+        public decimal DonGia {
+            get
+            {
+                var giaStr = CauHinhHelper.Get("HocPhi");
+                if (decimal.TryParse(giaStr, out decimal gia))
+                {
+                    return gia;
+                }
+                return 0;
+            }
         }
         public decimal HocPhi
         {
