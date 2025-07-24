@@ -78,6 +78,7 @@ builder.Services.AddScoped<HocPhiService>();
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<FileService>();
 builder.Services.AddScoped<CauHinhService>();
+builder.Services.AddScoped<BaoCaoService>();
 builder.Services.AddSingleton<VietQRPaymentService>();
 // Quản lý các service
 

@@ -1,0 +1,51 @@
+﻿@model IEnumerable<QLHocPhan_23TH0003.ViewModel.BaoCaoHocPhanViewModel>
+@{
+    string Title = "Báo cáo tổng hợp";
+    ViewBag.Title = Title;
+}
+<h4 class="text-center title">@Title</h4>
+<a href="@Url.Action("BaoCaoHocPhan", "ThongKe_23TH0003")" class="btn btn-primary">Báo cáo học phần</a>
+<a href="@Url.Action("BaoCaoSinhVien", "ThongKe_23TH0003")" class="btn ">Báo cáo sinh viên</a>
+<a href="@Url.Action("BaoCaoDiem", "ThongKe_23TH0003")" class="btn ">Báo cáo kết quả học tập</a>
+<a href="@Url.Action("BaoCaoHocPhi", "ThongKe_23TH0003")" class="btn ">Báo cáo học phí</a>
+
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>STT</th>
+            <th>Mã học phần</th>
+            <th>Tên học phần</th>
+            <th>Số tín chỉ</th>
+            <th>Khoa</th>
+            <th>Học kỳ</th>
+            <th>Năm học</th>
+            <th>Số lớp mở</th>
+            <th>Tổng SV đăng ký</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            int stt = 1;
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td>@(stt++)</td>
+                    <td>@item.MaHocPhan</td>
+                    <td>@item.TenHocPhan</td>
+                    <td>@item.SoTinChi</td>
+                    <td>@item.TenKhoa</td>
+                    <td>@item.HocKy</td>
+                    <td>@item.NamHoc</td>
+                    <td>@item.SoLopMo</td>
+                    <td>@item.TongSV</td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr><td colspan="9" class="text-center">Không có dữ liệu</td></tr>
+        }
+    </tbody>
+</table>

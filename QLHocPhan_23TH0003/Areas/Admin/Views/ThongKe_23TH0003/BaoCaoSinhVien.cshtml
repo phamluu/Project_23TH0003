@@ -1,0 +1,48 @@
+﻿@model IEnumerable<QLHocPhan_23TH0003.ViewModel.BaoCaoSinhVienViewModel>
+@{
+    string Title = "Báo cáo tổng hợp";
+    ViewBag.Title = Title;
+}
+
+<a href="@Url.Action("BaoCaoHocPhan", "ThongKe_23TH0003")" class="btn">Báo cáo học phần</a>
+<a href="@Url.Action("BaoCaoSinhVien", "ThongKe_23TH0003")" class="btn btn-primary">Báo cáo sinh viên</a>
+<a href="@Url.Action("BaoCaoDiem", "ThongKe_23TH0003")" class="btn">Báo cáo kết quả học tập</a>
+<a href="@Url.Action("BaoCaoHocPhi", "ThongKe_23TH0003")" class="btn">Báo cáo học phí</a>
+
+<h4 class="text-center"> Báo cáo sinh viên – Thống kê theo Lớp / Khoa / Học kỳ</h4>
+<a href="@Url.Action("XuatBaoCaoSinhVienExcel", "ThongKe_23TH0003")" class="btn btn-success">
+    📤 Xuất Excel
+</a>
+
+<table id="grid">
+    <thead>
+        <tr>
+            <th>STT</th>
+            <th>Mã lớp</th>
+            <th>Tên lớp</th>
+            <th>Khoa</th>
+            <th>Số sinh viên nam</th>
+            <th>Số sinh viên nữ</th>
+            <th>Tổng số sinh viên</th>
+        </tr>
+        
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Count() > 0)
+        {
+            int stt = 1;
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td>@(stt++)</td>
+                    <td>@item.MaLop</td>
+                    <td>@item.TenLop</td>
+                    <td>@item.Khoa</td>
+                    <td class="text-right">@item.SLNam</td>
+                    <td class="text-right">@item.SLNu</td>
+                    <td class="text-right">@item.TongSV</td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

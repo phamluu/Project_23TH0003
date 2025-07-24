@@ -1,0 +1,12 @@
+﻿@{
+    string Title = "Báo cáo tổng hợp";
+    ViewBag.Title = Title;
+}
+<h4 class="text-center title">@Title</h4>
+
+<a href="@Url.Action("BaoCaoHocPhan", "ThongKe_23TH0003")" class="btn">Báo cáo học phần</a>
+<a href="@Url.Action("BaoCaoSinhVien", "ThongKe_23TH0003")" class="btn">Báo cáo sinh viên</a>
+<a href="@Url.Action("BaoCaoDiem", "ThongKe_23TH0003")" class="btn  btn-primary">Báo cáo kết quả học tập</a>
+<a href="@Url.Action("BaoCaoHocPhi", "ThongKe_23TH0003")" class="btn">Báo cáo học phí</a>
+
+

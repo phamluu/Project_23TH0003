@@ -1,4 +1,5 @@
-﻿@model QLHocPhan_23TH0003.Models.SinhVien
+﻿@using QLHocPhan_23TH0003.Enums
+@model QLHocPhan_23TH0003.Models.SinhVien
 <div class="row">
     <div class="col-md-8">
         <div class="form-group">
@@ -19,10 +20,10 @@
         <div class="form-group">
             <label asp-for="GioiTinh" class="control-label">Giới tính</label>
             <label>
-                @Html.RadioButtonFor(model => model.GioiTinh, true) Nam
+                @Html.RadioButtonFor(model => model.GioiTinh, (int)GioiTinh.Nam) Nam
             </label>
             <label>
-                @Html.RadioButtonFor(model => model.GioiTinh, false) Nữ
+                @Html.RadioButtonFor(model => model.GioiTinh, (int)GioiTinh.Nu) Nữ
             </label>
             <span asp-validation-for="GioiTinh" class="text-danger"></span>
         </div>

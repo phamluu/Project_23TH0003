@@ -1,0 +1,100 @@
+﻿@model IEnumerable<QLHocPhan_23TH0003.ViewModel.BaoCaoHocPhiViewModel>
+@{
+    string Title = "Báo cáo tổng hợp";
+    ViewBag.Title = Title;
+}
+<h4 class="text-center title">@Title</h4>
+
+<a href="@Url.Action("BaoCaoHocPhan", "ThongKe_23TH0003")" class="btn">Báo cáo học phần</a>
+<a href="@Url.Action("BaoCaoSinhVien", "ThongKe_23TH0003")" class="btn">Báo cáo sinh viên</a>
+<a href="@Url.Action("BaoCaoDiem", "ThongKe_23TH0003")" class="btn ">Báo cáo kết quả học tập</a>
+<a href="@Url.Action("BaoCaoHocPhi", "ThongKe_23TH0003")" class="btn  btn-primary">Báo cáo học phí</a>
+
+<h4 class="text-center">Báo cáo học phí – Theo lớp / học kỳ / trạng thái</h4>
+
+<form method="get" asp-action="BaoCaoHocPhi" class="row g-3 mb-3">
+    <div class="col-md-3">
+        <label>Lớp</label>
+        <select name="LopId" class="form-control">
+            <option value="">-- Tất cả --</option>
+            @foreach (var lop in ViewBag.DSLop)
+            {
+                <option value="@lop.Id">@lop.TenLop</option>
+            }
+        </select>
+    </div>
+    <div class="col-md-2">
+        <label>Học kỳ</label>
+        <select name="HocKy" class="form-control">
+            <option value="">-- Tất cả --</option>
+            <option value="1">Học kỳ 1</option>
+            <option value="2">Học kỳ 2</option>
+        </select>
+    </div>
+    <div class="col-md-2">
+        <label>Năm học</label>
+        <input name="NamHoc" class="form-control" placeholder="2024-2025" />
+    </div>
+    <div class="col-md-2">
+        <label>Trạng thái</label>
+        <select name="TrangThai" class="form-control">
+            <option value="">-- Tất cả --</option>
+            <option value="DaDong">Đã đóng</option>
+            <option value="ChuaDong">Chưa đóng</option>
+        </select>
+    </div>
+    <div class="col-md-3 align-self-end">
+        <button class="btn btn-primary">Lọc</button>
+    </div>
+</form>
+
+<table class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>STT</th>
+            <th>Mã SV</th>
+            <th>Họ tên</th>
+            <th>Lớp</th>
+            <th>Học kỳ</th>
+            <th>Năm học</th>
+            <th>Tổng học phí</th>
+            <th>Đã đóng</th>
+            <th>Còn nợ</th>
+            <th>Trạng thái</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            int stt = 1;
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td>@(stt++)</td>
+                    <td>@item.MaSV</td>
+                    <td>@item.HoTen</td>
+                    <td>@item.TenLop</td>
+                    <td>@item.HocKy</td>
+                    <td>@item.NamHoc</td>
+                    <td class="text-right">@item.TongHocPhi.ToString("N0")</td>
+                    <td class="text-right text-success">@item.DaDong.ToString("N0")</td>
+                    <td class="text-right text-danger">@item.ConNo.ToString("N0")</td>
+                    <td>
+                        @if (item.ConNo == 0)
+                        {
+                            <span class="badge bg-success">Đã đóng</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-warning text-dark">Chưa đóng</span>
+                        }
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr><td colspan="10" class="text-center">Không có dữ liệu</td></tr>
+        }
+    </tbody>
+</table>

@@ -1,29 +1,4 @@
-﻿--create database QLHocPhan_23TH0003
---use QLHocPhan_23TH0003
--- Tạo bảng BaiHoc
-CREATE TABLE BaiHoc (
-    Id INT IDENTITY(1,1) PRIMARY KEY,
-    TenBaiHoc NVARCHAR(MAX) NULL,
-    NoiDung NVARCHAR(MAX) NULL,
-    Video NVARCHAR(MAX) NULL,
-    TaiLieu NVARCHAR(MAX) NULL,
-    IdLopHocPhan INT NULL,
-    CONSTRAINT FK_BaiHoc_LopHocPhan_IdLopHocPhan FOREIGN KEY (IdLopHocPhan)
-        REFERENCES LopHocPhan(Id)
-);
-
-CREATE INDEX IX_BaiHoc_IdLopHocPhan ON BaiHoc(IdLopHocPhan);
-
--- Tạo bảng CauHinhHeThong
-CREATE TABLE CauHinhHeThong (
-    Id INT PRIMARY KEY IDENTITY(1,1),
-    MaCauHinh NVARCHAR(100) NOT NULL,
-    TenCauHinh NVARCHAR(255) NOT NULL,
-    MoTa NVARCHAR(MAX) NULL,
-    GiaTri NVARCHAR(MAX) NULL
-);
-
-
+﻿
 DELETE FROM [dbo].DangKyHocPhan;
 DBCC CHECKIDENT ('dbo.DangKyHocPhan', RESEED, 0);
 

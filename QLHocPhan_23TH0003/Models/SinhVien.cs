@@ -8,7 +8,7 @@
         // Thông tin profile
         public string? HoTen { get; set; }
         public DateTime? NgaySinh { get; set; }
-        public string? GioiTinh { get; set; }
+        public int? GioiTinh { get; set; }
         public string? HinhDaiDien { get; set; }
         public string? DiaChi { get; set; }
         // Thông tin profile
