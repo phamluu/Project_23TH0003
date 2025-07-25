@@ -2,6 +2,9 @@
 @using QLHocPhan_23TH0003.Common.Helpers
 @inject SignInManager<IdentityUser> SignInManager
 @inject UserManager<IdentityUser> UserManager
+@{
+    string footer = CauHinhHelper.Get("Footer");
+}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -55,12 +58,10 @@
                                 <a class="nav-link text-dark" href="@Url.Action("Index", "MyProfile_23TH0003")" title="Manage">Hello @User.Identity?.Name!</a>
                             </li>
                             <li class="nav-item">
-                                <form class="form-inline" method="post" action="/Identity/Account/Logout">
+                                <form class="form-inline" method="post"  action="/Home/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
                                     @Html.AntiForgeryToken()
-                                    <input type="hidden" name="returnUrl" value="/" />
                                     <button type="submit" class="nav-link btn btn-link text-dark">Đăng xuất</button>
                                 </form>
-
                             </li>
                         </ul>
                     </div>
@@ -74,22 +75,13 @@
     </header>
 
     <main role="main" class="pb-3">
-        <div class="container mt-3">
-            @RenderBody()
-        </div>
+            @RenderBody()   
     </main>
 
 
     <footer class="border-top footer">
         <div class="container py-4">
-            <h4>TRƯỜNG ĐẠI HỌC NHA TRANG</h4>
-            <p>Trải qua 65 năm xây dựng và phát triển, Trường Đại học Nha Trang đã trở thành một trong những cơ sở đào tạo đa ngành, đa lĩnh vực quy mô lớn; là cơ sở nghiên cứu chủ đạo, triển khai ứng dụng công nghệ tiên tiến, đặc biệt trong lĩnh vực thủy sản phục vụ phát triển kinh tế xã hội khu vực Nam Trung Bộ, Tây Nguyên và phạm vi cả nước.</p>
-            <h4>Thông tin liên hệ</h4>
-            <p>Nguyễn Đình Chiểu, phường Vĩnh Thọ, Nha Trang, Khánh Hòa</p>
-            <p>
-                02583831149  02583831147
-            </p>
-            <p> dhnt@ntu.edu.vn  www.ntu.edu.vn</p>
+            @Html.Raw(footer)
         </div>
         <div class="footer-bottom py-2">
             <div class="container">

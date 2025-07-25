@@ -13,11 +13,14 @@ namespace QLHocPhan_23TH0003.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly MainDbContext _context;
-        public HomeController(ILogger<HomeController> logger, UserManager<IdentityUser> userManager, MainDbContext context)
+        private readonly SignInManager<IdentityUser> _signInManager;
+        public HomeController(ILogger<HomeController> logger, UserManager<IdentityUser> userManager,
+            MainDbContext context, SignInManager<IdentityUser> signInManager)
         {
             _logger = logger;
             _userManager = userManager;
             _context = context;
+            _signInManager = signInManager;
         }
 
         public IActionResult Index()
@@ -70,6 +73,20 @@ namespace QLHocPhan_23TH0003.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Logout(string returnUrl = null)
+        {
+            await _signInManager.SignOutAsync();  
+
+            if (returnUrl != null)
+            {
+                return Redirect(returnUrl);  
+            }
+
+            return RedirectToAction("Index", "Home", new { area = "" });  
         }
     }
 }

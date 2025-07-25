@@ -1,7 +1,6 @@
 ﻿@model IEnumerable<QLHocPhan_23TH0003.Models.DangKyHocPhan>
 @{
     ViewBag.Title = "Kết quả học tập";
-    var ListHocKy = Model.GroupBy(x => x.LopHocPhan.HocPhan.HocKy).Select(x => new {Id = x.Key.Id, MaHocKy = x.Key.MaHocKy, TenHocKy = x.Key.TenHocKy, NamHoc = x.Key.NamHoc });
 }
 <style>
     table th, td{
@@ -24,63 +23,68 @@
     </div>
 </div>
 <div class="container mt-3">
-
-    @foreach (var hocky in ListHocKy)
+    @if (Model != null && Model.Count() > 0)
     {
-        var ListDiem = Model.Where(x => x.LopHocPhan.HocPhan.IdHocKy == hocky.Id);
-        <div class="hocky=@hocky.Id hocky mt-5">
-            <h5>@hocky.TenHocKy - @hocky.NamHoc</h5>
-            <table style="width:100%">
-                <thead>
-                    <tr>
-                        <th>
-                            @Html.DisplayName("Lớp học phần")
-                        </th>
-                        <th>
-                            @Html.DisplayName("Số tín chỉ")
-                        </th>
-                        <th>
-                            @Html.DisplayName("Điểm giữa kì")
-                        </th>
-                        <th>
-                            @Html.DisplayName("Điểm cuối kì")
-                        </th>
-                        <th>
-                            @Html.DisplayName("Điểm TB")
-                        </th>
-                        <th>
-                            @Html.DisplayName("Xếp loại")
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in ListDiem)
-                    {
+        var ListHocKy = Model.GroupBy(x => x.LopHocPhan.HocPhan.HocKy).Select(x => new { Id = x.Key.Id, MaHocKy = x.Key.MaHocKy, TenHocKy = x.Key.TenHocKy, NamHoc = x.Key.NamHoc });
+        @foreach (var hocky in ListHocKy)
+        {
+            var ListDiem = Model.Where(x => x.LopHocPhan.HocPhan.IdHocKy == hocky.Id);
+            <div class="hocky=@hocky.Id hocky mt-5">
+                <h5>@hocky.TenHocKy - @hocky.NamHoc</h5>
+                <table style="width:100%">
+                    <thead>
                         <tr>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.LopHocPhan.TenLopHocPhan)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.LopHocPhan.HocPhan.SoTinChi)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Diem.DiemGiuaKy)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Diem.DiemCuoiKy)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Diem.DiemTrungBinh)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Diem.XepLoai)
-                            </td>
+                            <th>
+                                @Html.DisplayName("Lớp học phần")
+                            </th>
+                            <th>
+                                @Html.DisplayName("Số tín chỉ")
+                            </th>
+                            <th>
+                                @Html.DisplayName("Điểm giữa kì")
+                            </th>
+                            <th>
+                                @Html.DisplayName("Điểm cuối kì")
+                            </th>
+                            <th>
+                                @Html.DisplayName("Điểm TB")
+                            </th>
+                            <th>
+                                @Html.DisplayName("Xếp loại")
+                            </th>
                         </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
-        
+                    </thead>
+                    <tbody>
+                        @foreach (var item in ListDiem)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.LopHocPhan.TenLopHocPhan)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.LopHocPhan.HocPhan.SoTinChi)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Diem.DiemGiuaKy)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Diem.DiemCuoiKy)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Diem.DiemTrungBinh)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Diem.XepLoai)
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
     }
-    
-    </div>
+    else
+    {
+        <p>Không có dữ liệu</p>
+    }
+</div>

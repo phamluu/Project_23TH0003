@@ -21,18 +21,43 @@ namespace QLHocPhan_23TH0003.Areas.Student.Controllers
         }
         public ActionResult Index()
         {
-            string CurrentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var sinhVien = _context.SinhVien.FirstOrDefault(x => x.UserId == CurrentUserId);
-            if (sinhVien == null)
+            try
             {
-                TempData["ErrorMessage"] = "Sinh viên chưa có hồ sơ";
+                string currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+                var sinhVien = _context.SinhVien.FirstOrDefault(x => x.UserId == currentUserId);
+                if (sinhVien == null)
+                {
+                    TempData["ErrorMessage"] = "Sinh viên chưa có hồ sơ.";
+                    return View();
+                }
+
+                var model = _context.DangKyHocPhan
+                    .Include(x => x.LopHocPhan).ThenInclude(x => x.HocPhan).ThenInclude(x => x.HocKy)
+                    .Include(x => x.LopHocPhan).ThenInclude(x => x.PhanCongGiangDays).ThenInclude(x => x.GiangVien)
+                    .Include(x => x.SinhVien)
+                    .Where(x => x.IdSinhVien == sinhVien.Id)
+                    .ToList();
+
+                return View(model);
             }
-            var model = _context.DangKyHocPhan
-                .Include(x => x.LopHocPhan).ThenInclude(x => x.HocPhan).ThenInclude(x => x.HocKy)
-                .Include(x => x.LopHocPhan).ThenInclude(x => x.PhanCongGiangDays).ThenInclude(x => x.GiangVien)
-                .Include(x => x.SinhVien).Where(x => x.IdSinhVien == sinhVien.Id).ToList();
-            return View(model);
+            catch (Exception ex)
+            {
+                var errorMessages = new List<string>();
+                errorMessages.Add($"Lỗi chính: {ex.Message}");
+                var inner = ex.InnerException;
+                while (inner != null)
+                {
+                    errorMessages.Add($"Inner: {inner.Message}");
+                    inner = inner.InnerException;
+                }
+
+                TempData["ErrorMessages"] = errorMessages;
+                return View();
+            }
+
         }
+
 
         // GET: DangKyHocPhan_23TH0003Controller/Details/5
         public ActionResult Details(int id)

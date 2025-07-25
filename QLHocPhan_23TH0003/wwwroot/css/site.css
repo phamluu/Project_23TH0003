@@ -151,6 +151,9 @@ html {
 .main-panel > .content {
     margin-top: 0;
 }
+main{
+    min-height:500px;
+}
 .lophocphan a {
     background: #a8a8b029;
     padding: 0.5rem 1rem;

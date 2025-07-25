@@ -30,5 +30,7 @@ namespace QLHocPhan_23TH0003.Areas.Student.Controllers
                 .ToList();
             return View(model);
         }
+        
+
     }
 }

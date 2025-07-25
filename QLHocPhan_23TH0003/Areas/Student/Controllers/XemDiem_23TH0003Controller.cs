@@ -18,13 +18,43 @@ namespace QLHocPhan_23TH0003.Areas.Student.Controllers
         // GET: XemDiemController
         public ActionResult Index()
         {
-            string CurrentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var sinhVien = _context.SinhVien.FirstOrDefault(x => x.UserId == CurrentUserId);
-            var model = _context.DangKyHocPhan.Where(x => x.IdSinhVien == sinhVien.Id)
-                .Include(x => x.LopHocPhan).ThenInclude(x => x.HocPhan).ThenInclude(x => x.HocKy)
-                .Include(x => x.Diem).Where(x => x.TrangThai == (int)TrangThaiDangKy.DaDangKy).ToList();
-            return View(model);
+            try
+            {
+                string currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+                var sinhVien = _context.SinhVien.FirstOrDefault(x => x.UserId == currentUserId);
+                if (sinhVien == null)
+                {
+                    TempData["ErrorMessages"] = new List<string> { "Không tìm thấy thông tin sinh viên cho tài khoản hiện tại." };
+                    return View();
+                }
+
+                var model = _context.DangKyHocPhan
+                    .Where(x => x.IdSinhVien == sinhVien.Id)
+                    .Include(x => x.LopHocPhan).ThenInclude(x => x.HocPhan).ThenInclude(x => x.HocKy)
+                    .Include(x => x.Diem)
+                    .Where(x => x.TrangThai == (int)TrangThaiDangKy.DaDangKy)
+                    .ToList();
+
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                // Lưu lỗi chi tiết
+                var errors = new List<string> { $"Lỗi chính: {ex.Message}" };
+
+                var inner = ex.InnerException;
+                while (inner != null)
+                {
+                    errors.Add($"Lỗi lồng: {inner.Message}");
+                    inner = inner.InnerException;
+                }
+
+                TempData["ErrorMessages"] = errors;
+                return View();
+            }
         }
+
 
         // GET: XemDiemController/Details/5
         public ActionResult Details(int id)

@@ -11,100 +11,107 @@
 
         <!-- Form thông tin -->
         <form method="post" action="@Url.Action("ThanhToan", "HocPhi_23TH0003")">
-            <!-- Học kỳ -->
-            <div class="d-flex align-items-center mb-3">
-                <label for="NamHoc" class="me-3 mb-0 fw-bold" style="width: 100px;">Năm học</label>
-                @* <select id="NamHoc" class="form-select" name="NamHoc" style="max-width: 200px;">
-                    @foreach (var item in NamHocs)
-                    {
-                        <option value="@item.NamHoc">@item.NamHoc</option>
-                    }
-                </select> *@
-            </div>
-
-            <div class="d-flex align-items-center mb-3">
-                <label for="HocKy" class="me-3 mb-0 fw-bold" style="width: 100px;">Học kỳ</label>
-                <select id="HocKy" class="form-select" name="IdHocKy" style="max-width: 200px;">
-                    @foreach (var item in Model.HocKy)
-                    {
-                        <option value="@item.Id">@item.TenHocKy</option>
-                    }
-                    
-                </select>
-            </div>
-
-
-            @foreach (var hocky in Model.HocPhiHocKy)
+           
+            @if (Model != null)
             {
-                <div class="hocKy-container" id="hocKy-@hocky.HocKy" style="display: none;">
-                    <div class="mb-3">
-                        <table class="table table-bordered">
-                            <thead class="table-light">
-                                <tr>
-                                    <th>STT</th>
-                                    <th>Mã học phần</th>
-                                    <th>Tên Học phần</th>
-                                    <th>Số tín chỉ</th>
-                                    <th>Mức thu (VNĐ/tín chỉ)</th>
-                                    <th>Học phí</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @if (hocky != null && hocky.ChiTietHocPhi.Count > 0)
-                                {
-                                    foreach (var item in hocky.ChiTietHocPhi)
-                                    {
-                                        <tr>
-                                            <td></td>
-                                            <td>@item.LopHocPhan?.MaLopHocPhan</td>
-                                            <td>@item.LopHocPhan?.TenLopHocPhan</td>
-                                            <td>@item.LopHocPhan?.HocPhan?.SoTinChi</td>
-                                            <td>@item.DonGia.ToString("N0")</td>
-                                            <td>@item.HocPhi.ToString("N0")</td>
-                                        </tr>
-                                    }
-
-                                }
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <!-- Tổng hợp thanh toán -->
-                    <div class="mb-4">
-                        <div class="row">
-                            <div class="col-md-3">
-                                <div class="p-3 border rounded bg-light">
-                                    <strong>Tổng học phí:</strong>
-                                    <div class="text-end text-danger fw-bold fs-5">@hocky.TongHocPhi.ToString("N0")</div>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="p-3 border rounded bg-light">
-                                    <strong>Số tiền đã nộp:</strong>
-                                    <div class="text-end text-success fw-bold">@hocky.DaDong.ToString("N0")</div>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="p-3 border rounded bg-light">
-                                    <strong>Nợ cũ:</strong>
-                                    <div class="text-end fw-bold text-warning">@hocky.NoCu.ToString("N0")</div>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="p-3 border rounded bg-light">
-                                    <strong>Còn phải nộp:</strong>
-                                    <div class="text-end fw-bold text-warning">@hocky.ConNo.ToString("N0")</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
+                 <!-- Học kỳ -->
+                <div class="d-flex align-items-center mb-3">
+                    <label for="NamHoc" class="me-3 mb-0 fw-bold" style="width: 100px;">Năm học</label>
+                    @* <select id="NamHoc" class="form-select" name="NamHoc" style="max-width: 200px;">
+                        @foreach (var item in NamHocs)
+                        {
+                            <option value="@item.NamHoc">@item.NamHoc</option>
+                        }
+                    </select> *@
                 </div>
-            
-            }
-            
 
-                <div class="mb-3">
+                <div class="d-flex align-items-center mb-3">
+                    <label for="HocKy" class="me-3 mb-0 fw-bold" style="width: 100px;">Học kỳ</label>
+                    <select id="HocKy" class="form-select" name="IdHocKy" style="max-width: 200px;">
+                        @foreach (var item in Model.HocKy)
+                        {
+                            <option value="@item.Id">@item.TenHocKy</option>
+                        }
+                    
+                    </select>
+                </div>
+
+                if (Model.HocPhiHocKy != null && Model.HocPhiHocKy.Count > 0)
+                {
+                    foreach (var hocky in Model.HocPhiHocKy)
+                    {
+                        <div class="hocKy-container" id="hocKy-@hocky.HocKy" style="display: none;">
+                            <div class="mb-3">
+                                <table class="table table-bordered">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>STT</th>
+                                            <th>Mã học phần</th>
+                                            <th>Tên Học phần</th>
+                                            <th>Số tín chỉ</th>
+                                            <th>Mức thu (VNĐ/tín chỉ)</th>
+                                            <th>Học phí</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @if (hocky != null && hocky.ChiTietHocPhi.Count > 0)
+                                        {
+                                            foreach (var item in hocky.ChiTietHocPhi)
+                                            {
+                                                <tr>
+                                                    <td></td>
+                                                    <td>@item.LopHocPhan?.MaLopHocPhan</td>
+                                                    <td>@item.LopHocPhan?.TenLopHocPhan</td>
+                                                    <td>@item.LopHocPhan?.HocPhan?.SoTinChi</td>
+                                                    <td>@item.DonGia.ToString("N0")</td>
+                                                    <td>@item.HocPhi.ToString("N0")</td>
+                                                </tr>
+                                            }
+
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <!-- Tổng hợp thanh toán -->
+                            <div class="mb-4">
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="p-3 border rounded bg-light">
+                                            <strong>Tổng học phí:</strong>
+                                            <div class="text-end text-danger fw-bold fs-5">@hocky.TongHocPhi.ToString("N0")</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="p-3 border rounded bg-light">
+                                            <strong>Số tiền đã nộp:</strong>
+                                            <div class="text-end text-success fw-bold">@hocky.DaDong.ToString("N0")</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="p-3 border rounded bg-light">
+                                            <strong>Nợ cũ:</strong>
+                                            <div class="text-end fw-bold text-warning">@hocky.NoCu.ToString("N0")</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="p-3 border rounded bg-light">
+                                            <strong>Còn phải nộp:</strong>
+                                            <div class="text-end fw-bold text-warning">@hocky.ConNo.ToString("N0")</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    }
+                }
+                else
+                {
+                    <p>Chưa có học phần phần cần đóng học phí</p>
+                }
+                 <div class="mb-3">
                     <label class="form-label fw-bold">Hình thức nộp học phí</label>
                     <select class="form-select" name="Method">
                         <option value="@((int)PhuongThucThanhToan.vietqr)">Viet QR</option>
@@ -122,6 +129,12 @@
                     </button>
                 </div>
             <!-- Phương thức nộp -->
+            }
+            else
+            {
+                <p>Chưa có dữ liệu</p>
+            }
+               
            
         </form>
     </div>

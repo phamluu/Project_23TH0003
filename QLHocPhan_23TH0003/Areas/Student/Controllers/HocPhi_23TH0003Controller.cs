@@ -29,18 +29,40 @@ namespace QLHocPhan_23TH0003.Areas.Student.Controllers
         }
         public ActionResult Index()
         {
-            string CurrentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var sinhVien = _context.SinhVien.FirstOrDefault(x => x.UserId == CurrentUserId);
-            if (sinhVien == null)
+            try
             {
-                TempData["ErrorMessage"] = "Sinh viên chưa có hồ sơ";
+                string currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var sinhVien = _context.SinhVien.FirstOrDefault(x => x.UserId == currentUserId);
+
+                if (sinhVien == null)
+                {
+                    TempData["ErrorMessages"] = new List<string> { "Sinh viên chưa có hồ sơ." };
+                    return View();
+                }
+
+                HocPhiTongHopViewModel model = new HocPhiTongHopViewModel
+                {
+                    HocKy = _context.HocKy.ToList(),
+                    HocPhiHocKy = _service.GetHocPhiHocKy(sinhVien.Id)
+                };
+
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                var errors = new List<string> { $"Lỗi chính: {ex.Message}" };
+                var inner = ex.InnerException;
+                while (inner != null)
+                {
+                    errors.Add($"Lỗi lồng: {inner.Message}");
+                    inner = inner.InnerException;
+                }
+
+                TempData["ErrorMessages"] = errors;
                 return View();
             }
-            HocPhiTongHopViewModel model = new HocPhiTongHopViewModel();
-            model.HocKy = _context.HocKy.ToList();
-            model.HocPhiHocKy = _service.GetHocPhiHocKy(sinhVien.Id);
-            return View(model);
         }
+
 
         // GET: HocPhi_23TH0003Controller/Details/5
         public ActionResult ThanhToan(int Method, int IdHocKy)
