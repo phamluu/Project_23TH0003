@@ -1,4 +1,7 @@
 ﻿
+-- Nếu tạo data lần đầu thì bỏ đoạn này
+DELETE FROM [dbo].[Diem];
+DBCC CHECKIDENT ('dbo.Diem', RESEED, 0);
 DELETE FROM [dbo].DangKyHocPhan;
 DBCC CHECKIDENT ('dbo.DangKyHocPhan', RESEED, 0);
 
@@ -21,7 +24,7 @@ DELETE FROM [dbo].[Khoa];
 DBCC CHECKIDENT ('dbo.Khoa', RESEED, 0);
 DELETE FROM [dbo].[HocKy];
 DBCC CHECKIDENT ('dbo.HocKy', RESEED, 0);
-
+-- Nếu tạo data lần đầu thì bỏ đoạn này
 
 -- Tạo dữ liệu cho bảng Học kỳ
 INSERT INTO [dbo].[HocKy] ([MaHocKy],[TenHocKy],[NamHoc],[ThuTu], [NgayTao], [NgayCapNhat])
@@ -149,35 +152,35 @@ GO
 
 -- Tạo dữ liệu cho bảng GiangVien
 INSERT INTO [dbo].[GiangVien] ([MaGiangVien], [HoTen],[NgaySinh],[GioiTinh],[HinhDaiDien],
-    [DiaChi],[UserId],[IdKhoa],[IsDeleted],[NgayTao],[NgayCapNhat]
+    [DiaChi],[UserId],[IdKhoa],[IsActive], [IsDeleted],[NgayTao],[NgayCapNhat]
 )
 VALUES
-('GV001', N'Nguyễn Văn A', '1980-03-15', N'Nam', '', N'Hà Nội', '', 1, 0, GETDATE(), NULL),
-('GV002', N'Trần Thị B', '1985-06-22', N'Nữ', '', N'Hồ Chí Minh', '', 1, 0, GETDATE(), NULL),
-('GV003', N'Lê Văn C', '1978-11-09', N'Nam', '', N'Đà Nẵng', '', 2, 0, GETDATE(), NULL),
-('GV004', N'Phạm Thị D', '1983-01-12', N'Nữ', '', N'Hải Phòng', '', 2, 0, GETDATE(), NULL),
-('GV005', N'Hoàng Văn E', '1990-09-05', N'Nam', '', N'Cần Thơ', '', 3, 0, GETDATE(), NULL),
-('GV006', N'Vũ Thị F', '1987-07-19', N'Nữ', '', N'Bình Dương', '', 3, 0, GETDATE(), NULL),
-('GV007', N'Đỗ Văn G', '1975-12-01', N'Nam', '', N'Nghệ An', '', 1, 0, GETDATE(), NULL),
-('GV008', N'Ngô Thị H', '1992-02-28', N'Nữ', '', N'Thái Bình', '', 2, 0, GETDATE(), NULL),
-('GV009', N'Tạ Văn I', '1981-04-18', N'Nam', '', N'Nam Định', '', 3, 0, GETDATE(), NULL),
-('GV010', N'Bùi Thị K', '1986-10-10', N'Nữ', '', N'Hòa Bình', '', 1, 0, GETDATE(), NULL);
+('GV001', N'Nguyễn Văn A', '1980-03-15', 0, '', N'Hà Nội', '', 1,1, 0, GETDATE(), NULL),
+('GV002', N'Trần Thị B', '1985-06-22', 1, '', N'Hồ Chí Minh', '', 1,1, 0, GETDATE(), NULL),
+('GV003', N'Lê Văn C', '1978-11-09', 0, '', N'Đà Nẵng', '', 2,1, 0, GETDATE(), NULL),
+('GV004', N'Phạm Thị D', '1983-01-12', 1, '', N'Hải Phòng', '', 2,1, 0, GETDATE(), NULL),
+('GV005', N'Hoàng Văn E', '1990-09-05', 0, '', N'Cần Thơ', '', 3,1, 0, GETDATE(), NULL),
+('GV006', N'Vũ Thị F', '1987-07-19', 1, '', N'Bình Dương', '', 3,1, 0, GETDATE(), NULL),
+('GV007', N'Đỗ Văn G', '1975-12-01', 0, '', N'Nghệ An', '', 1, 0,1, GETDATE(), NULL),
+('GV008', N'Ngô Thị H', '1992-02-28', 1, '', N'Thái Bình', '', 2,1, 0, GETDATE(), NULL),
+('GV009', N'Tạ Văn I', '1981-04-18', 0, '', N'Nam Định', '', 3,1, 0, GETDATE(), NULL),
+('GV010', N'Bùi Thị K', '1986-10-10', 1, '', N'Hòa Bình', '', 1,1, 0, GETDATE(), NULL);
 GO
 
 -- Tạo dữ liệu cho bang SinhVien
 INSERT INTO [dbo].[SinhVien] ([MaSinhVien],[HoTen],[NgaySinh],[GioiTinh],[HinhDaiDien],
     [DiaChi],[UserId],[IdLop],[IsDeleted],[NgayTao],[NgayCapNhat])
 VALUES
-('SV001', N'Nguyễn Văn An', '2002-01-15', N'Nam', '', N'Hà Nội', '', 1, 0, GETDATE(), NULL),
-('SV002', N'Trần Thị Bình', '2002-03-20', N'Nữ', '', N'Hồ Chí Minh', '', 1, 0, GETDATE(), NULL),
-('SV003', N'Lê Văn Cường', '2001-09-10', N'Nam', '', N'Đà Nẵng', '', 2, 0, GETDATE(), NULL),
-('SV004', N'Phạm Thị Duyên', '2002-05-25', N'Nữ', '', N'Hải Phòng', '', 2, 0, GETDATE(),NULL),
-('SV005', N'Hoàng Văn Em', '2001-12-05', N'Nam', '', N'Cần Thơ', '', 3, 0, GETDATE(), NULL),
-('SV006', N'Vũ Thị Phương', '2002-07-11', N'Nữ', '', N'Ninh Bình', '', 3, 0, GETDATE(), NULL),
-('SV007', N'Đỗ Văn Giang', '2002-04-17', N'Nam', '', N'Nghệ An', '', 1, 0, GETDATE(), NULL),
-('SV008', N'Ngô Thị Hạnh', '2001-08-09', N'Nữ', '', N'Thái Bình', '', 1, 0, GETDATE(), NULL),
-('SV009', N'Tạ Văn Khang', '2002-02-27', N'Nam', '', N'Nam Định', '', 2, 0, GETDATE(), NULL),
-('SV010', N'Bùi Thị Lan', '2001-11-03', N'Nữ', '', N'Hòa Bình', '', 3, 0, GETDATE(), NULL);
+('SV001', N'Nguyễn Văn An', '2002-01-15', 1, '', N'Hà Nội', '', 1, 0, GETDATE(), NULL),
+('SV002', N'Trần Thị Bình', '2002-03-20', 0, '', N'Hồ Chí Minh', '', 1, 0, GETDATE(), NULL),
+('SV003', N'Lê Văn Cường', '2001-09-10', 1, '', N'Đà Nẵng', '', 2, 0, GETDATE(), NULL),
+('SV004', N'Phạm Thị Duyên', '2002-05-25', 0, '', N'Hải Phòng', '', 2, 0, GETDATE(),NULL),
+('SV005', N'Hoàng Văn Em', '2001-12-05', 1, '', N'Cần Thơ', '', 3, 0, GETDATE(), NULL),
+('SV006', N'Vũ Thị Phương', '2002-07-11', 0, '', N'Ninh Bình', '', 3, 0, GETDATE(), NULL),
+('SV007', N'Đỗ Văn Giang', '2002-04-17', 1, '', N'Nghệ An', '', 1, 0, GETDATE(), NULL),
+('SV008', N'Ngô Thị Hạnh', '2001-08-09', 0, '', N'Thái Bình', '', 1, 0, GETDATE(), NULL),
+('SV009', N'Tạ Văn Khang', '2002-02-27', 1, '', N'Nam Định', '', 2, 0, GETDATE(), NULL),
+('SV010', N'Bùi Thị Lan', '2001-11-03', 0, '', N'Hòa Bình', '', 3, 0, GETDATE(), NULL);
 GO
 
 -- Tạo dữ liệu cho bảng PhanCongGiangDay
