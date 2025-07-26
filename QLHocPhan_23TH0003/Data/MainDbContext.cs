@@ -45,7 +45,7 @@ namespace QLHocPhan_23TH0003.Data
             {
                 entity.ToTable("GiangVien");
                 entity.HasKey(e => e.Id);
-                entity.HasOne(e => e.Khoa).WithMany(e => e.GiangViens).HasForeignKey(e => e.IdKhoa);
+                entity.HasOne(e => e.Khoa).WithMany(e => e.GiangViens).HasForeignKey(e => e.IdKhoa).OnDelete(DeleteBehavior.Restrict);
                 entity.HasMany(e => e.PhanCongGiangDays).WithOne(e => e.GiangVien).HasForeignKey(e => e.IdGiangVien);
             });
 
@@ -67,9 +67,9 @@ namespace QLHocPhan_23TH0003.Data
             {
                 entity.ToTable("HocPhan");
                 entity.HasKey(e => e.Id);
-                entity.HasOne(e => e.MonHoc).WithMany(e => e.HocPhans).HasForeignKey(e => e.IdMonHoc);
+                entity.HasOne(e => e.MonHoc).WithMany(e => e.HocPhans).HasForeignKey(e => e.IdMonHoc).OnDelete(DeleteBehavior.Restrict);
                 entity.HasMany(e => e.LopHocPhans).WithOne(e => e.HocPhan).HasForeignKey(e => e.IdHocPhan);
-                entity.HasOne(e => e.HocKy).WithMany(e => e.HocPhans).HasForeignKey(e => e.IdHocKy);
+                entity.HasOne(e => e.HocKy).WithMany(e => e.HocPhans).HasForeignKey(e => e.IdHocKy).OnDelete(DeleteBehavior.Restrict);
 
             });
             modelBuilder.Entity<LopHocPhan>(entity =>
@@ -80,7 +80,7 @@ namespace QLHocPhan_23TH0003.Data
                 entity.Property(l => l.HeSoGiuaKy).HasColumnType("decimal(18,2)");
                 entity.Property(l => l.HeSoThucHanh).HasColumnType("decimal(18,2)");
                 entity.Property(l => l.HeSoCuoiKy).HasColumnType("decimal(18,2)");
-                entity.HasOne(e => e.HocPhan).WithMany(e => e.LopHocPhans).HasForeignKey(e => e.IdHocPhan);
+                entity.HasOne(e => e.HocPhan).WithMany(e => e.LopHocPhans).HasForeignKey(e => e.IdHocPhan).OnDelete(DeleteBehavior.Restrict);
                 entity.HasMany(e => e.DangKyHocPhans).WithOne(e => e.LopHocPhan).HasForeignKey(e => e.IdLopHocPhan);
                 entity.HasMany(e => e.PhanCongGiangDays).WithOne(e => e.LopHocPhan).HasForeignKey(e => e.IdLopHocPhan);
             });
@@ -88,15 +88,15 @@ namespace QLHocPhan_23TH0003.Data
             {
                 entity.ToTable("DangKyHocPhan");
                 entity.HasKey(e => e.Id);
-                entity.HasOne(e => e.SinhVien).WithMany(e => e.DangKyHocPhans).HasForeignKey(e => e.IdSinhVien);
-                entity.HasOne(e => e.LopHocPhan).WithMany(e => e.DangKyHocPhans).HasForeignKey(e => e.IdLopHocPhan);
+                entity.HasOne(e => e.SinhVien).WithMany(e => e.DangKyHocPhans).HasForeignKey(e => e.IdSinhVien).OnDelete(DeleteBehavior.Restrict);
+                entity.HasOne(e => e.LopHocPhan).WithMany(e => e.DangKyHocPhans).HasForeignKey(e => e.IdLopHocPhan).OnDelete(DeleteBehavior.Restrict);
             });
             modelBuilder.Entity<PhanCongGiangDay>(entity =>
             {
                 entity.ToTable("PhanCongGiangDay");
                 entity.HasKey(e => e.Id);
-                entity.HasOne(e => e.GiangVien).WithMany(e => e.PhanCongGiangDays).HasForeignKey(e => e.IdGiangVien);
-                entity.HasOne(e => e.LopHocPhan).WithMany(e => e.PhanCongGiangDays).HasForeignKey(e => e.IdLopHocPhan);
+                entity.HasOne(e => e.GiangVien).WithMany(e => e.PhanCongGiangDays).HasForeignKey(e => e.IdGiangVien).OnDelete(DeleteBehavior.Restrict);
+                entity.HasOne(e => e.LopHocPhan).WithMany(e => e.PhanCongGiangDays).HasForeignKey(e => e.IdLopHocPhan).OnDelete(DeleteBehavior.Restrict);
             });
             modelBuilder.Entity<Diem>(entity =>
             {
@@ -114,14 +114,15 @@ namespace QLHocPhan_23TH0003.Data
             {
                 entity.ToTable("SinhVien");
                 entity.HasKey(e => e.Id);
-                entity.HasOne(e => e.Lop).WithMany(e => e.SinhViens).HasForeignKey(e => e.IdLop);
+                entity.HasOne(e => e.Lop).WithMany(e => e.SinhViens).HasForeignKey(e => e.IdLop).OnDelete(DeleteBehavior.Restrict);
                 entity.HasMany(e => e.DangKyHocPhans).WithOne(e => e.SinhVien).HasForeignKey(e => e.IdSinhVien);
+                entity.HasMany(e => e.ThanhToanHocPhis).WithOne(e => e.SinhVien).HasForeignKey(e => e.IdSinhVien);
             });
             modelBuilder.Entity<BaiHoc>(entity =>
             {
                 entity.ToTable("BaiHoc");
                 entity.HasKey(e => e.Id);
-                entity.HasOne(e => e.LopHocPhan).WithMany(e => e.BaiHocs).HasForeignKey(e => e.IdLopHocPhan);
+                entity.HasOne(e => e.LopHocPhan).WithMany(e => e.BaiHocs).HasForeignKey(e => e.IdLopHocPhan).OnDelete(DeleteBehavior.Restrict);
             });
             modelBuilder.Entity<CauHinhHeThong>(entity =>
             {

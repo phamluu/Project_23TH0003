@@ -224,6 +224,7 @@ namespace QLHocPhan_23TH0003.Areas.Admin.Controllers
             }
 
             // Xử lý xoá vai trò
+            // Kiểm tra nếu giảng viên đã phân công giảng hạy || sinh viên đã đăng ký học phần => không thể xóa vai trò
             if (rolesToRemove.Any())
             {
                 var removeResult = await _userManager.RemoveFromRolesAsync(user, rolesToRemove);
