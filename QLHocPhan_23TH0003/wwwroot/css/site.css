@@ -170,6 +170,12 @@ main{
 .nav-item .dropdown-toggle::after {
     font-size:1rem;
 }
+
+#TaoMatKhau .position-relative span {
+    top: 50%;
+    right: 1rem;
+    transform: translateY(-50%);
+}
 @media(max-width:490px) {
     .logo img {
         max-height: 40px;

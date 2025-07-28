@@ -1,6 +1,7 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @using QLHocPhan_23TH0003.ViewModel
 @model UserViewModel
+
 @{
    if (User.Identity.Name == Model.UserName)
     {
@@ -71,7 +72,7 @@
         </div>
         <div class="form-group">
             <label><strong>Mật khẩu: </strong></label>
-            <a href="" class="btn btn-primary">Tạo mật khẩu mới</a>
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#TaoMatKhau">Tạo mật khẩu mới</button>
         </div>
     </div>
 </div>
@@ -132,8 +133,123 @@
                     </div>
 
                 </form>
-            
-            
         </div>
     </div>
 </div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="TaoMatKhau" tabindex="-1" aria-labelledby="TaoMatKhauLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content shadow rounded">
+            <div class="modal-header">
+                <h4 class="modal-title" id="TaoMatKhauLabel">Tạo mật khẩu mới</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+            </div>
+
+            <form action="@Url.Action("TaoMatKhauMoi")" method="post" id="TaoMatKhau">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="userId" value="@Model.Id" />
+
+                <div class="modal-body">
+                    <div class="form-group mb-3">
+                        <label for="newPassword" class="form-label">Mật khẩu mới</label>
+                        <div class="position-relative">
+                            <input type="password" name="newPassword" id="newPassword" class="form-control" required minlength="6" />
+                            <span class="toggle-password fa fa-eye position-absolute top-50 end-0 translate-middle-y me-3"
+                                  data-target="newPassword"
+                                  style="cursor: pointer; font-size: 1.1rem;"></span>
+                        </div>
+                        <small class="text-muted">Tối thiểu 6 ký tự, bao gồm chữ hoa, số hoặc ký tự đặc biệt.</small>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="confirmPassword" class="form-label">Xác nhận mật khẩu</label>
+                        <div class="position-relative">
+                            <input type="password" id="confirmPassword" class="form-control" required />
+                            <span class="toggle-password fa fa-eye position-absolute top-50 end-0 translate-middle-y me-3"
+                                  data-target="confirmPassword"
+                                  style="cursor: pointer; font-size: 1.1rem;"></span>
+                        </div>
+                        <div class="text-danger mt-1" id="passwordMismatch" style="display:none;">Mật khẩu xác nhận không khớp.</div>
+                    </div>
+
+                    <div class="progress mb-2">
+                        <div id="passwordStrengthBar" class="progress-bar" role="progressbar" style="width: 0%;"></div>
+                    </div>
+                    <small id="passwordStrengthText" class="form-text"></small>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Lưu mật khẩu</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+@Html.Raw(@"
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('.toggle-password').forEach(span => {
+            span.addEventListener('click', function () {
+                const targetId = this.getAttribute('data-target');
+                const input = document.getElementById(targetId);
+
+                if (input.type === 'password') {
+                    input.type = 'text';
+                    this.classList.remove('fa-eye');
+                    this.classList.add('fa-eye-slash');
+                } else {
+                    input.type = 'password';
+                    this.classList.remove('fa-eye-slash');
+                    this.classList.add('fa-eye');
+                }
+            });
+        });
+
+        const newPassword = document.getElementById('newPassword');
+        const confirmPassword = document.getElementById('confirmPassword');
+        const mismatch = document.getElementById('passwordMismatch');
+
+        if (confirmPassword && newPassword && mismatch) {
+            confirmPassword.addEventListener('input', () => {
+                mismatch.style.display = (confirmPassword.value !== newPassword.value) ? 'block' : 'none';
+            });
+
+            newPassword.addEventListener('input', () => {
+                const pw = newPassword.value;
+                const strength = getStrength(pw);
+
+                const bar = document.getElementById('passwordStrengthBar');
+                const text = document.getElementById('passwordStrengthText');
+
+                if (bar && text) {
+                    bar.style.width = strength.percent + '%';
+                    bar.className = 'progress-bar ' + strength.color;
+                    text.textContent = strength.message;
+                }
+            });
+        }
+
+        function getStrength(pw) {
+            let score = 0;
+            if (pw.length >= 6) score++;
+            if (/[A-Z]/.test(pw)) score++;
+            if (/\\d/.test(pw)) score++;
+            if (/[@$!%*#?&]/.test(pw)) score++;
+
+            switch (score) {
+                case 1: return { percent: 25, color: 'bg-danger', message: 'Yếu' };
+                case 2: return { percent: 50, color: 'bg-warning', message: 'Trung bình' };
+                case 3: return { percent: 75, color: 'bg-info', message: 'Khá mạnh' };
+                case 4: return { percent: 100, color: 'bg-success', message: 'Mạnh' };
+                default: return { percent: 0, color: '', message: '' };
+            }
+        }
+    });
+</script>
+")
+

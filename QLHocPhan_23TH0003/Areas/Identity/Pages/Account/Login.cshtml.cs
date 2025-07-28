@@ -107,59 +107,55 @@ namespace QLHocPhan_23TH0003.Areas.Identity.Pages.Account
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
             returnUrl ??= Url.Content("~/");
-            
+
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
 
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                var user = await _userManager.FindByEmailAsync(Input.Email);
-                if (user != null)
-                {
-                    // This doesn't count login failures towards account lockout
-                    // To enable password failures to trigger account lockout, set lockoutOnFailure: true
-                    var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
-                    if (result.Succeeded)
-                    {
-                        var roles = await _userManager.GetRolesAsync(user);
-                        if (roles.Contains(AdminRole.Admin.ToString()))
-                        {
-                            // Nếu là Admin, chuyển hướng đến trang Admin
-                            return RedirectToAction("Index", "Home", new { area = "Admin" }); // Đảm bảo AdminController đã có trong dự án
-                        }
-                        if (roles.Contains(Role.GiangVien.ToString()))
-                        {
-                            return RedirectToAction("Index", "Home", new { area = "Instructor" });
-                        }
-                        if (roles.Contains(Role.SinhVien.ToString()))
-                        {
-                            return RedirectToAction("Index", "Home", new { area = "Student" });
-                        }
-                        // Nếu không phải Admin, chuyển hướng về trang mặc định
-                        return LocalRedirect(returnUrl);
-
-                        //_logger.LogInformation("User logged in.");
-                        //return LocalRedirect(returnUrl);
-                    }
-                    if (result.RequiresTwoFactor)
-                    {
-                        return RedirectToPage("./LoginWith2fa", new { ReturnUrl = returnUrl, RememberMe = Input.RememberMe });
-                    }
-                    if (result.IsLockedOut)
-                    {
-                        _logger.LogWarning("User account locked out.");
-                        return RedirectToPage("./Lockout");
-                    }
-                    else
-                    {
-                        ModelState.AddModelError(string.Empty, "Invalid login attempt.");
-                        return Page();
-                    }
-                }
-               
+                return Page(); // Form bị lỗi dữ liệu phía client (validation) => không xử lý tiếp
             }
 
-            // If we got this far, something failed, redisplay form
+            var user = await _userManager.FindByEmailAsync(Input.Email);
+            if (user == null)
+            {
+                // Email chưa đăng ký
+                ModelState.AddModelError(string.Empty, "Email chưa đăng ký.");
+                return Page();
+            }
+
+            var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
+
+            if (result.Succeeded)
+            {
+                var roles = await _userManager.GetRolesAsync(user);
+
+                if (roles.Contains(AdminRole.Admin.ToString()))
+                    return RedirectToAction("Index", "Home", new { area = "Admin" });
+
+                if (roles.Contains(Role.GiangVien.ToString()))
+                    return RedirectToAction("Index", "Home", new { area = "Instructor" });
+
+                if (roles.Contains(Role.SinhVien.ToString()))
+                    return RedirectToAction("Index", "Home", new { area = "Student" });
+
+                return LocalRedirect(returnUrl);
+            }
+
+            if (result.RequiresTwoFactor)
+            {
+                return RedirectToPage("./LoginWith2fa", new { ReturnUrl = returnUrl, RememberMe = Input.RememberMe });
+            }
+
+            if (result.IsLockedOut)
+            {
+                _logger.LogWarning("User account locked out.");
+                return RedirectToPage("./Lockout");
+            }
+
+            // Mật khẩu sai
+            ModelState.AddModelError(string.Empty, "Đăng nhập không thành công. Mật khẩu không đúng");
             return Page();
         }
+
     }
 }

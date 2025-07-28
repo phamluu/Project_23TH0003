@@ -2,89 +2,166 @@
 @{
     ViewBag.Title = "Kết quả học tập";
 }
+
 <style>
-    table th, td{
-        border: 1px solid #fff;
-        border-collapse: collapse;
+    .title {
+        font-size: 30px;
+        color: #d60000;
+        font-weight: 700;
+        margin-top: 30px;
+        text-transform: uppercase;
+        position: relative;
     }
-    table tr:nth-child(2n+1) {
-        background: #33333321;
+
+        .title::after {
+            content: "";
+            display: block;
+            width: 60px;
+            height: 4px;
+            background-color: #007bff;
+            margin: 8px auto 0;
+            border-radius: 2px;
+        }
+
+    .term-title {
+        font-size: 20px;
+        font-weight: 600;
+        color: #0d6efd;
+        margin: 30px 0 10px;
     }
-    table th {
-       
-        background: #00c9ff;
+
+    table {
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+    thead {
+        background-color: #00c9ff;
         color: #fff;
-        padding: 5px;
+        font-weight: bold;
+        text-align: center;
+    }
+
+    tbody tr:nth-child(odd) {
+        background-color: #f7f7f7;
+    }
+
+    tbody tr:nth-child(even) {
+        background-color: #ffffff;
+    }
+
+    table th, table td {
+        padding: 12px;
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    .no-data {
+        margin-top: 20px;
+        font-style: italic;
+        color: #888;
+    }
+
+    .print-btn {
+        margin-top: 10px;
+        margin-bottom: 30px;
+        display: flex;
+        justify-content: center;
+    }
+    
+    @@media print {
+        body *
+
+    {
+        visibility: hidden;
+    }
+
+    .print-content * {
+        visibility: visible;
+    }
+
+        .print-btn{
+            visibility: hidden;
+        }
+    .container {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+    }
+
+    .print-btn {
+        display: none !important;
+    }
+
+    .navbar, .page-header, footer {
+        display: none !important;
+    }
+
     }
 </style>
-<div class="page-header">
-    <div class="container">
-        <h4 class="title text-center">@ViewBag.Title</h4>
-    </div>
-</div>
-<div class="container mt-3">
-    @if (Model != null && Model.Count() > 0)
-    {
-        var ListHocKy = Model.GroupBy(x => x.LopHocPhan.HocPhan.HocKy).Select(x => new { Id = x.Key.Id, MaHocKy = x.Key.MaHocKy, TenHocKy = x.Key.TenHocKy, NamHoc = x.Key.NamHoc });
-        @foreach (var hocky in ListHocKy)
+
+<div class="container mt-4">
+    <div class="print-content">
+        <h2 class="text-center title">@ViewBag.Title</h2>
+
+        <div class="text-end mb-3">
+            <button class="btn btn-sm btn-outline-primary print-btn" onclick="window.print()">
+                <i class="fas fa-print"></i> In bảng điểm
+            </button>
+        </div>
+
+        @if (Model != null && Model.Any())
         {
-            var ListDiem = Model.Where(x => x.LopHocPhan.HocPhan.IdHocKy == hocky.Id);
-            <div class="hocky=@hocky.Id hocky mt-5">
-                <h5>@hocky.TenHocKy - @hocky.NamHoc</h5>
-                <table style="width:100%">
-                    <thead>
-                        <tr>
-                            <th>
-                                @Html.DisplayName("Lớp học phần")
-                            </th>
-                            <th>
-                                @Html.DisplayName("Số tín chỉ")
-                            </th>
-                            <th>
-                                @Html.DisplayName("Điểm giữa kì")
-                            </th>
-                            <th>
-                                @Html.DisplayName("Điểm cuối kì")
-                            </th>
-                            <th>
-                                @Html.DisplayName("Điểm TB")
-                            </th>
-                            <th>
-                                @Html.DisplayName("Xếp loại")
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var item in ListDiem)
-                        {
-                            <tr>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.LopHocPhan.TenLopHocPhan)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.LopHocPhan.HocPhan.SoTinChi)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Diem.DiemGiuaKy)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Diem.DiemCuoiKy)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Diem.DiemTrungBinh)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Diem.XepLoai)
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
+            var ListHocKy = Model
+            .GroupBy(x => x.LopHocPhan.HocPhan.HocKy)
+            .Select(x => new
+            {
+                Id = x.Key.Id,
+                MaHocKy = x.Key.MaHocKy,
+                TenHocKy = x.Key.TenHocKy,
+                NamHoc = x.Key.NamHoc
+            });
+
+            foreach (var hocky in ListHocKy)
+            {
+                var ListDiem = Model.Where(x => x.LopHocPhan?.HocPhan?.IdHocKy == hocky.Id);
+                <div class="mt-5">
+                    <h4 class="term-title">@hocky.TenHocKy - @hocky.NamHoc</h4>
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover shadow-sm">
+                            <thead>
+                                <tr>
+                                    <th>Lớp học phần</th>
+                                    <th>Số tín chỉ</th>
+                                    <th>Điểm giữa kì</th>
+                                    <th>Điểm cuối kì</th>
+                                    <th>Điểm TB</th>
+                                    <th>Xếp loại</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in ListDiem)
+                                {
+                                    <tr>
+                                        <td>@item?.LopHocPhan?.TenLopHocPhan</td>
+                                        <td>@item?.LopHocPhan?.HocPhan?.SoTinChi</td>
+                                        <td>@item?.Diem?.DiemGiuaKy?.ToString("0.00")</td>
+                                        <td>@item?.Diem?.DiemCuoiKy?.ToString("0.00")</td>
+                                        <td>@item?.Diem?.DiemTrungBinh?.ToString("0.00")</td>
+                                        <td>@item?.Diem?.XepLoai</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            }
         }
-    }
-    else
-    {
-        <p>Không có dữ liệu</p>
-    }
+        else
+        {
+            <p class="text-center no-data">Không có dữ liệu học tập nào được tìm thấy.</p>
+        }
+    </div>
+    
 </div>

@@ -1,84 +1,107 @@
 ﻿@model QLHocPhan_23TH0003.Models.SinhVien
 
-<div class="container">
-    <h4 class="text-danger text-center title">Cập nhật hồ sơ sinh viên của tôi</h4>
-    @Html.Partial("_AlertMessages")
-    <form action="@Url.Action("EditProfileSinhVien", "MyProfile_23TH0003")" method="post" enctype="multipart/form-data">
-        @Html.AntiForgeryToken()
-
-        @Html.HiddenFor(model => model.Id)
-        @Html.HiddenFor(model => model.UserId)
-        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-        <div class="form-group">
-            <input type="submit" value="Lưu" class="btn btn-primary btn-sm" />
-            <a href="@Url.Action("Index", "MyProfile_23TH0003")" class="btn btn-default btn-primary btn-sm">Tài khoản</a>
+<div class="container py-4">
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-success text-white text-center">
+            <h4 class="mb-0"><i class="bi bi-person-lines-fill me-2"></i>Cập nhật hồ sơ sinh viên</h4>
         </div>
-        <div class="row">
-            <div class="col-md-8">
-                <div class="form-group">
-                    <strong asp-for="MaGiangVien" class="control-label">Mã sinh Viên : </strong>
-                    <span>@Model.MaSinhVien</span>
+
+        <div class="card-body">
+            @Html.Partial("_AlertMessages")
+
+            <form action="@Url.Action("EditProfileSinhVien", "MyProfile_23TH0003")" method="post" enctype="multipart/form-data">
+                @Html.AntiForgeryToken()
+                @Html.HiddenFor(model => model.Id)
+                @Html.HiddenFor(model => model.UserId)
+
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                <div class="d-flex justify-content-end mb-3">
+                    <input type="submit" value="💾 Lưu thay đổi" class="btn btn-success btn-sm me-2" />
+                    <a href="@Url.Action("Index", "MyProfile_23TH0003")" class="btn btn-outline-secondary btn-sm">↩ Trở về</a>
                 </div>
-                <div class="form-group">
-                    <strong asp-for="IdKhoa" class="control-label">Lớp : </strong>
-                    <span>@Model.Lop?.TenLop</span>
+
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="mb-3">
+                            <label class="form-label"><strong>Mã sinh viên:</strong></label>
+                            <div class="form-control-plaintext">@Model.MaSinhVien</div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label"><strong>Lớp:</strong></label>
+                            <div class="form-control-plaintext">@Model.Lop?.TenLop</div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="HoTen" class="form-label">Họ và tên</label>
+                            @Html.EditorFor(model => model.HoTen, new { htmlAttributes = new { @class = "form-control" } })
+                            <span asp-validation-for="HoTen" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="NgaySinh" class="form-label">Ngày sinh</label>
+                            @Html.TextBoxFor(model => model.NgaySinh, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })
+                            <span asp-validation-for="NgaySinh" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="GioiTinh" class="form-label">Giới tính</label>
+                            <div class="form-check form-check-inline">
+                                @Html.RadioButtonFor(model => model.GioiTinh, true, new { @class = "form-check-input", id = "gioitinh-nam" })
+                                <label for="gioitinh-nam" class="form-check-label">Nam</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                @Html.RadioButtonFor(model => model.GioiTinh, false, new { @class = "form-check-input", id = "gioitinh-nu" })
+                                <label for="gioitinh-nu" class="form-check-label">Nữ</label>
+                            </div>
+                            <span asp-validation-for="GioiTinh" class="text-danger d-block mt-1"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="DiaChi" class="form-label">Địa chỉ</label>
+                            @Html.EditorFor(model => model.DiaChi, new { htmlAttributes = new { @class = "form-control" } })
+                            <span asp-validation-for="DiaChi" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 text-center">
+                        <label class="form-label fw-bold">Ảnh đại diện</label>
+                        <div class="mb-3">
+                            <img id="previewImage"
+                                 src="/Uploads/@(string.IsNullOrEmpty(Model.HinhDaiDien) ? "default-avatar.png" : Model.HinhDaiDien)"
+                                 class="rounded-circle border shadow"
+                                 style="width: 150px; height: 150px; object-fit: cover;" />
+                        </div>
+
+                        @Html.HiddenFor(model => model.HinhDaiDien)
+
+                        <button type="button" class="btn btn-outline-primary btn-sm" onclick="document.getElementById('HinhDaiDienFile').click()">
+                            📁 Chọn ảnh mới
+                        </button>
+
+                        <input type="file" id="HinhDaiDienFile" name="HinhDaiDienFile" accept="image/*"
+                               class="d-none" />
+
+                        <span asp-validation-for="HinhDaiDien" class="text-danger d-block mt-1"></span>
+                    </div>
+
                 </div>
-                <div class="form-group">
-                    <label asp-for="HoTen" class="control-label">Họ tên</label>
-                    @Html.EditorFor(model => model.HoTen, new { htmlAttributes = new { @class = "form-control" } })
-                    <span asp-validation-for="HoTen" class="text-danger"></span>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="form-group">
-                    <label asp-for="HinhDaiDien" class="control-label">Hình đại diện</label><br />
-                    <img id="previewImage" src="/Uploads/@Model.HinhDaiDien" style="width: 100px; height: 100px; object-fit: cover; border: 1px solid #ccc;" />
-                    @Html.HiddenFor(model => model.HinhDaiDien)
-                    <input type="file" id="HinhDaiDienFile" name="HinhDaiDienFile" class="form-control file" accept="image/*" />
-                    <span asp-validation-for="HinhDaiDien" class="text-danger"></span>
-                </div>
-            </div>
+            </form>
         </div>
-
-        <div class="form-group">
-            <label asp-for="NgaySinh" class="control-label">Ngày sinh</label>
-            @Html.TextBoxFor(model => model.NgaySinh, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })
-            <span asp-validation-for="NgaySinh" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <label asp-for="GioiTinh" class="control-label">Giới tính</label>
-            <div class="form-check">
-                <label for="gioitinh-nam" class="form-check-label">@Html.RadioButtonFor(model => model.GioiTinh, true, new { @class = "form-check-input", id = "gioitinh-nam" })Nam</label>
-                <label for="gioitinh-nu" class="form-check-label">@Html.RadioButtonFor(model => model.GioiTinh, false, new { @class = "form-check-input", id = "gioitinh-nu" })Nữ</label>
-            </div>
-            <span asp-validation-for="GioiTinh" class="text-danger"></span>
-        </div>
-
-
-        <div class="form-group">
-            <label asp-for="DiaChi" class="control-label">Địa chỉ</label>
-            @Html.EditorFor(model => model.DiaChi, new { htmlAttributes = new { @class = "form-control" } })
-            <span asp-validation-for="DiaChi" class="text-danger"></span>
-        </div>
-    </form>
-
+    </div>
 
     <script>
         document.getElementById('HinhDaiDienFile').addEventListener('change', function (event) {
             const fileInput = event.target;
             const preview = document.getElementById('previewImage');
-
             if (fileInput.files && fileInput.files[0]) {
                 const reader = new FileReader();
-
                 reader.onload = function (e) {
                     preview.src = e.target.result;
-                }
-
+                };
                 reader.readAsDataURL(fileInput.files[0]);
             }
         });
     </script>
 </div>
-
-

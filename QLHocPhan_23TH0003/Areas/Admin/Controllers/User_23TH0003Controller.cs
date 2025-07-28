@@ -319,7 +319,47 @@ namespace QLHocPhan_23TH0003.Areas.Admin.Controllers
             return Redirect(Request.Headers["Referer"].ToString());
         }
 
+        #region Tạo mật khẩu mới cho người dùng
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> TaoMatKhauMoi(string userId, string newPassword)
+        {
+            if (string.IsNullOrWhiteSpace(userId) || string.IsNullOrWhiteSpace(newPassword))
+            {
+                TempData["ErrorMessage"] = "Thông tin không hợp lệ.";
+                return RedirectToAction("ChiTiet", new { id = userId });
+            }
 
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                TempData["ErrorMessage"] = "Không tìm thấy người dùng.";
+                return RedirectToAction("Index");
+            }
+
+            // Xóa mật khẩu cũ (nếu có)
+            var removeResult = await _userManager.RemovePasswordAsync(user);
+            if (!removeResult.Succeeded)
+            {
+                TempData["ErrorMessage"] = "Không thể xóa mật khẩu cũ.";
+                return RedirectToAction("Details", new { id = userId });
+            }
+
+            // Thêm mật khẩu mới
+            var addResult = await _userManager.AddPasswordAsync(user, newPassword);
+            if (addResult.Succeeded)
+            {
+                TempData["SuccessMessage"] = "Tạo mật khẩu mới thành công.";
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "Tạo mật khẩu thất bại: " + string.Join(", ", addResult.Errors.Select(e => e.Description));
+            }
+
+            return RedirectToAction("Details", new { id = userId });
+        }
+
+        #endregion
 
     }
 }
