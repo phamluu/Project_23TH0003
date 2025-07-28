@@ -224,13 +224,12 @@ CREATE TABLE [dbo].[ThanhToanHocPhi] (
     [Id] int NOT NULL IDENTITY,
     [IdSinhVien] int NOT NULL,
     [IdHocKy] int NOT NULL,
-    [HocKyId] int NOT NULL,
     [SoTien] decimal(18,2) NOT NULL,
     [PhuongThuc] int NOT NULL,
     [TrangThai] int NOT NULL,
     [NgayThanhToan] datetime2 NOT NULL,
     CONSTRAINT [PK_ThanhToanHocPhi] PRIMARY KEY ([Id]),
-    CONSTRAINT [FK_ThanhToanHocPhi_HocKy_HocKyId] FOREIGN KEY ([HocKyId]) REFERENCES [HocKy] ([Id]) ON DELETE CASCADE,
+    CONSTRAINT [FK_ThanhToanHocPhi_HocKy_IdHocKy] FOREIGN KEY ([IdHocKy]) REFERENCES [HocKy] ([Id]) ON DELETE CASCADE,
     CONSTRAINT [FK_ThanhToanHocPhi_SinhVien_IdSinhVien] FOREIGN KEY ([IdSinhVien]) REFERENCES [SinhVien] ([Id]) ON DELETE CASCADE
 );
 

@@ -39,7 +39,7 @@ namespace QLHocPhan_23TH0003.Areas.Admin.Controllers
         // GET: GiangVien_23TH0003
         public ActionResult Index()
         {
-            var model = _context.GiangVien.Include(x => x.Khoa).Where(x => x.IsDeleted != true).ToList();
+            var model = _context.GiangVien.Include(x => x.Khoa).Where(x => x.IsDeleted != true).OrderByDescending(x => x.NgayTao).ToList();
             return View(model);
         }
 
@@ -123,8 +123,7 @@ namespace QLHocPhan_23TH0003.Areas.Admin.Controllers
                     string fileName = await _file.UploadAndGetResultStringAsync(HinhDaiDienFile, model.HinhDaiDien);
                     model.HinhDaiDien = fileName;
                 }
-                _context.Update(model);
-                _context.SaveChanges();
+                _userService.UpdateGiangVien(model);
                 TempData["SuccessMessage"] = "Cập nhật giảng viên thành công";
                 return RedirectToAction(nameof(Index));
             }
@@ -148,15 +147,30 @@ namespace QLHocPhan_23TH0003.Areas.Admin.Controllers
                 TempData["ErrorMessage"] = "Giảng viên không tồn tại";
                 return RedirectToAction("Index");
             }
-            mon.IsDeleted = true;
-            _context.SaveChanges();
-            TempData["SuccessMessage"] = "Xóa giảng viên thành công";
+            try
+            {
+                mon.IsDeleted = true;
+                _context.SaveChanges();
+                TempData["SuccessMessage"] = "Xóa giảng viên thành công";
+            }catch(Exception ex)
+            {
+                var errorMessages = new List<string> { "Lỗi khi lưu vào cơ sở dữ liệu:" };
+
+                var innerEx = ex.InnerException;
+                while (innerEx != null)
+                {
+                    errorMessages.Add($"- {innerEx.Message}");
+                    innerEx = innerEx.InnerException;
+                }
+                TempData["ErrorMessage"] = string.Join("<br/>", errorMessages);
+            }
+            
             return RedirectToAction("Index");
         }
 
         public ActionResult Trash()
         {
-            var deletedLop = _context.GiangVien.Include(x => x.Khoa).Where(x => x.IsDeleted == true).ToList();
+            var deletedLop = _context.GiangVien.Include(x => x.Khoa).Where(x => x.IsDeleted == true).OrderByDescending(x => x.NgayTao).ToList();
             return View(deletedLop);
         }
 

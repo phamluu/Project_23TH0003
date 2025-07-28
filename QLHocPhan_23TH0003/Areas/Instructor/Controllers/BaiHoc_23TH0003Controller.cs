@@ -83,10 +83,37 @@ namespace QLHocPhan_23TH0003.Areas.Instructor.Controllers
                 TempData["SuccessMessage"] = "Thêm bài học thành công";
                 return RedirectToAction(nameof(Index), new { IdLopHocPhan = model.IdLopHocPhan });
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
-                TempData["ErrorMessage"] = "Thêm bài học không thành công";
+                // Chuỗi lỗi tổng hợp
+                var errorMessages = new List<string>();
+
+                // Lỗi chính
+                errorMessages.Add("Lỗi: " + ex.Message);
+
+                // Lỗi lồng nhau (InnerException)
+                Exception? inner = ex.InnerException;
+                while (inner != null)
+                {
+                    errorMessages.Add("Lỗi bên trong: " + inner.Message);
+                    inner = inner.InnerException;
+                }
+
+                // Lỗi từ ModelState (nếu có)
+                if (!ModelState.IsValid)
+                {
+                    foreach (var state in ModelState)
+                    {
+                        foreach (var error in state.Value.Errors)
+                        {
+                            errorMessages.Add($"ModelState - Trường: {state.Key}, Lỗi: {error.ErrorMessage}");
+                        }
+                    }
+                }
+
+                // Gán tất cả lỗi vào TempData
+                TempData["ErrorMessage"] = string.Join("<br/>", errorMessages); // Dùng <br/> nếu bạn hiển thị HTML trên View
+
                 return View(model);
             }
         }

@@ -73,7 +73,7 @@ builder.Services.AddTransient<IEmailSender, SmtpEmailSender>(); // Đăng ký t�
 
 // Quản lý các service
 builder.Services.AddHttpClient();
-builder.Services.AddSingleton<DropboxService>();
+builder.Services.AddScoped<DropboxService>();
 builder.Services.AddScoped<HocPhiService>();
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<FileService>();

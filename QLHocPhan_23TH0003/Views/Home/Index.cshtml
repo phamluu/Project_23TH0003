@@ -14,7 +14,6 @@
     </div>
 }
 
-
 <section id="khoahoc">
     <div class="container">
         <h4 class="title"><span>CÁC KHÓA HỌC HIỆN TẠI</span></h4>
@@ -77,6 +76,11 @@
                                                                            class="btn btn-primary mt-2">
                                                                             Truy cập khóa học
                                                                         </a>
+                                                                        @if (item.IsDangKy)
+                                                                        {
+                                                                            <span class="badge bg-success mt-2">Bạn đã đăng ký</span>
+                                                                        }
+                                                                        <!-- Kiểm tra có hồ sơ sinh viên-->
                                                                     </div>
                                                                 </div>
                                                             </div>

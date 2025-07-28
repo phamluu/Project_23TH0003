@@ -45,5 +45,18 @@ namespace QLHocPhan_23TH0003.Service
             }
             return ch;
         }
+
+        public bool UpdateGiaTri(string maCauHinh, string giaTri)
+        {
+            var ch = _context.CauHinhHeThong.FirstOrDefault(x => x.MaCauHinh == maCauHinh);
+            if (ch != null)
+            {
+                ch.GiaTri = giaTri;
+                _context.CauHinhHeThong.Update(ch);
+                _context.SaveChanges();
+                return true;
+            }
+            return false;
+        }
     }
 }

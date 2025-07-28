@@ -168,8 +168,7 @@ namespace QLHocPhan_23TH0003.Areas.Admin.Controllers
                     string fileName = await _file.UploadAndGetResultStringAsync(HinhDaiDienFile, model.HinhDaiDien);
                     model.HinhDaiDien = fileName;
                 }
-                _context.Update(model);
-                _context.SaveChanges();
+                _userService.UpdateSinhVien(model);
                 TempData["SuccessMessage"] = "Cập nhật sinh viên thành công";
                 return RedirectToAction(nameof(Index));
             }
@@ -231,9 +230,23 @@ namespace QLHocPhan_23TH0003.Areas.Admin.Controllers
             var mon = _context.SinhVien.Find(id);
             if (mon != null)
             {
-                mon.IsDeleted = false;
-                _context.SaveChanges();
-                TempData["SuccessMessage"] = "Khôi phục sinh viên thành công";
+                try
+                {
+                    mon.IsDeleted = false;
+                    _context.SaveChanges();
+                    TempData["SuccessMessage"] = "Khôi phục sinh viên thành công";
+                }catch(Exception ex)
+                {
+                    var errorMessages = new List<string> { "Lỗi khi lưu vào cơ sở dữ liệu:" };
+                    var innerEx = ex.InnerException;
+                    while (innerEx != null)
+                    {
+                        errorMessages.Add($"- {innerEx.Message}");
+                        innerEx = innerEx.InnerException;
+                    }
+                    TempData["ErrorMessage"] = string.Join("<br/>", errorMessages);
+                }
+               
             }
             return RedirectToAction("Trash");
         }
@@ -246,10 +259,24 @@ namespace QLHocPhan_23TH0003.Areas.Admin.Controllers
             var mon = _context.SinhVien.Find(id);
             if (mon != null)
             {
-                _context.SinhVien.Remove(mon);
-                _context.SaveChanges();
-                _file.DeleteFile(mon.HinhDaiDien);
-                TempData["SuccessMessage"] = "Xóa vĩnh viễn sinh viên thành công";
+                try
+                {
+                    _context.SinhVien.Remove(mon);
+                    _context.SaveChanges();
+                    _file.DeleteFile(mon.HinhDaiDien);
+                    TempData["SuccessMessage"] = "Xóa vĩnh viễn sinh viên thành công";
+                }
+                catch (Exception ex)
+                {
+                    var errorMessages = new List<string> { "Lỗi khi lưu vào cơ sở dữ liệu:" };
+                    var innerEx = ex.InnerException;
+                    while (innerEx != null)
+                    {
+                        errorMessages.Add($"- {innerEx.Message}");
+                        innerEx = innerEx.InnerException;
+                    }
+                    TempData["ErrorMessage"] = string.Join("<br/>", errorMessages);
+                }
             }
             return RedirectToAction("Trash");
         }

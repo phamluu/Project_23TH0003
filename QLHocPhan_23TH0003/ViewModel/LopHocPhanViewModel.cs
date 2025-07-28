@@ -8,4 +8,9 @@ namespace QLHocPhan_23TH0003.ViewModel
         public IEnumerable<BaiHocViewModel>? BaiHocs { get; set; }
     }
 
+    public class LopHocPhanViewModel: LopHocPhan
+    {
+        public bool IsDangKy { get; set; }
+    }
+
 }

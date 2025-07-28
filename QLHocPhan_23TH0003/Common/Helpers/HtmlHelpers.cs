@@ -17,5 +17,14 @@ namespace QLHocPhan_23TH0003.Common.Helpers
             return (isControllerMatch && isActionMatch) ? "active" : "";
 
         }
+
+        public static string IsMenuGroupActive(this IHtmlHelper htmlHelper, params string[] controllers)
+        {
+            var routeData = htmlHelper.ViewContext.RouteData;
+            var routeController = routeData.Values["controller"]?.ToString();
+
+            return controllers.Any(c => string.Equals(c, routeController, StringComparison.OrdinalIgnoreCase)) ? "show" : "";
+        }
+
     }
 }

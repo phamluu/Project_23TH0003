@@ -29,7 +29,9 @@ namespace QLHocPhan_23TH0003.Controllers
             {
                 if (!_userManager.Users.Any())
                     return Redirect("/Identity/Account/Register");
-
+                string IdUser = _userManager.GetUserId(User);
+                var sinhVien = _context.SinhVien.FirstOrDefault(sv => sv.UserId == IdUser);
+                int? IdSinhVien = sinhVien == null ? null : sinhVien.Id;
                 var model = _context.HocKy.AsNoTracking()
                              .Where(hk => hk.HocPhans.Any(hp => !hp.IsDeleted && hp.LopHocPhans.Any(lhp => !lhp.IsDeleted)))
                              .OrderByDescending(hk => hk.ThuTu)
@@ -47,9 +49,14 @@ namespace QLHocPhan_23TH0003.Controllers
                                                              lhp.HocPhan.MonHoc.IdKhoa == k.Id)
                                                          .Include(lhp => lhp.PhanCongGiangDays)
                                                              .ThenInclude(pc => pc.GiangVien)
-                                                         .Include(lhp => lhp.HocPhan)
-                                                             .ThenInclude(hp => hp.MonHoc)
-                                                         .ToList()
+                                                        .Include(lhp => lhp.DangKyHocPhans)
+                                                        .Select(lhp => new LopHocPhanViewModel
+                                                        {
+                                                            Id = lhp.Id,
+                                                            TenLopHocPhan = lhp.TenLopHocPhan,
+                                                            PhanCongGiangDays = lhp.PhanCongGiangDays,
+                                                            IsDangKy = IdSinhVien.HasValue && lhp.DangKyHocPhans.Any(dk => dk.IdSinhVien == IdSinhVien.Value)
+                                                        }).ToList()
                                      }).Where(vm => vm.LopHocPhans.Any()) // chỉ lấy khoa có lớp học phần
                                      .ToList()
                              })

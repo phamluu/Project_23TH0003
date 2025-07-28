@@ -12,14 +12,12 @@ namespace QLHocPhan_23TH0003.Models
         public int IdSinhVien { get; set; } 
 
         [Required]
-        [StringLength(20)]
         public int IdHocKy { get; set; } // VD: "Học kỳ 1"
         public virtual HocKy HocKy { get; set; }
         [Required]
         [Column(TypeName = "decimal(18,2)")]
         public decimal SoTien { get; set; } // Số tiền đã thanh toán
 
-        [StringLength(50)]
         public int PhuongThuc { get; set; } // Chuyển khoản, MoMo, ATM...
         public int TrangThai { get; set; }
         public DateTime NgayThanhToan { get; set; } = DateTime.Now;

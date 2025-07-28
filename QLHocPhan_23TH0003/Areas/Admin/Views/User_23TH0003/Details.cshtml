@@ -89,6 +89,7 @@
             </div>
             
                 <form action="@Url.Action("UpdateUserRoles", "User_23TH0003")" method="post">
+                    @Html.AntiForgeryToken()
                     <div class="modal-body">
                         <input type="hidden" name="email" value="@Model.Email" />
                     <div class="form-group">

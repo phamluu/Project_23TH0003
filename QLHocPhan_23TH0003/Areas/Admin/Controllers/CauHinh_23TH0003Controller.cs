@@ -5,6 +5,9 @@ using QLHocPhan_23TH0003.Enums;
 using QLHocPhan_23TH0003.Models;
 using QLHocPhan_23TH0003.Service;
 using QLHocPhan_23TH0003.ViewModel;
+using System.Net.Http.Headers;
+using System.Text;
+using System.Text.Json;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 namespace QLHocPhan_23TH0003.Areas.Admin.Controllers
 {
@@ -13,11 +16,13 @@ namespace QLHocPhan_23TH0003.Areas.Admin.Controllers
         private readonly MainDbContext _context;
         private readonly FileService _fileService;
         private readonly CauHinhService _cauHinhService;
-        public CauHinh_23TH0003Controller(MainDbContext context, FileService fileService, CauHinhService cauHinhService)
+        private readonly IHttpClientFactory _httpClientFactory;
+        public CauHinh_23TH0003Controller(MainDbContext context, FileService fileService, CauHinhService cauHinhService, IHttpClientFactory httpClientFactory)
         {
             _context = context;
             _fileService = fileService;
             _cauHinhService = cauHinhService;
+            _httpClientFactory = httpClientFactory;
         }
         
         #region Cấu hình
@@ -236,6 +241,42 @@ namespace QLHocPhan_23TH0003.Areas.Admin.Controllers
             }
         }
 
+
         #endregion
+
+        //[HttpGet("callback")]
+        //public async Task<IActionResult> ChangeCodeRefeshToken(string code)
+        //{
+        //    var clientId = CauHinhHelper.Get("dropbox_app_key");       // Hoặc hard-code
+        //    var clientSecret = CauHinhHelper.Get("dropbox_app_secret");
+        //    var redirectUri = "https://localhost:7067/";
+
+        //    var client = _httpClientFactory.CreateClient();
+        //    var authHeader = Convert.ToBase64String(Encoding.UTF8.GetBytes($"{clientId}:{clientSecret}"));
+
+        //    var request = new HttpRequestMessage(HttpMethod.Post, "https://api.dropboxapi.com/oauth2/token");
+        //    request.Headers.Authorization = new AuthenticationHeaderValue("Basic", authHeader);
+        //    request.Content = new FormUrlEncodedContent(new Dictionary<string, string>
+        //        {
+        //            { "code", code },
+        //            { "grant_type", "authorization_code" },
+        //            { "redirect_uri", redirectUri }
+        //        });
+
+        //    var response = await client.SendAsync(request);
+        //    var content = await response.Content.ReadAsStringAsync();
+
+        //    if (!response.IsSuccessStatusCode)
+        //        return Content("Lỗi: " + content, "text/plain");
+
+        //    using var doc = JsonDocument.Parse(content);
+        //    var accessToken = doc.RootElement.GetProperty("access_token").GetString();
+        //    var refreshToken = doc.RootElement.GetProperty("refresh_token").GetString();
+
+        //    _cauHinhService.UpdateGiaTri("dropbox_token", accessToken!);
+        //    _cauHinhService.UpdateGiaTri("dropbox_refresh_token", refreshToken!);
+
+        //    return Content("✅ Lấy token thành công:\n" + content, "text/plain");
+        //}
     }
 }

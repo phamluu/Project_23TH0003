@@ -16,6 +16,7 @@ namespace QLHocPhan_23TH0003.ViewModel
     public class KhoaLopHocPhanViewModel
     {
         public Khoa Khoa { get; set; }
-        public IEnumerable<LopHocPhan> LopHocPhans { get; set; }
+        public IEnumerable<LopHocPhanViewModel> LopHocPhans { get; set; }
+        public bool IsDangKy { get; set; }
     }
 }

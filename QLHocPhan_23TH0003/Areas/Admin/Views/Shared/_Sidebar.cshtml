@@ -22,7 +22,7 @@
                     <i class="now-ui-icons now-ui-icons files_box"></i>
                     <span>Quản lý danh mục</span>
                 </a>
-                <div class="collapse" id="danhmuc">
+                <div class="collapse @Html.IsMenuGroupActive("HocKy_23TH0003", "Khoa_23TH0003", "LopHoc_23TH0003", "MonHoc_23TH0003", "HocPhan_23TH0003")" id="danhmuc">
                     <ul class="nav flex-column ml-3">
                         <li class="@Html.IsActive("HocKy_23TH0003")">
                             <a href="@Url.Action("Index", "HocKy_23TH0003")">
@@ -64,7 +64,7 @@
                     <i class="now-ui-icons now-ui-icons education_hat"></i>
                     <span>Quản lý học phần</span>
                 </a>
-                <div class="collapse" id="hocphan">
+                <div class="collapse @Html.IsMenuGroupActive("LopHocPhan_23TH0003", "PhanCongGiangDay_23TH0003", "DangKyHocPhan_23TH0003")" id="hocphan">
                     <ul class="nav flex-column ml-3">
                         <li class="@Html.IsActive("LopHocPhan_23TH0003")">
                             <a href="@Url.Action("Index", "LopHocPhan_23TH0003")">
@@ -101,7 +101,7 @@
                     <i class="now-ui-icons now-ui-icons users_circle-08"></i>
                     <span>Người dùng</span>
                 </a>
-                 <div class="collapse" id="user">
+                 <div class="collapse @Html.IsMenuGroupActive("User_23TH0003", "GiangVien_23TH0003", "SinhVien_23TH0003")" id="user">
                     <ul class="nav flex-column ml-3">
                         <li class="@Html.IsActive("User_23TH0003")">
                             <a href="@Url.Action("Index", "User_23TH0003")">
@@ -131,7 +131,7 @@
                     <i class="now-ui-icons business_chart-bar-32"></i>
                     <span>Báo cáo thống kê</span>
                 </a>
-                 <div class="collapse" id="thongke">
+                 <div class="collapse @Html.IsMenuGroupActive("HocPhi_23TH0003", "Diem_23TH0003", "ThongKe_23TH0003")" id="thongke">
                     <ul class="nav flex-column ml-3">
                         <li class="@Html.IsActive("HocPhi_23TH0003")">
                             <a href="@Url.Action("Index", "HocPhi_23TH0003")">
@@ -145,7 +145,7 @@
                                 <p>Xem điểm</p>
                             </a>
                         </li>
-                        <li>
+                        <li class="@Html.IsActive("ThongKe_23TH0003")">
                             <a href="@Url.Action("BaoCaoSinhVien", "ThongKe_23TH0003")">
                                 <i class="now-ui-icons business_chart-bar-32"></i>
                                 <p>Báo cáo tổng hợp</p>

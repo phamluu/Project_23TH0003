@@ -90,6 +90,7 @@ namespace QLHocPhan_23TH0003.Areas.Student.Controllers
                 _context.DangKyHocPhan.Add(model);
                 _context.SaveChanges();
                 TempData["SuccessMessage"] = "Đăng ký học phần thành công";
+                return RedirectToAction(nameof(Index));
             }
             catch
             {

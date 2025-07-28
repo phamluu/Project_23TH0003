@@ -6,9 +6,9 @@
 }
     <div class="container">
         <div class="page-header">
-        <h4 class="title text-center">@ViewBag.Title</h4>
+            <h4 class="title text-center">@ViewBag.Title</h4>
         </div>
-        
+        @Html.Partial("_AlertMessages")
     <table id="grid">
         <thead>
             <tr>
@@ -26,7 +26,7 @@
                 <th style="width: 200px">Thao tác</th>
         </thead>
         <tbody>
-            @if (Model != null && Model.Count() == 0)
+            @if (Model != null && Model.Count() > 0)
             {
                 foreach (var item in Model)
                 {
@@ -46,7 +46,7 @@
                     @(item.NgayTao == null ? "" : item.NgayTao.ToString("dd/MM/yyyy"))
                 </td>
                 <td>
-                    @EnumExtensions.GetDisplayName((TrangThaiDangKy)item.TrangThai)
+                    <span class="">@EnumExtensions.GetDisplayName((TrangThaiDangKy)item.TrangThai)</span>
                 </td>
                 <td>
                     @if (item.TrangThai == (int)TrangThaiDangKy.DaDangKy)

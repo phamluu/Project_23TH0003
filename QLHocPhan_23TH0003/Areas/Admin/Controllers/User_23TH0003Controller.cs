@@ -5,20 +5,26 @@ using Microsoft.EntityFrameworkCore;
 using QLHocPhan_23TH0003.Data;
 using QLHocPhan_23TH0003.Enums;
 using QLHocPhan_23TH0003.Models;
+using QLHocPhan_23TH0003.Service;
 using QLHocPhan_23TH0003.ViewModel;
 
 namespace QLHocPhan_23TH0003.Areas.Admin.Controllers
 {
+    // Cập nhật quản lý tài khoản của người dùng khác
     public class User_23TH0003Controller : BaseAdminController
     {
         private readonly MainDbContext _context;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
-        public User_23TH0003Controller(MainDbContext context, UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
+        private readonly UserService _userService;
+        public User_23TH0003Controller(MainDbContext context, 
+            UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager,
+            UserService userService)
         {
             _context = context;
             _userManager = userManager;
             _roleManager = roleManager;
+            _userService = userService;
         }
         // GET: User_23TH0003Controller
         public ActionResult Index()
@@ -183,8 +189,10 @@ namespace QLHocPhan_23TH0003.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> UpdateUserRoles(string email, List<string> selectedRoles)
         {
+            var errorMessages = new List<string>();
             var user = await _userManager.FindByEmailAsync(email);
             if (user == null)
                 return NotFound("Người dùng không tồn tại.");
@@ -193,68 +201,121 @@ namespace QLHocPhan_23TH0003.Areas.Admin.Controllers
             var rolesToAdd = selectedRoles.Except(currentRoles).ToList();
             var rolesToRemove = currentRoles.Except(selectedRoles).ToList();
 
-            // Xử lý thêm vai trò
-            if (rolesToAdd.Any())
+            if (!rolesToAdd.Any() && !rolesToRemove.Any())
             {
-                var addResult = await _userManager.AddToRolesAsync(user, rolesToAdd);
-                if (!addResult.Succeeded)
-                    return BadRequest("Thêm vai trò thất bại.");
-
-                foreach (var role in rolesToAdd)
-                {
-                    switch (role)
-                    {
-                        case "GiangVien":
-                            _context.GiangVien.Add(new GiangVien
-                            {
-                                UserId = user.Id,
-                                NgayTao = DateTime.Now
-                            });
-                            break;
-
-                        case "SinhVien":
-                            _context.SinhVien.Add(new SinhVien
-                            {
-                                UserId = user.Id,
-                                NgayTao = DateTime.Now
-                            });
-                            break;
-                    }
-                }
+                TempData["SuccessMessage"] = "Không có thay đổi nào được thực hiện.";
+                return Redirect(Request.Headers["Referer"].ToString());
             }
 
-            // Xử lý xoá vai trò
-            // Kiểm tra nếu giảng viên đã phân công giảng hạy || sinh viên đã đăng ký học phần => không thể xóa vai trò
-            if (rolesToRemove.Any())
+            await using var transaction = await _context.Database.BeginTransactionAsync();
+            try
             {
-                var removeResult = await _userManager.RemoveFromRolesAsync(user, rolesToRemove);
-                if (!removeResult.Succeeded)
-                    return BadRequest("Xoá vai trò thất bại.");
-
+                // ====== Kiểm tra ràng buộc trước khi thực hiện thay đổi ======
                 foreach (var role in rolesToRemove)
                 {
                     switch (role)
                     {
                         case "GiangVien":
-                            var gv =  _context.GiangVien.Where(x => x.UserId == user.Id).ToList();
-                            if (gv.Any())
-                                _context.GiangVien.RemoveRange(gv);
+                            var messGv = await _userService.CanDeleteGiangVienAsync(user.Id);
+                            errorMessages.AddRange(messGv);
                             break;
 
                         case "SinhVien":
-                            var svList = _context.SinhVien.Where(x => x.UserId == user.Id).ToList();
-                            if (svList.Any())
-                                _context.SinhVien.RemoveRange(svList);
+                            var messSv = await _userService.CanDeleteSinhVienAsync(user.Id);
+                            errorMessages.AddRange(messSv);
                             break;
                     }
                 }
+
+                if (errorMessages.Any())
+                {
+                    TempData["ErrorMessage"] = string.Join("<br/>", errorMessages);
+                    return Redirect(Request.Headers["Referer"].ToString());
+                }
+
+                // ====== Thêm hồ sơ khi thêm vai trò ======
+                foreach (var role in rolesToAdd)
+                {
+                    switch (role)
+                    {
+                        case "GiangVien":
+                            var isGiangVienExists = await _context.GiangVien.AnyAsync(x => x.UserId == user.Id);
+                            if (!isGiangVienExists)
+                            {
+                                _context.GiangVien.Add(new GiangVien
+                                {
+                                    UserId = user.Id,
+                                    NgayTao = DateTime.Now
+                                });
+                            }
+                            break;
+
+                        case "SinhVien":
+                            var isSinhVienExists = await _context.SinhVien.AnyAsync(x => x.UserId == user.Id);
+                            if (!isSinhVienExists)
+                            {
+                                _context.SinhVien.Add(new SinhVien
+                                {
+                                    UserId = user.Id,
+                                    NgayTao = DateTime.Now
+                                });
+                            }
+                            break;
+                    }
+                }
+
+                // ====== Xoá hồ sơ khi xoá vai trò ======
+                foreach (var role in rolesToRemove)
+                {
+                    switch (role)
+                    {
+                        case "GiangVien":
+                            var giangVienToRemove = await _context.GiangVien
+                                .Where(x => x.UserId == user.Id)
+                                .ToListAsync();
+                            if (giangVienToRemove.Any())
+                                _context.GiangVien.RemoveRange(giangVienToRemove);
+                            break;
+
+                        case "SinhVien":
+                            var sinhVienToRemove = await _context.SinhVien
+                                .Where(x => x.UserId == user.Id)
+                                .ToListAsync();
+                            if (sinhVienToRemove.Any())
+                                _context.SinhVien.RemoveRange(sinhVienToRemove);
+                            break;
+                    }
+                }
+
+                // ====== Cập nhật vai trò ======
+                var addResult = await _userManager.AddToRolesAsync(user, rolesToAdd);
+                if (!addResult.Succeeded)
+                    throw new Exception("Thêm vai trò thất bại: " + string.Join(", ", addResult.Errors.Select(e => e.Description)));
+
+                var removeResult = await _userManager.RemoveFromRolesAsync(user, rolesToRemove);
+                if (!removeResult.Succeeded)
+                    throw new Exception("Xoá vai trò thất bại: " + string.Join(", ", removeResult.Errors.Select(e => e.Description)));
+
+                await _context.SaveChangesAsync();
+                await transaction.CommitAsync();
+
+                TempData["SuccessMessage"] = "Cập nhật vai trò người dùng thành công.";
+            }
+            catch (Exception ex)
+            {
+                await transaction.RollbackAsync();
+                errorMessages.Add("Lỗi khi lưu vào cơ sở dữ liệu:");
+                errorMessages.Add(ex.Message);
+                var innerEx = ex.InnerException;
+                while (innerEx != null)
+                {
+                    errorMessages.Add($"- {innerEx.Message}");
+                    innerEx = innerEx.InnerException;
+                }
+
+                TempData["ErrorMessage"] = string.Join("<br/>", errorMessages);
             }
 
-            // Chỉ lưu khi có thay đổi
-            if (rolesToAdd.Any() || rolesToRemove.Any())
-                await _context.SaveChangesAsync();
-
-            TempData["SuccessMessage"] = "Cập nhật vai trò người dùng thành công.";
             return Redirect(Request.Headers["Referer"].ToString());
         }
 
