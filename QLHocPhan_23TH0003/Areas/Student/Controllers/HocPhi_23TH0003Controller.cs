@@ -17,16 +17,24 @@ namespace QLHocPhan_23TH0003.Areas.Student.Controllers
         private readonly ApplicationDbContext _applicationDb;
         private readonly HocPhiService _service;
         private readonly VietQRPaymentService _vietQRPaymentService;
+        private readonly ZaloPayService _zaloPayService;
+        private readonly VNPayService _vNPayService;
         public HocPhi_23TH0003Controller(QuanLyHocPhanDbContext context, 
             ApplicationDbContext applicationDb, 
             HocPhiService service,
-            VietQRPaymentService vietQRPaymentService)
+            VietQRPaymentService vietQRPaymentService,
+            ZaloPayService zaloPayService,
+            VNPayService vNPayService
+            )
         {
             _context = context;
             _applicationDb = applicationDb;
             _service = service;
             _vietQRPaymentService = vietQRPaymentService;
+            _zaloPayService = zaloPayService;
+            _vNPayService = vNPayService;
         }
+        // Xem thông tin học phí
         public ActionResult Index()
         {
             try
@@ -63,9 +71,22 @@ namespace QLHocPhan_23TH0003.Areas.Student.Controllers
             }
         }
 
+        #region Thanh toán học phí
+        public ActionResult Step1(int IdHocKy)
+        {
+            string CurrentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var sinhVien = _context.SinhVien.FirstOrDefault(x => x.UserId == CurrentUserId);
+            if (sinhVien == null)
+            {
+                TempData["ErrorMessage"] = "Sinh viên chưa có hồ sơ";
+                return View();
+            }
+            HocPhiHocKyViewModel model = _service.GetHocPhi(sinhVien.Id, IdHocKy);
+            return View(model);
+        }
 
         // GET: HocPhi_23TH0003Controller/Details/5
-        public ActionResult ThanhToan(int Method, int IdHocKy)
+        public async Task<ActionResult> ThanhToanAsync(int Method, int IdHocKy)
         {
             string CurrentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var sinhVien = _context.SinhVien.FirstOrDefault(x => x.UserId == CurrentUserId);
@@ -88,6 +109,9 @@ namespace QLHocPhan_23TH0003.Areas.Student.Controllers
             _context.SaveChanges();
             // Lấy lại Số hóa đơn vừa tạo
             var hoadon = _context.ThanhToanHocPhi.Where(x => x.IdSinhVien == sinhVien.Id).OrderByDescending(x => x.NgayThanhToan).FirstOrDefault();
+
+
+            // Thanh toán với việt qr
             if (Method == (int)PhuongThucThanhToan.vietqr)
             {
                 Addinfo = "Đóng học phí: " + hoadon.Id;
@@ -96,28 +120,51 @@ namespace QLHocPhan_23TH0003.Areas.Student.Controllers
                     Addinfo
                 );
             }
+            if (Method == (int)PhuongThucThanhToan.zalopay)
+            {
+                var paymentUrl = await _zaloPayService.CreateOrderAsync(hoadon.SoTien, hoadon.Id.ToString());
+                return Redirect(paymentUrl);
+            }
+
+            // Thanh toán với zalo pay
+            if (Method == (int)PhuongThucThanhToan.vnpay)
+            {
+                string paymentUrl = _vNPayService.CreatePaymentUrl(HttpContext, hoadon.SoTien, hoadon.Id.ToString());
+
+
+                return Redirect(paymentUrl);
+            }
             return View(model);
         }
 
-        // GET: HocPhi_23TH0003Controller/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
+        #region Thanh toán zalo pay
+        [HttpPost("callback")]
+        public IActionResult Callback() => Ok();
 
-        // POST: HocPhi_23TH0003Controller/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        [HttpGet("return")]
+        public IActionResult Return() => View(); // trang thank you hoặc kết quả
+        #endregion
+
+        #region Thanh toán vnpay
+        public IActionResult PaymentReturn()
         {
-            try
+            var isValid = _vNPayService.ValidateResponse(Request.Query);
+
+            if (isValid)
             {
-                return RedirectToAction(nameof(Index));
+                // ✅ Thanh toán hợp lệ
+                ViewBag.Message = "Thanh toán thành công!";
             }
-            catch
+            else
             {
-                return View();
+                // ❌ Sai chữ ký hoặc dữ liệu giả mạo
+                ViewBag.Message = "Thanh toán thất bại! Sai chữ ký.";
             }
+
+            return View(); // Tạo View PaymentReturn.cshtml để hiển thị
         }
+        #endregion
+        #endregion
+
     }
 }

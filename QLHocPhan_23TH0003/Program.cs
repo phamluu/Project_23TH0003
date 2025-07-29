@@ -80,6 +80,8 @@ builder.Services.AddScoped<FileService>();
 builder.Services.AddScoped<CauHinhService>();
 builder.Services.AddScoped<BaoCaoService>();
 builder.Services.AddSingleton<VietQRPaymentService>();
+builder.Services.AddSingleton<VNPayService>();
+builder.Services.AddSingleton<ZaloPayService>();
 // Quản lý các service
 
 // Lưu key
