@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using QLHocPhan_23TH0003.Common.Helpers;
 using QLHocPhan_23TH0003.Data;
@@ -29,11 +30,11 @@ namespace QLHocPhan_23TH0003.Areas.Admin.Controllers
         }
 
         // GET: DangKyHocPhan_23TH0003Controller/Create
-        public ActionResult Create(int ? IdLopHocPhan)
+        public ActionResult Create(int ? IdLopHocPhan, int? IdLop = null)
         {
             DangKyHocPhanViewModel model = new DangKyHocPhanViewModel();
             var lhp = _context.LopHocPhan.Include(x => x.HocPhan).ThenInclude(x => x.HocKy).ToList();
-            var sinhVien = _context.SinhVien.Include(x => x.Lop).Where(x => x.IsDeleted != true).ToList();
+            var sinhVien = _context.SinhVien.Include(x => x.Lop).Where(x => x.IsDeleted != true && (!IdLop.HasValue || x.IdLop == IdLop)).ToList();
             var daDangKy = _context.DangKyHocPhan
                             .Where(p => p.IdLopHocPhan == IdLopHocPhan)
                             .Select(p => p.IdSinhVien)
@@ -46,6 +47,7 @@ namespace QLHocPhan_23TH0003.Areas.Admin.Controllers
             model.LopHocPhans = lhp.ToList();
             model.SinhViens = sinhVien;
             model.SinhVienDaDangKy = daDangKy;
+            ViewBag.IdLop = new SelectList(_context.Lop.ToList(), "Id", "TenLop", IdLop);
             return View(model);
         }
 

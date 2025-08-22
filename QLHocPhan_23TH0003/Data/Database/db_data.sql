@@ -1,29 +1,113 @@
-﻿
+﻿-- 1. Data người dùng Identity --
+
+-- 1.1. Tạo vai trò "Admin, GiangVien, SinhVien" --
+INSERT INTO AspNetRoles (Id, Name, NormalizedName, ConcurrencyStamp)
+    VALUES 
+        (NEWID(), 'Admin', 'ADMIN', NEWID()),
+        (NEWID(), 'GiangVien', 'GIANGVIEN', NEWID()),
+        (NEWID(), 'SinhVien', 'SINHVIEN', NEWID());
+
+-- 1.2. Tạo user (mật khẩu: 123456) --
+INSERT INTO AspNetUsers 
+    (Id, UserName, NormalizedUserName, Email, NormalizedEmail, EmailConfirmed, 
+     PasswordHash, SecurityStamp, ConcurrencyStamp, PhoneNumberConfirmed, TwoFactorEnabled, 
+     LockoutEnabled, AccessFailedCount) 
+    VALUES 
+    (NEWID(), 'lecongdinh@gmail.com', 'LECONGDINH@GMAIL.COM', 'lecongdinh@gmail.com', 'LECONGDINH@GMAIL.COM', 1, 
+     'AQAAAAIAAYagAAAAEMKPcwnhSW8SkLdoQB/PX33xHe9l6yTO77q0BAaSQr3wlZ1oxknfsRkOpozfou2NUQ==',
+     NEWID(), NEWID(), 0, 0, 1, 0),
+     (NEWID(), 'phamthithanhluu1990@gmail.com', 'PHAMTHITHANHLUU1990@GMAIL.COM', 'phamthithanhluu1990@gmail.com', 'PHAMTHITHANHLUU1990@GMAIL.COM', 1,
+     'AQAAAAIAAYagAAAAEMKPcwnhSW8SkLdoQB/PX33xHe9l6yTO77q0BAaSQr3wlZ1oxknfsRkOpozfou2NUQ==',
+     NEWID(), NEWID(), 0, 0, 1, 0),
+    (NEWID(), 'dangthanhhoa@gmail.com', 'DANGTHANHHOA@GMAIL.COM', 'dangthanhhoa@gmail.com', 'DANGTHANHHOA@GMAIL.COM', 1, 
+     'AQAAAAIAAYagAAAAEMKPcwnhSW8SkLdoQB/PX33xHe9l6yTO77q0BAaSQr3wlZ1oxknfsRkOpozfou2NUQ==',
+     NEWID(), NEWID(), 0, 0, 1, 0),
+     (NEWID(), 'ledoan@gmail.com', 'LEDOAN', 'ledoan@gmail.com', 'LEDOAN@GMAIL.COM', 1, 
+     'AQAAAAIAAYagAAAAEMKPcwnhSW8SkLdoQB/PX33xHe9l6yTO77q0BAaSQr3wlZ1oxknfsRkOpozfou2NUQ==',
+     NEWID(), NEWID(), 0, 0, 1, 0),
+     (NEWID(), 'nguyentanphuoc@gmail.com', 'NGUYENTANPHUOC@GMAIL.COM', 'nguyentanphuoc@gmail.com', 'NGUYENTANPHUOC@GMAIL.COM', 1,
+     'AQAAAAIAAYagAAAAEMKPcwnhSW8SkLdoQB/PX33xHe9l6yTO77q0BAaSQr3wlZ1oxknfsRkOpozfou2NUQ==',
+     NEWID(), NEWID(), 0, 0, 1, 0),
+     (NEWID(), 'lethanhan@gmail.com', 'LETHANHAN@GMAIL@.COM', 'lethanhan@gmail.com', 'LETHANHAN@GMAIL@.COM', 1,
+     'AQAAAAIAAYagAAAAEMKPcwnhSW8SkLdoQB/PX33xHe9l6yTO77q0BAaSQr3wlZ1oxknfsRkOpozfou2NUQ==',
+     NEWID(), NEWID(), 0, 0, 1, 0),
+     (NEWID(), 'letruongdat@gmail.com', 'LETRUONGDAT@.COM', 'letruongdat@gmail.com', 'LETRUONGDAT@.COM', 1,
+     'AQAAAAIAAYagAAAAEMKPcwnhSW8SkLdoQB/PX33xHe9l6yTO77q0BAaSQr3wlZ1oxknfsRkOpozfou2NUQ==',
+     NEWID(), NEWID(), 0, 0, 1, 0),
+     (NEWID(), 'phuchitai', 'PHUCHITAI@.COM', 'phuchitai@gmail.com', 'PHUCHITAI@.COM', 1,
+     'AQAAAAIAAYagAAAAEMKPcwnhSW8SkLdoQB/PX33xHe9l6yTO77q0BAaSQr3wlZ1oxknfsRkOpozfou2NUQ==',
+     NEWID(), NEWID(), 0, 0, 1, 0),
+     (NEWID(), 'nguyendinhhung@gmail.com', 'NGUYENDINHHUNG@.COM', 'nguyendinhhung@gmail.com', 'NGUYENDINHHUNG@.COM', 1,
+     'AQAAAAIAAYagAAAAEMKPcwnhSW8SkLdoQB/PX33xHe9l6yTO77q0BAaSQr3wlZ1oxknfsRkOpozfou2NUQ==',
+     NEWID(), NEWID(), 0, 0, 1, 0);
+
+-- 1.3. Gán user vào role 
+INSERT INTO AspNetUserRoles (UserId, RoleId)
+    SELECT u.Id, r.Id
+    FROM AspNetUsers u, AspNetRoles r
+    WHERE u.UserName = 'lecongdinh@gmail.com' AND r.Name = 'Admin';
+INSERT INTO AspNetUserRoles (UserId, RoleId)
+    SELECT u.Id, r.Id
+    FROM AspNetUsers u, AspNetRoles r
+    WHERE u.UserName = 'phamthithanhluu1990@gmail.com' AND r.Name = 'Admin';
+INSERT INTO AspNetUserRoles (UserId, RoleId)
+    SELECT u.Id, r.Id
+    FROM AspNetUsers u, AspNetRoles r
+    WHERE u.UserName = 'dangthanhhoa@gmail.com' AND r.Name = 'GiangVien';
+INSERT INTO AspNetUserRoles (UserId, RoleId)
+    SELECT u.Id, r.Id
+    FROM AspNetUsers u, AspNetRoles r
+    WHERE u.UserName = 'ledoan@gmail.com' AND r.Name = 'GiangVien';
+INSERT INTO AspNetUserRoles (UserId, RoleId)
+    SELECT u.Id, r.Id
+    FROM AspNetUsers u, AspNetRoles r
+    WHERE u.UserName = 'nguyentanphuoc@gmail.com' AND r.Name = 'GiangVien';
+INSERT INTO AspNetUserRoles (UserId, RoleId)
+    SELECT u.Id, r.Id
+    FROM AspNetUsers u, AspNetRoles r
+    WHERE u.UserName = 'lethanhan@gmail.com' AND r.Name = 'SinhVien';
+INSERT INTO AspNetUserRoles (UserId, RoleId)
+    SELECT u.Id, r.Id
+    FROM AspNetUsers u, AspNetRoles r
+    WHERE u.UserName = 'letruongdat@gmail.com' AND r.Name = 'SinhVien';
+    INSERT INTO AspNetUserRoles (UserId, RoleId)
+    SELECT u.Id, r.Id
+    FROM AspNetUsers u, AspNetRoles r
+    WHERE u.UserName = 'phuchitai@gmail.com' AND r.Name = 'SinhVien';
+INSERT INTO AspNetUserRoles (UserId, RoleId)
+    SELECT u.Id, r.Id
+    FROM AspNetUsers u, AspNetRoles r
+    WHERE u.UserName = 'nguyendinhhung@gmail.com' AND r.Name = 'SinhVien';
+-- End 2. Data người dùng Identity --
+
+
+
+
 -- Nếu tạo data lần đầu thì bỏ đoạn này
-DELETE FROM [dbo].[Diem];
-DBCC CHECKIDENT ('dbo.Diem', RESEED, 0);
-DELETE FROM [dbo].DangKyHocPhan;
-DBCC CHECKIDENT ('dbo.DangKyHocPhan', RESEED, 0);
+--DELETE FROM [dbo].[Diem];
+--DBCC CHECKIDENT ('dbo.Diem', RESEED, 0);
+--DELETE FROM [dbo].DangKyHocPhan;
+--DBCC CHECKIDENT ('dbo.DangKyHocPhan', RESEED, 0);
 
-DELETE FROM [dbo].[GiangVien];
-DBCC CHECKIDENT ('dbo.GiangVien', RESEED, 0);
+--DELETE FROM [dbo].[GiangVien];
+--DBCC CHECKIDENT ('dbo.GiangVien', RESEED, 0);
 
-DELETE FROM [dbo].[SinhVien];
-DBCC CHECKIDENT ('dbo.SinhVien', RESEED, 0);
-DBCC CHECKIDENT ('dbo.SinhVien', RESEED, 0);
+--DELETE FROM [dbo].[SinhVien];
+--DBCC CHECKIDENT ('dbo.SinhVien', RESEED, 0);
+--DBCC CHECKIDENT ('dbo.SinhVien', RESEED, 0);
 
-DELETE FROM [dbo].[LopHocPhan];
-DBCC CHECKIDENT ('dbo.LopHocPhan', RESEED, 0);
-DELETE FROM [dbo].[HocPhan];
-DBCC CHECKIDENT ('dbo.HocPhan', RESEED, 0);
-DELETE FROM [dbo].[MonHoc];
-DBCC CHECKIDENT ('dbo.MonHoc', RESEED, 0);
-DELETE FROM [dbo].[Lop];
-DBCC CHECKIDENT ('dbo.Lop', RESEED, 0);
-DELETE FROM [dbo].[Khoa];
-DBCC CHECKIDENT ('dbo.Khoa', RESEED, 0);
-DELETE FROM [dbo].[HocKy];
-DBCC CHECKIDENT ('dbo.HocKy', RESEED, 0);
+--DELETE FROM [dbo].[LopHocPhan];
+--DBCC CHECKIDENT ('dbo.LopHocPhan', RESEED, 0);
+--DELETE FROM [dbo].[HocPhan];
+--DBCC CHECKIDENT ('dbo.HocPhan', RESEED, 0);
+--DELETE FROM [dbo].[MonHoc];
+--DBCC CHECKIDENT ('dbo.MonHoc', RESEED, 0);
+--DELETE FROM [dbo].[Lop];
+--DBCC CHECKIDENT ('dbo.Lop', RESEED, 0);
+--DELETE FROM [dbo].[Khoa];
+--DBCC CHECKIDENT ('dbo.Khoa', RESEED, 0);
+--DELETE FROM [dbo].[HocKy];
+--DBCC CHECKIDENT ('dbo.HocKy', RESEED, 0);
 -- Nếu tạo data lần đầu thì bỏ đoạn này
 
 -- Tạo dữ liệu cho bảng Học kỳ
@@ -151,36 +235,72 @@ VALUES
 GO
 
 -- Tạo dữ liệu cho bảng GiangVien
-INSERT INTO [dbo].[GiangVien] ([MaGiangVien], [HoTen],[NgaySinh],[GioiTinh],[HinhDaiDien],
-    [DiaChi],[UserId],[IdKhoa],[IsActive], [IsDeleted],[NgayTao],[NgayCapNhat]
+INSERT INTO [dbo].[GiangVien] ([MaGiangVien], [HoTen], [UserId], [NgaySinh],[GioiTinh],[HinhDaiDien],
+    [DiaChi],[IdKhoa],[IsActive], [IsDeleted],[NgayTao],[NgayCapNhat]
 )
-VALUES
-('GV001', N'Nguyễn Văn A', '1980-03-15', 0, '', N'Hà Nội', '', 1,1, 0, GETDATE(), NULL),
-('GV002', N'Trần Thị B', '1985-06-22', 1, '', N'Hồ Chí Minh', '', 1,1, 0, GETDATE(), NULL),
-('GV003', N'Lê Văn C', '1978-11-09', 0, '', N'Đà Nẵng', '', 2,1, 0, GETDATE(), NULL),
-('GV004', N'Phạm Thị D', '1983-01-12', 1, '', N'Hải Phòng', '', 2,1, 0, GETDATE(), NULL),
-('GV005', N'Hoàng Văn E', '1990-09-05', 0, '', N'Cần Thơ', '', 3,1, 0, GETDATE(), NULL),
-('GV006', N'Vũ Thị F', '1987-07-19', 1, '', N'Bình Dương', '', 3,1, 0, GETDATE(), NULL),
-('GV007', N'Đỗ Văn G', '1975-12-01', 0, '', N'Nghệ An', '', 1, 0,1, GETDATE(), NULL),
-('GV008', N'Ngô Thị H', '1992-02-28', 1, '', N'Thái Bình', '', 2,1, 0, GETDATE(), NULL),
-('GV009', N'Tạ Văn I', '1981-04-18', 0, '', N'Nam Định', '', 3,1, 0, GETDATE(), NULL),
-('GV010', N'Bùi Thị K', '1986-10-10', 1, '', N'Hòa Bình', '', 1,1, 0, GETDATE(), NULL);
+select
+'GV001', N'Đặng Thành Hòa', Id, '1980-03-15', 0, '', N'Hà Nội', 1,1, 0, GETDATE(), NULL FROM AspNetUsers WHERE UserName = 'dangthanhhoa@gmail.com'
+UNION ALL
+select
+'GV002', N'Lê Đoan', Id, '1985-06-22', 1, '', N'Hồ Chí Minh', 1,1, 0, GETDATE(), NULL from AspNetUsers WHERE UserName = 'ledoan@gmail.com'
+UNION ALL
+select
+'GV003', N'Lê Văn C','', '1978-11-09', 0, '', N'Đà Nẵng',  2,1, 0, GETDATE(), NULL
+UNION ALL
+select
+'GV004', N'Phạm Thị D','', '1983-01-12', 1, '', N'Hải Phòng', 2,1, 0, GETDATE(), NULL
+UNION ALL
+select
+'GV005', N'Hoàng Văn E', '','1990-09-05', 0, '', N'Cần Thơ',  3,1, 0, GETDATE(), NULL
+UNION ALL
+select
+'GV006', N'Vũ Thị F','', '1987-07-19', 1, '', N'Bình Dương',  3,1, 0, GETDATE(), NULL
+UNION ALL
+select
+'GV007', N'Đỗ Văn G', '','1975-12-01', 0, '', N'Nghệ An',  1, 0,1, GETDATE(), NULL
+UNION ALL
+select
+'GV008', N'Ngô Thị H','', '1992-02-28', 1, '', N'Thái Bình',  2,1, 0, GETDATE(), NULL
+UNION ALL
+select
+'GV009', N'Tạ Văn I', '','1981-04-18', 0, '', N'Nam Định',  3,1, 0, GETDATE(), NULL
+UNION ALL
+select
+'GV010', N'Bùi Thị K', '','1986-10-10', 1, '', N'Hòa Bình',  1,1, 0, GETDATE(), NULL
 GO
 
 -- Tạo dữ liệu cho bang SinhVien
-INSERT INTO [dbo].[SinhVien] ([MaSinhVien],[HoTen],[NgaySinh],[GioiTinh],[HinhDaiDien],
-    [DiaChi],[UserId],[IdLop],[IsDeleted],[NgayTao],[NgayCapNhat])
-VALUES
-('SV001', N'Nguyễn Văn An', '2002-01-15', 1, '', N'Hà Nội', '', 1, 0, GETDATE(), NULL),
-('SV002', N'Trần Thị Bình', '2002-03-20', 0, '', N'Hồ Chí Minh', '', 1, 0, GETDATE(), NULL),
-('SV003', N'Lê Văn Cường', '2001-09-10', 1, '', N'Đà Nẵng', '', 2, 0, GETDATE(), NULL),
-('SV004', N'Phạm Thị Duyên', '2002-05-25', 0, '', N'Hải Phòng', '', 2, 0, GETDATE(),NULL),
-('SV005', N'Hoàng Văn Em', '2001-12-05', 1, '', N'Cần Thơ', '', 3, 0, GETDATE(), NULL),
-('SV006', N'Vũ Thị Phương', '2002-07-11', 0, '', N'Ninh Bình', '', 3, 0, GETDATE(), NULL),
-('SV007', N'Đỗ Văn Giang', '2002-04-17', 1, '', N'Nghệ An', '', 1, 0, GETDATE(), NULL),
-('SV008', N'Ngô Thị Hạnh', '2001-08-09', 0, '', N'Thái Bình', '', 1, 0, GETDATE(), NULL),
-('SV009', N'Tạ Văn Khang', '2002-02-27', 1, '', N'Nam Định', '', 2, 0, GETDATE(), NULL),
-('SV010', N'Bùi Thị Lan', '2001-11-03', 0, '', N'Hòa Bình', '', 3, 0, GETDATE(), NULL);
+INSERT INTO [dbo].[SinhVien] ([MaSinhVien],[HoTen],[UserId],[NgaySinh],[GioiTinh],[HinhDaiDien],
+    [DiaChi],[IdLop],[IsDeleted],[NgayTao],[NgayCapNhat])
+select
+'SV001', N'Lê Thanh An',Id, '2002-01-15', 1, '', N'Hà Nội',  1, 0, GETDATE(), NULL from AspNetUsers where UserName = 'lethanhan@gmail.com'
+UNION ALL
+select
+'SV002', N'Phù Chí Tài', '','2002-03-20', 0, '', N'Hồ Chí Minh',  1, 0, GETDATE(), NULL from AspNetUsers where UserName = 'phuchitai@gmail.com'
+UNION ALL
+select
+'SV003', N'Lê Trường Đạt','', '2001-09-10', 1, '', N'Đà Nẵng', 2, 0, GETDATE(), NULL from AspNetUsers where UserName = 'letruongdat@gmail.com'
+UNION ALL
+select
+'SV004', N'Nguyễn Đình Hưng','', '2002-05-25', 0, '', N'Hải Phòng',  2, 0, GETDATE(),NULL from AspNetUsers where UserName = 'nguyendinhhung@gmail.com'
+UNION ALL
+select
+'SV005', N'Nguyễn Xuân Long','', '2001-12-05', 1, '', N'Cần Thơ',  3, 0, GETDATE(), NULL from AspNetUsers where UserName = 'nguyenxuanlong@gmail.com'
+UNION ALL
+select
+'SV006', N'Nguyễn Xuân Khánh','', '2002-07-11', 0, '', N'Ninh Bình',  3, 0, GETDATE(), NULL from AspNetUsers where UserName = 'nguyenxuankhanh@gmail.com'
+UNION ALL
+select
+'SV007', N'Đỗ Mạnh Đức','', '2002-04-17', 1, '', N'Nghệ An', 1, 0, GETDATE(), NULL from AspNetUsers where UserName = 'doanmanhduc@gmail.com'
+UNION ALL
+select
+'SV008', N'Ngô Thị Hạnh', '','2001-08-09', 0, '', N'Thái Bình',  1, 0, GETDATE(), NULL
+UNION ALL
+select
+'SV009', N'Tạ Văn Khang', '','2002-02-27', 1, '', N'Nam Định',  2, 0, GETDATE(), NULL
+UNION ALL
+select
+'SV010', N'Bùi Thị Lan', '','2001-11-03', 0, '', N'Hòa Bình',  3, 0, GETDATE(), NULL 
 GO
 
 -- Tạo dữ liệu cho bảng PhanCongGiangDay

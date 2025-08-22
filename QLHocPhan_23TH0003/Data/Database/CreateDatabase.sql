@@ -1,4 +1,11 @@
-﻿IF OBJECT_ID(N'[__EFMigrationsHistory]') IS NULL
+﻿--USE master;
+--ALTER DATABASE XemDiem_23TH0003 SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
+--DROP DATABASE XemDiem_23TH0003;
+--create database XemDiem_23TH0003
+
+use XemDiem_23TH0003
+
+IF OBJECT_ID(N'[__EFMigrationsHistory]') IS NULL
 BEGIN
     CREATE TABLE [dbo].[__EFMigrationsHistory] (
         [MigrationId] nvarchar(150) NOT NULL,
@@ -9,6 +16,8 @@ END;
 GO
 
 BEGIN TRANSACTION;
+
+-- Module Auth Identity --
 CREATE TABLE [dbo].[AspNetRoles] (
     [Id] nvarchar(450) NOT NULL,
     [Name] nvarchar(256) NULL,
@@ -34,26 +43,6 @@ CREATE TABLE [dbo].[AspNetUsers] (
     [LockoutEnabled] bit NOT NULL,
     [AccessFailedCount] int NOT NULL,
     CONSTRAINT [PK_AspNetUsers] PRIMARY KEY ([Id])
-);
-
-CREATE TABLE [dbo].[CauHinhHeThong] (
-    [Id] int NOT NULL IDENTITY,
-    [MaCauHinh] nvarchar(max) NOT NULL,
-    [TenCauHinh] nvarchar(max) NULL,
-    [MoTa] nvarchar(max) NULL,
-    [GiaTri] nvarchar(max) NULL,
-    CONSTRAINT [PK_CauHinhHeThong] PRIMARY KEY ([Id])
-);
-
-CREATE TABLE [dbo].[HocKy] (
-    [Id] int NOT NULL IDENTITY,
-    [MaHocKy] nvarchar(max) NULL,
-    [TenHocKy] nvarchar(max) NULL,
-    [NamHoc] nvarchar(max) NULL,
-    [ThuTu] int NOT NULL,
-    [NgayTao] datetime2 NOT NULL,
-    [NgayCapNhat] datetime2 NULL,
-    CONSTRAINT [PK_HocKy] PRIMARY KEY ([Id])
 );
 
 CREATE TABLE [dbo].[AspNetRoleClaims] (
@@ -98,6 +87,31 @@ CREATE TABLE [dbo].[AspNetUserTokens] (
     [Value] nvarchar(max) NULL,
     CONSTRAINT [PK_AspNetUserTokens] PRIMARY KEY ([UserId], [LoginProvider], [Name]),
     CONSTRAINT [FK_AspNetUserTokens_AspNetUsers_UserId] FOREIGN KEY ([UserId]) REFERENCES [AspNetUsers] ([Id]) ON DELETE CASCADE
+);
+
+-- End Module Auth Identity --
+
+-- Module dùng chung
+CREATE TABLE [dbo].[CauHinhHeThong] (
+    [Id] int NOT NULL IDENTITY,
+    [MaCauHinh] nvarchar(max) NOT NULL,
+    [TenCauHinh] nvarchar(max) NULL,
+    [MoTa] nvarchar(max) NULL,
+    [GiaTri] nvarchar(max) NULL,
+    CONSTRAINT [PK_CauHinhHeThong] PRIMARY KEY ([Id])
+);
+-- End Module dùng chung --
+
+-- Module Quản lý học phần --
+CREATE TABLE [dbo].[HocKy] (
+    [Id] int NOT NULL IDENTITY,
+    [MaHocKy] nvarchar(max) NULL,
+    [TenHocKy] nvarchar(max) NULL,
+    [NamHoc] nvarchar(max) NULL,
+    [ThuTu] int NOT NULL,
+    [NgayTao] datetime2 NOT NULL,
+    [NgayCapNhat] datetime2 NULL,
+    CONSTRAINT [PK_HocKy] PRIMARY KEY ([Id])
 );
 
 CREATE TABLE [dbo].[BaiHoc] (
@@ -265,6 +279,9 @@ CREATE TABLE [dbo].[PhanCongGiangDay] (
     CONSTRAINT [FK_PhanCongGiangDay_LopHocPhan_IdLopHocPhan] FOREIGN KEY ([IdLopHocPhan]) REFERENCES [LopHocPhan] ([Id]) ON DELETE NO ACTION
 );
 
+-- End Module Quản lý học phần --
+
+-- Tạo liên kết --
 CREATE INDEX [IX_AspNetRoleClaims_RoleId] ON [AspNetRoleClaims] ([RoleId]);
 
 CREATE UNIQUE INDEX [RoleNameIndex] ON [AspNetRoles] ([NormalizedName]) WHERE [NormalizedName] IS NOT NULL;
@@ -293,7 +310,7 @@ CREATE INDEX [IX_HocPhan_IdHocKy] ON [HocPhan] ([IdHocKy]);
 
 CREATE INDEX [IX_HocPhan_IdMonHoc] ON [HocPhan] ([IdMonHoc]);
 
-CREATE UNIQUE INDEX [IX_Khoa_IdTruongKhoa] ON [Khoa] ([IdTruongKhoa]) WHERE [IdTruongKhoa] IS NOT NULL;
+--CREATE UNIQUE INDEX [IX_Khoa_IdTruongKhoa] ON [Khoa] ([IdTruongKhoa]) WHERE [IdTruongKhoa] IS NOT NULL;
 
 CREATE INDEX [IX_Lop_IdKhoa] ON [Lop] ([IdKhoa]);
 
@@ -307,7 +324,7 @@ CREATE INDEX [IX_PhanCongGiangDay_IdLopHocPhan] ON [PhanCongGiangDay] ([IdLopHoc
 
 CREATE INDEX [IX_SinhVien_IdLop] ON [SinhVien] ([IdLop]);
 
-CREATE INDEX [IX_ThanhToanHocPhi_HocKyId] ON [ThanhToanHocPhi] ([HocKyId]);
+CREATE INDEX [IX_ThanhToanHocPhi_IdHocKy] ON [ThanhToanHocPhi] ([IdHocKy]);
 
 CREATE INDEX [IX_ThanhToanHocPhi_IdSinhVien] ON [ThanhToanHocPhi] ([IdSinhVien]);
 

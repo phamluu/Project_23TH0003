@@ -28,11 +28,11 @@ namespace QLHocPhan_23TH0003.Service
             string? userMail = CauHinhHelper.Get("smtp_user");
             string? userPass = CauHinhHelper.Get("smtp_pass");
 
+            // Kiểm tra nếu không có trong cấu hình thì lấy trong configuration
             if (string.IsNullOrWhiteSpace(userMail) || string.IsNullOrWhiteSpace(userPass))
             {
-                // Không throw nữa
-                Console.WriteLine("Lỗi: smtp_user hoặc smtp_pass chưa được cấu hình.");
-                return;
+                userMail = _config["Email:User"];
+                userPass = _config["Email:Password"];
             }
 
             try

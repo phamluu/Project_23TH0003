@@ -30,14 +30,19 @@
     <div class="col col-md-8">
         <div class="phancong">
             <h5 class="title mt-3 mb-2">Đăng ký học phần cho sinh viên</h5>
+            <form method="get" action="@Url.Action("Create")">
+                @Html.HiddenFor(Model => Model.IdLopHocPhan)
+                @Html.DropDownList("IdLop", ViewBag.IdLop as SelectList, "Chọn lớp", new { @class = "form-control d-inline-block w-auto" })
+                <button type="submit" class="btn btn-secondary">Tìm</button>
+            </form>
+
+
             <form action="@Url.Action("Create", new { IdLopHocPhan = Model.IdLopHocPhan })" method="post">
                 @Html.AntiForgeryToken()
-                <div>
-                    <button type="submit" class="btn btn-primary">
-                        Lưu
-                    </button>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary end-0 right-0">Lưu đăng ký</button>
                 </div>
-                <table class="table">
+                <table class="table" id="tableSinhVien">
                     <thead>
                         <tr>
                             <th></th>
@@ -55,7 +60,7 @@
                         {
                             var isChecked = Model.SinhVienDaDangKy != null && Model.SinhVienDaDangKy.Contains(item.Id);
                             <tr>
-                                <th><input type="checkbox" value="@item.Id" name="IdSinhVien" value="@item.Id" @(isChecked ? "checked disabled" : "") /></th>
+                                <th><input type="checkbox" name="IdSinhVien" value="@item.Id" @(isChecked ? "checked disabled" : "") /></th>
                                 <td>@(stt++)</td>
                                 <td>@item.MaSinhVien</td>
                                 <td>@item.HoTen</td>
@@ -65,7 +70,18 @@
                     </tbody>
                 </table>
             </form>
-
         </div>
     </div>
 </div>
+
+<script>
+    // lọc sinh viên trong bảng theo input
+    document.getElementById("searchBox").addEventListener("keyup", function () {
+        var value = this.value.toLowerCase();
+        var rows = document.querySelectorAll("#tableSinhVien tbody tr");
+        rows.forEach(function (row) {
+            var text = row.innerText.toLowerCase();
+            row.style.display = text.includes(value) ? "" : "none";
+        });
+    });
+</script>
