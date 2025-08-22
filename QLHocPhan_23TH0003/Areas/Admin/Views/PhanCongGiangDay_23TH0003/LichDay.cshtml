@@ -1,0 +1,105 @@
+﻿@model IEnumerable<QLHocPhan_23TH0003.Models.PhanCongGiangDay>
+@{
+    ViewBag.Title = "Lịch giảng dạy";
+}
+
+<div class="container mt-3">
+    <h2 class="mb-4 text-primary fw-bold">📅 Lịch giảng dạy</h2>
+
+    <!-- Form tìm kiếm -->
+    <form method="get" action="@Url.Action("LichDay")" class="g-3 align-items-end mb-4 p-3 bg-light rounded shadow-sm">
+        <div class="row">
+            <div class="col-md-4">
+                <label class="form-label fw-semibold">Giảng viên</label>
+                @Html.DropDownList(
+                "IdGiangVien",
+                                ViewBag.IdGiangVien as SelectList,
+                                "— Chọn giảng viên —",
+                                new { @class = "form-select form-control" }
+                                )
+            </div>
+
+            <div class="col-md-3">
+                <label class="form-label fw-semibold">Năm học</label>
+                @Html.DropDownList(
+                                "NamHoc",
+                                ViewBag.NamHoc as SelectList,
+                                "— Chọn năm học —",
+                                new { @class = "form-select form-control", @id = "ddlNamHoc" }
+                                )
+            </div>
+
+            <div class="col-md-3">
+                <label class="form-label fw-semibold">Học kỳ</label>
+                @Html.DropDownList(
+                                "IdHocKy",
+                                ViewBag.IdHocKy as SelectList,
+                                "— Chọn học kỳ —",
+                                new { @class = "form-select form-control", @id = "ddlHocKy" }
+                                )
+            </div>
+
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-primary w-100">
+                    <i class="bi bi-search"></i> Tìm
+                </button>
+            </div>
+        </div>
+    </form>
+
+
+    <!-- Bảng dữ liệu -->
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <table class="table table-bordered table-hover align-middle">
+                <thead class="table-primary text-center">
+                    <tr>
+                        <th>Lớp học phần</th>
+                        <th>Giảng viên</th>
+                        <th>Ngày phân công</th>
+                        <th>Năm học</th>
+                        <th>Học kỳ</th>
+                        <th>Vai trò</th>
+                        <th>Ghi chú</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Any())
+                    {
+                        foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@item?.LopHocPhan?.TenLopHocPhan</td>
+                                <td>@item?.GiangVien?.HoTen</td>
+                                <td>@item?.NgayPhanCong.ToString("dd/MM/yyyy")</td>
+                                <td>@item?.LopHocPhan?.HocPhan?.HocKy?.NamHoc</td>
+                                <td>@item?.LopHocPhan?.HocPhan?.HocKy?.TenHocKy</td>
+                                <td>@Html.DisplayFor(modelItem => item.VaiTro)</td>
+                                <td>@Html.DisplayFor(modelItem => item.GhiChu)</td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="7" class="text-center text-muted">Không có dữ liệu</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<script>
+    $("#ddlNamHoc").change(function () {
+        var namHoc = $(this).val();
+        $.getJSON('@Url.Action("GetHocKyByNamHoc")', { namHoc: namHoc }, function (data) {
+            var ddl = $("#ddlHocKy");
+            ddl.empty();
+            ddl.append($('<option>').text('— Chọn học kỳ —').attr('value', ''));
+            $.each(data, function (i, hocKy) {
+                ddl.append($('<option>').text(hocKy.tenHocKy).attr('value', hocKy.id));
+            });
+        });
+    });
+</script>

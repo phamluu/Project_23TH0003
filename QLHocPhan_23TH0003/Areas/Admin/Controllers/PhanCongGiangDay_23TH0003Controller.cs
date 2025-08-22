@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components.RenderTree;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using QLHocPhan_23TH0003.Common.Helpers;
@@ -79,6 +80,64 @@ namespace QLHocPhan_23TH0003.Areas.Admin.Controllers
             return RedirectToAction("Index", new { IdLopHocPhan });
         }
 
+        public IActionResult LichDay(int? IdGiangVien, string? NamHoc, int? IdHocKy)
+        {
+            // Dropdown giảng viên
+            ViewBag.IdGiangVien = new SelectList(_context.GiangVien, "Id", "HoTen", IdGiangVien);
+
+            // Dropdown năm học (distinct)
+            ViewBag.NamHoc = new SelectList(
+                _context.HocKy
+                    .Select(h => h.NamHoc)
+                    .Distinct()
+                    .OrderByDescending(n => n),
+                NamHoc
+            );
+
+            // Dropdown học kỳ (lọc theo năm học nếu có chọn)
+            var hocKyQuery = _context.HocKy.AsQueryable();
+            if (!string.IsNullOrEmpty(NamHoc))
+            {
+                hocKyQuery = hocKyQuery.Where(h => h.NamHoc == NamHoc);
+            }
+
+            ViewBag.IdHocKy = new SelectList(
+                hocKyQuery.OrderBy(h => h.ThuTu)
+                          .Select(h => new { h.Id, Ten = h.TenHocKy + " - " + h.NamHoc }),
+                "Id",
+                "Ten",
+                IdHocKy
+            );
+
+            // Trả về dữ liệu bảng
+            var query = _context.PhanCongGiangDay
+                .Include(p => p.LopHocPhan)
+                    .ThenInclude(l => l.HocPhan)
+                        .ThenInclude(h => h.HocKy)
+                .Include(p => p.GiangVien)
+                .AsQueryable();
+
+            if (IdGiangVien.HasValue)
+                query = query.Where(p => p.IdGiangVien == IdGiangVien.Value);
+
+            if (IdHocKy.HasValue)
+                query = query.Where(p => p.LopHocPhan.HocPhan.HocKy.Id == IdHocKy.Value);
+
+            return View(query.ToList());
+        }
+
+
+        [HttpGet]
+        public JsonResult GetHocKyByNamHoc(string namHoc)
+        {
+            var dsHocKy = _context.HocKy
+                .Where(h => h.NamHoc == namHoc)
+                .OrderBy(h => h.ThuTu)
+                .Select(h => new { h.Id, h.TenHocKy })
+                .ToList();
+
+            return Json(dsHocKy);
+        }
 
     }
 }
