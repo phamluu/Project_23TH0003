@@ -7,8 +7,8 @@ namespace QLHocPhan_23TH0003.Areas.Admin.Controllers
 {
     public class HocPhi_23TH0003Controller : BaseAdminController
     {
-        private readonly QuanLyHocPhanDbContext _context;
-        public HocPhi_23TH0003Controller(QuanLyHocPhanDbContext contetxt)
+        private readonly MainDbContext _context;
+        public HocPhi_23TH0003Controller(MainDbContext contetxt)
         {
             _context = contetxt;
         }

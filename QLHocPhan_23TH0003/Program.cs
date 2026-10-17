@@ -32,21 +32,25 @@ builder.Host.UseSerilog();
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 builder.Services.AddDbContext<MainDbContext>(options =>
-    options.UseSqlServer(connectionString));
+    options.UseMySql(
+        connectionString, new MySqlServerVersion(new Version(11,8,0))));
+
+//builder.Services.AddDbContext<MainDbContext>(options =>
+//    options.UseSqlServer(connectionString));
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-// add dbcontext để tạo các migration
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-//end
-// add dbcontext để tạo các migration
-builder.Services.AddDbContext<QuanLyHocPhanDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+//// add dbcontext để tạo các migration
+//builder.Services.AddDbContext<ApplicationDbContext>(options =>
+//    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+////end
+//// add dbcontext để tạo các migration
+//builder.Services.AddDbContext<QuanLyHocPhanDbContext>(options =>
+//    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddDbContext<CaiDatHeThongDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-//end
+//builder.Services.AddDbContext<CaiDatHeThongDbContext>(options =>
+//    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+////end
 
 builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
 {

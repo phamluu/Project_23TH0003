@@ -17,9 +17,12 @@
         <label>Lớp</label>
         <select name="LopId" class="form-control">
             <option value="">-- Tất cả --</option>
-            @foreach (var lop in ViewBag.DSLop)
+            @if (ViewBag.DSLop != null)
             {
-                <option value="@lop.Id">@lop.TenLop</option>
+                foreach (var lop in ViewBag.DSLop)
+                {
+                    <option value="@lop.Id">@lop.TenLop</option>
+                }
             }
         </select>
     </div>

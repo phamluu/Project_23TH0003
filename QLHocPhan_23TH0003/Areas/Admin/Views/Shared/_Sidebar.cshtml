@@ -1,5 +1,5 @@
 ﻿@using QLHocPhan_23TH0003.Common.Helpers
-<div class="sidebar" data-color="orange">
+<div class="sidebar"  >
     <div class="logo">
         <a href="/Admin" class="simple-text logo-mini">
             QL
@@ -72,13 +72,13 @@
                                 <p>Lớp Học phần</p>
                             </a>
                         </li>
-                        <li class="@Html.IsActive("PhanCongGiangDay_23TH0003")">
+                        <li class="@Html.IsActive("PhanCongGiangDay_23TH0003","Index")">
                             <a href="@Url.Action("Index", "PhanCongGiangDay_23TH0003")">
                                 <i class="now-ui-icons users_single-02"></i>
                                 <p>Phân công giảng dạy</p>
                             </a>
                         </li>
-                        <li class="@Html.IsActive("PhanCongGiangDay_23TH0003")">
+                        <li class="@Html.IsActive("PhanCongGiangDay_23TH0003","LichDay")">
                             <a href="@Url.Action("LichDay", "PhanCongGiangDay_23TH0003")">
                                 <i class="now-ui-icons ui-1_calendar-60"></i>
                                 <p>Lịch dạy giảng viên</p>

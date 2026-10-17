@@ -79,6 +79,7 @@ namespace QLHocPhan_23TH0003.Service
             return true;
         }
 
+        // Lưu ý khi update lớp chỉ cho phép admin update
         public async Task<bool> UpdateSinhVien(SinhVien model)
         {
             var sinhVien = _context.SinhVien.Find(model.Id);
@@ -92,6 +93,7 @@ namespace QLHocPhan_23TH0003.Service
             sinhVien.NgaySinh = model.NgaySinh;
             sinhVien.DiaChi = model.DiaChi;
             sinhVien.HinhDaiDien = model.HinhDaiDien;
+            sinhVien.IdLop = model.IdLop;
             _context.SinhVien.Update(sinhVien);
             await _context.SaveChangesAsync();
             return true;

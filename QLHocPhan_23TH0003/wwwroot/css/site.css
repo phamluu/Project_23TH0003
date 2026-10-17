@@ -1,6 +1,13 @@
-html {
-    font-size: 14px;
+.sidebar {
+    background-color: #204065;
 }
+.sidebar:after, .off-canvas-sidebar:after{background:none;}
+.sidebar .nav li.active > a, .off-canvas-sidebar .nav li.active > a {
+    background-color: #2b517c;
+}
+    html {
+        font-size: 14px;
+    }
 header {
     background: #1062ab;
 }

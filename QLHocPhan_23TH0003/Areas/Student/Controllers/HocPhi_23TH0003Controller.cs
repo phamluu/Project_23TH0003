@@ -13,14 +13,14 @@ namespace QLHocPhan_23TH0003.Areas.Student.Controllers
 {
     public class HocPhi_23TH0003Controller : BaseStudentController
     {
-        private readonly QuanLyHocPhanDbContext _context;
-        private readonly ApplicationDbContext _applicationDb;
+        private readonly MainDbContext _context;
+        //private readonly ApplicationDbContext _applicationDb;
         private readonly HocPhiService _service;
         private readonly VietQRPaymentService _vietQRPaymentService;
         private readonly ZaloPayService _zaloPayService;
         private readonly VNPayService _vNPayService;
-        public HocPhi_23TH0003Controller(QuanLyHocPhanDbContext context, 
-            ApplicationDbContext applicationDb, 
+        public HocPhi_23TH0003Controller(MainDbContext context, 
+            //ApplicationDbContext applicationDb, 
             HocPhiService service,
             VietQRPaymentService vietQRPaymentService,
             ZaloPayService zaloPayService,
@@ -28,7 +28,7 @@ namespace QLHocPhan_23TH0003.Areas.Student.Controllers
             )
         {
             _context = context;
-            _applicationDb = applicationDb;
+            //_applicationDb = applicationDb;
             _service = service;
             _vietQRPaymentService = vietQRPaymentService;
             _zaloPayService = zaloPayService;

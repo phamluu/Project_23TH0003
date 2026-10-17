@@ -35,7 +35,7 @@
         @foreach (var hocky in Model.HocKies)
         {
             <option value="@hocky.Id" @(hocky.Id == Model.IdHocKy ? "selected" : "")>
-                @hocky.TenHocKy
+                @hocky.TenHocKy - @hocky.NamHoc
             </option>
         }
     </select>

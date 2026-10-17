@@ -10,8 +10,8 @@ namespace QLHocPhan_23TH0003.Service
 {
     public class HocPhiService
     {
-        private readonly QuanLyHocPhanDbContext _context;
-        public HocPhiService(QuanLyHocPhanDbContext context)
+        private readonly MainDbContext _context;
+        public HocPhiService(MainDbContext context)
         {
             _context = context;
         }

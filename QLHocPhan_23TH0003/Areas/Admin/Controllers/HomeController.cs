@@ -13,9 +13,9 @@ namespace QLHocPhan_23TH0003.Areas.Admin.Controllers
     public class HomeController : BaseAdminController
     {
         private readonly SignInManager<IdentityUser> _signInManager;
-        private readonly QuanLyHocPhanDbContext _context;
+        private readonly MainDbContext _context;
         private readonly UserService _service;
-        public HomeController(SignInManager<IdentityUser> signInManager, QuanLyHocPhanDbContext context,
+        public HomeController(SignInManager<IdentityUser> signInManager, MainDbContext context,
             UserService service)
         {
             _signInManager = signInManager;

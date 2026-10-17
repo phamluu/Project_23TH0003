@@ -5,6 +5,13 @@ namespace QLHocPhan_23TH0003.ViewModel
     public class HocKyViewModel:HocKy
     {
         public string Action { get; set; }
+        public string NgayTaoString
+        {
+            get
+            {
+                return this.NgayTao == null ? "" : this.NgayTao.ToString("dd/MM/yyyy");
+            } 
+        }
     }
 
     public class HocKyLopHocPhanViewModel

@@ -5,6 +5,7 @@
         <div class="form-group">
             <label asp-for="IdHocPhan" class="control-label">Học phần</label>
             @Html.DropDownList("IdHocPhan", (SelectList)ViewData["HocPhan"], new { @class = "form-control" })
+            <span asp-validation-for="IdHocPhan" class="text-danger"></span>
         </div>
         <div class="form-group">
             <label asp-for="MaLopHocPhan" class="control-label">Mã lớp học phần</label>

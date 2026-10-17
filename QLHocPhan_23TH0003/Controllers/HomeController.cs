@@ -32,36 +32,74 @@ namespace QLHocPhan_23TH0003.Controllers
                 string IdUser = _userManager.GetUserId(User);
                 var sinhVien = _context.SinhVien.FirstOrDefault(sv => sv.UserId == IdUser);
                 int? IdSinhVien = sinhVien == null ? null : sinhVien.Id;
-                var model = _context.HocKy.AsNoTracking()
-                             .Where(hk => hk.HocPhans.Any(hp => !hp.IsDeleted && hp.LopHocPhans.Any(lhp => !lhp.IsDeleted)))
-                             .OrderByDescending(hk => hk.ThuTu)
-                             .Select(hk => new HocKyLopHocPhanViewModel
-                             {
-                                 HocKy = hk,
-                                 Khoas = _context.Khoa
-                                     .Select(k => new KhoaLopHocPhanViewModel
-                                     {
-                                         Khoa = k,
-                                         LopHocPhans = _context.LopHocPhan
-                                                         .Where(lhp =>
-                                                             !lhp.IsDeleted &&
-                                                             lhp.HocPhan.HocKy.Id == hk.Id &&
-                                                             lhp.HocPhan.MonHoc.IdKhoa == k.Id)
-                                                         .Include(lhp => lhp.PhanCongGiangDays)
-                                                             .ThenInclude(pc => pc.GiangVien)
-                                                        .Include(lhp => lhp.DangKyHocPhans)
-                                                        .Select(lhp => new LopHocPhanViewModel
-                                                        {
-                                                            Id = lhp.Id,
-                                                            TenLopHocPhan = lhp.TenLopHocPhan,
-                                                            PhanCongGiangDays = lhp.PhanCongGiangDays,
-                                                            IsDangKy = IdSinhVien.HasValue && lhp.DangKyHocPhans.Any(dk => dk.IdSinhVien == IdSinhVien.Value)
-                                                        }).ToList()
-                                     }).Where(vm => vm.LopHocPhans.Any()) // chỉ lấy khoa có lớp học phần
-                                     .ToList()
-                             })
-                             .Where(vm => vm.Khoas.Any()) // chỉ lấy học kỳ có dữ liệu
-                             .ToList();
+
+                if (!_context.HocKy.Any())
+                {
+                    return View();
+                }
+                var hocKys = _context.HocKy
+                                .AsNoTracking()
+                                .Where(hk => hk.HocPhans.Any(hp =>
+                                    !hp.IsDeleted &&
+                                    hp.LopHocPhans.Any(lhp => !lhp.IsDeleted)))
+                                .OrderByDescending(hk => hk.ThuTu)
+                                .ToList();
+
+                if (!hocKys.Any())
+                    return View(new List<HocKyLopHocPhanViewModel>());
+
+                // 2. Lấy danh sách khoa
+                var khoas = _context.Khoa
+                    .AsNoTracking()
+                    .ToList();
+
+                // 3. Lấy lớp học phần và các quan hệ cần thiết
+                var lopHocPhans = _context.LopHocPhan
+                    .AsNoTracking()
+                    .Where(lhp => !lhp.IsDeleted)
+                    .Include(lhp => lhp.HocPhan)
+                        .ThenInclude(hp => hp.MonHoc)
+                    .Include(lhp => lhp.PhanCongGiangDays)
+                        .ThenInclude(pc => pc.GiangVien)
+                    .Include(lhp => lhp.DangKyHocPhans)
+                    .ToList();
+
+                // 4. Ghép ViewModel trong bộ nhớ
+                var model = hocKys
+                    .Select(hk => new HocKyLopHocPhanViewModel
+                    {
+                        HocKy = hk,
+
+                        Khoas = khoas
+                            .Select(k => new KhoaLopHocPhanViewModel
+                            {
+                                Khoa = k,
+
+                                LopHocPhans = lopHocPhans
+                                    .Where(lhp =>
+                                        lhp.HocPhan != null &&
+                                        lhp.HocPhan.HocKy != null &&
+                                        lhp.HocPhan.MonHoc != null &&
+                                        lhp.HocPhan.HocKy.Id == hk.Id &&
+                                        lhp.HocPhan.MonHoc.IdKhoa == k.Id)
+                                    .Select(lhp => new LopHocPhanViewModel
+                                    {
+                                        Id = lhp.Id,
+                                        TenLopHocPhan = lhp.TenLopHocPhan,
+                                        PhanCongGiangDays = lhp.PhanCongGiangDays,
+
+                                        IsDangKy = IdSinhVien.HasValue &&
+                                            lhp.DangKyHocPhans.Any(dk =>
+                                                dk.IdSinhVien == IdSinhVien.Value)
+                                    })
+                                    .ToList()
+                            })
+                            .Where(vm => vm.LopHocPhans.Any())
+                            .ToList()
+                    })
+                    .Where(vm => vm.Khoas.Any())
+                    .ToList();
+
                 return View(model);
             }
             catch (Exception ex)

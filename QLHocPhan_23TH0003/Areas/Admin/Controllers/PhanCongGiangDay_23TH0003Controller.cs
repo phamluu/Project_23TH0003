@@ -34,7 +34,7 @@ namespace QLHocPhan_23TH0003.Areas.Admin.Controllers
             model.GiangViens = giangVien;
             model.IdLopHocPhan = IdLopHocPhan;
             model.GiangVienDaPhanCong = daPhanCong;
-            if (!IdLopHocPhan.HasValue)
+            if (!IdLopHocPhan.HasValue && lhp.Any() && lhp.Count() > 0)
             {
                 model.IdLopHocPhan = lhp.LastOrDefault().Id;
             }
@@ -82,8 +82,9 @@ namespace QLHocPhan_23TH0003.Areas.Admin.Controllers
 
         public IActionResult LichDay(int? IdGiangVien, string? NamHoc, int? IdHocKy)
         {
-            // Dropdown giảng viên
-            ViewBag.IdGiangVien = new SelectList(_context.GiangVien, "Id", "HoTen", IdGiangVien);
+            // Dropdown giảng viên đã được duyệt
+            var giangViens = _context.GiangVien.Where(x => x.IsActive == true && x.IsDeleted != true).ToList();
+            ViewBag.IdGiangVien = new SelectList(giangViens, "Id", "HoTen", IdGiangVien);
 
             // Dropdown năm học (distinct)
             ViewBag.NamHoc = new SelectList(
