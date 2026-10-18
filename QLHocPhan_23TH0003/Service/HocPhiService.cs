@@ -27,7 +27,7 @@ namespace QLHocPhan_23TH0003.Service
             // Truy vấn chính học phí theo từng học kỳ
             var result = _context.DangKyHocPhan
                 .Include(x => x.LopHocPhan)
-                    .ThenInclude(x => x.HocPhan)
+                    .ThenInclude(x => x.HocPhan).ThenInclude(x => x.HocKy).ThenInclude(x => x.ChinhSachHocPhis)
                 .Where(x => x.IdSinhVien == IdSinhVien && x.TrangThai == (int)TrangThaiDangKy.DaDangKy)
                 .GroupBy(x => x.LopHocPhan.HocPhan.IdHocKy)
                 .Select(g => new HocPhiHocKyViewModel
@@ -35,7 +35,11 @@ namespace QLHocPhan_23TH0003.Service
                     HocKy = g.Key,
                     ChiTietHocPhi = g.Select(x => new HocPhiViewModel
                     {
-                        LopHocPhan = x.LopHocPhan
+                        LopHocPhan = x.LopHocPhan,
+                        DonGia = x.LopHocPhan.HocPhan.HocKy.ChinhSachHocPhis
+                .OrderByDescending(cs => cs.Id)
+                .Select(cs => (decimal?)cs.DonGiaTinChi)
+                .FirstOrDefault() ?? 0
                     }).ToList(),
                     DaDong = thanhToans.ContainsKey(g.Key) ? thanhToans[g.Key] : 0
                 })
@@ -48,6 +52,11 @@ namespace QLHocPhan_23TH0003.Service
         public HocPhiHocKyViewModel GetHocPhi(int IdSinhVien, int? IdHocKy)
         {
             HocPhiHocKyViewModel model = new HocPhiHocKyViewModel();
+            var chinhSach = _context.ChinhSachHocPhi.FirstOrDefault(x => x.IdHocKy == IdHocKy);
+            if (chinhSach != null)
+            {
+                model.DonGia = chinhSach.DonGiaTinChi;
+            }
             var hocphi = _context.DangKyHocPhan
                 .Include(x => x.LopHocPhan)
                     .ThenInclude(x => x.HocPhan)
@@ -55,7 +64,8 @@ namespace QLHocPhan_23TH0003.Service
                         && x.LopHocPhan.HocPhan.IdHocKy == IdHocKy)
                 .Select(x => new HocPhiViewModel
                 {
-                    LopHocPhan = x.LopHocPhan
+                    LopHocPhan = x.LopHocPhan,
+                    DonGia = model.DonGia
                 })
             .ToList();
             model.ChiTietHocPhi = hocphi;

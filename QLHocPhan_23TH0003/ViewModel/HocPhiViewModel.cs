@@ -23,28 +23,33 @@ namespace QLHocPhan_23TH0003.ViewModel
         public string? NamHoc { get; set; }
 
         public int? HocKy { get; set; }
-
+        public decimal? DonGia { get; set; } // Đơn giá tính chỉ tính theo học kỳ
         public string? PhuongThuc { get; set; }
     }
     public class HocPhiViewModel:DangKyHocPhan
     {
         
-        public decimal DonGia {
-            get
-            {
-                var giaStr = CauHinhHelper.Get("HocPhi");
-                if (decimal.TryParse(giaStr, out decimal gia))
-                {
-                    return gia;
-                }
-                return 0;
-            }
-        }
+        //public decimal DonGia {
+        //    get
+        //    {
+        //        var giaStr = CauHinhHelper.Get("HocPhi");
+        //        if (decimal.TryParse(giaStr, out decimal gia))
+        //        {
+        //            return gia;
+        //        }
+        //        return 0;
+        //    }
+        //}
+        public decimal? DonGia { get; set; }
         public decimal HocPhi
         {
             get
             {
-                return DonGia * (this.LopHocPhan?.HocPhan?.SoTinChi ?? 0);
+                if(this.LopHocPhan?.HocPhan?.SoTinChi == null || DonGia == null)
+                {
+                    return 0;
+                }
+                return DonGia!.Value * (this.LopHocPhan?.HocPhan?.SoTinChi ?? 0);
             }
         }
     }

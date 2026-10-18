@@ -112,13 +112,13 @@ footer {
             padding: 0.3rem 1rem;
             font-size: 16px;
             text-transform: uppercase;
-            background: repeating-radial-gradient(#7a0505, #ab0e09b5 100px);
+            background: #1062ab;
         }
 
     .login h4 {
         text-transform: uppercase;
         text-align: center;
-        background: #a90505;
+        background: #1062ab;
         color: #fff;
         padding: 1rem 0;
         font-size: 18px;
@@ -167,8 +167,8 @@ main{
     display: block;
     border-bottom: #33333330 1px solid;
 }
-.lophocphan .active a{
-    background: #ff0055;
+.lophocphan .active a {
+    background: #20406587;
     color: #fff;
 }
 .form-group{

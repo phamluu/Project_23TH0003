@@ -22,6 +22,7 @@ namespace QLHocPhan_23TH0003.Data
         public DbSet<LopHocPhan> LopHocPhan { get; set; }
         public DbSet<BaiHoc> BaiHoc { get; set; }
         public DbSet<CauHinhHeThong> CauHinhHeThong { get; set; }
+        public DbSet<ChinhSachHocPhi> ChinhSachHocPhi { get; set; }
         public DbSet<ThanhToanHocPhi> ThanhToanHocPhi { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -118,6 +119,12 @@ namespace QLHocPhan_23TH0003.Data
                 entity.HasOne(e => e.Lop).WithMany(e => e.SinhViens).HasForeignKey(e => e.IdLop).OnDelete(DeleteBehavior.Restrict);
                 entity.HasMany(e => e.DangKyHocPhans).WithOne(e => e.SinhVien).HasForeignKey(e => e.IdSinhVien);
                 entity.HasMany(e => e.ThanhToanHocPhis).WithOne(e => e.SinhVien).HasForeignKey(e => e.IdSinhVien);
+            });
+            modelBuilder.Entity<ChinhSachHocPhi>(entity =>
+            {
+                entity.ToTable("ChinhSachHocPhi");
+                entity.HasKey(e => e.Id);
+                entity.HasOne(e => e.HocKy).WithMany(e => e.ChinhSachHocPhis).HasForeignKey(e => e.IdHocKy).OnDelete(DeleteBehavior.Restrict);
             });
             modelBuilder.Entity<ThanhToanHocPhi>(entity =>
             {

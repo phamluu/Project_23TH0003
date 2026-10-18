@@ -274,6 +274,30 @@ namespace QLHocPhan_23TH0003.Data.Migrations
                     b.ToTable("CauHinhHeThong", (string)null);
                 });
 
+            modelBuilder.Entity("QLHocPhan_23TH0003.Models.ChinhSachHocPhi", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<decimal?>("DonGiaTinChi")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<int>("IdHocKy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("NgayTao")
+                        .HasColumnType("datetime(6)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IdHocKy");
+
+                    b.ToTable("ChinhSachHocPhi", (string)null);
+                });
+
             modelBuilder.Entity("QLHocPhan_23TH0003.Models.DangKyHocPhan", b =>
                 {
                     b.Property<int>("Id")
@@ -805,6 +829,17 @@ namespace QLHocPhan_23TH0003.Data.Migrations
                     b.Navigation("LopHocPhan");
                 });
 
+            modelBuilder.Entity("QLHocPhan_23TH0003.Models.ChinhSachHocPhi", b =>
+                {
+                    b.HasOne("QLHocPhan_23TH0003.Models.HocKy", "HocKy")
+                        .WithMany("ChinhSachHocPhis")
+                        .HasForeignKey("IdHocKy")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("HocKy");
+                });
+
             modelBuilder.Entity("QLHocPhan_23TH0003.Models.DangKyHocPhan", b =>
                 {
                     b.HasOne("QLHocPhan_23TH0003.Models.LopHocPhan", "LopHocPhan")
@@ -962,6 +997,8 @@ namespace QLHocPhan_23TH0003.Data.Migrations
 
             modelBuilder.Entity("QLHocPhan_23TH0003.Models.HocKy", b =>
                 {
+                    b.Navigation("ChinhSachHocPhis");
+
                     b.Navigation("HocPhans");
 
                     b.Navigation("ThanhToanHocPhis");

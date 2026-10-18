@@ -6,7 +6,45 @@
 <h4>@ViewBag.Title</h4>
 
 @Html.Partial("_AlertMessages")
+<!-- Form tìm kiếm -->
+<form method="get" action="@Url.Action("Index")" class="g-3 align-items-end mb-4 p-3 bg-light rounded shadow-sm">
+    <div class="row">
+        <div class="col-md-3">
+            <label class="form-label fw-semibold">Mã sinh viên</label>
+            @Html.TextBox("MSSV", "", new { @class = "form-control" })
+        </div>
+        <div class="col-md-4">
+            <label class="form-label fw-semibold">Lớp học</label>
+            @Html.DropDownList(
+            "idLopHoc",
+                        ViewBag.IdLopHoc as SelectList,
+                        "— Chọn lớp học —",
+                        new { @class = "form-select form-control" }
+                        )
+        </div>
 
+        <div class="col-md-3">
+            <label class="form-label fw-semibold">Lớp học phần</label>
+            @Html.DropDownList(
+                        "idLopHocPhan",
+                        ViewBag.IdLopHocPhan as SelectList,
+                        "— Chọn lớp học phần —",
+                        new { @class = "form-select form-control", @id = "ddLopHocPhan" }
+                        )
+        </div>
+
+        
+
+        <div class="col-md-2">
+            <button type="submit" class="btn btn-primary w-30">
+                <i class="bi bi-search"></i> Tìm
+            </button>
+            <a href="@Url.Action("Index")" class="btn btn-danger">
+                <i class="bi bi-arrow-counterclockwise"></i> Reset
+            </a>
+        </div>
+    </div>
+</form>
 <table id="grid">
     <thead>
         <tr>

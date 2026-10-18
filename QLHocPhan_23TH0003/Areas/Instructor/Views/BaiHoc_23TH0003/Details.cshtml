@@ -1,0 +1,30 @@
+﻿@using QLHocPhan_23TH0003.Models
+@model BaiHoc
+
+@{
+    ViewBag.Title = "Chi tiết bài học";
+}
+
+    <div class="container">
+        <h4 class="text-center mt-3 mb-3">@ViewBag.Title</h4>
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Thông tin bài học</h5>
+            </div>
+            <div class="card-body">
+                @if (Model != null)
+{
+                <dl class="row">
+                    <dt class="col-sm-3">Tên bài học</dt>
+                    <dd class="col-sm-9">@Model.TenBaiHoc</dd>
+
+                    <dt class="col-sm-3">Nội dung</dt>
+                    <dd class="col-sm-9">@Html.Raw(Model.NoiDung)</dd>
+
+                </dl>
+}
+            </div>
+        </div>
+    </div>
+
+

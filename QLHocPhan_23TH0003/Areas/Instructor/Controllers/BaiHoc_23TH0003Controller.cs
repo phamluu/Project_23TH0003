@@ -52,7 +52,8 @@ namespace QLHocPhan_23TH0003.Areas.Instructor.Controllers
         // GET: BaiHoc_23TH0003Controller/Details/5
         public ActionResult Details(int id)
         {
-            return View();
+            var model = _context.BaiHoc.FirstOrDefault(x => x.Id == id);
+            return View(model);
         }
 
         // GET: BaiHoc_23TH0003Controller/Create

@@ -37,7 +37,7 @@ namespace QLHocPhan_23TH0003.Controllers
                 {
                     return View();
                 }
-                var hocKys = _context.HocKy
+                var hocKys = _context.HocKy.Include(x => x.HocPhans).ThenInclude(x => x.LopHocPhans)
                                 .AsNoTracking()
                                 .Where(hk => hk.HocPhans.Any(hp =>
                                     !hp.IsDeleted &&
@@ -57,8 +57,8 @@ namespace QLHocPhan_23TH0003.Controllers
                 var lopHocPhans = _context.LopHocPhan
                     .AsNoTracking()
                     .Where(lhp => !lhp.IsDeleted)
-                    .Include(lhp => lhp.HocPhan)
-                        .ThenInclude(hp => hp.MonHoc)
+                    .Include(lhp => lhp.HocPhan).ThenInclude(mh => mh.MonHoc)
+                    .Include(lhp => lhp.HocPhan).ThenInclude(hk => hk.HocKy)
                     .Include(lhp => lhp.PhanCongGiangDays)
                         .ThenInclude(pc => pc.GiangVien)
                     .Include(lhp => lhp.DangKyHocPhans)

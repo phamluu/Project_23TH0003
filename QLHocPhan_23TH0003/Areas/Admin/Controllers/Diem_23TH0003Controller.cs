@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using QLHocPhan_23TH0003.Data;
+using QLHocPhan_23TH0003.Models;
 using System.Net.WebSockets;
 
 namespace QLHocPhan_23TH0003.Areas.Admin.Controllers
@@ -14,17 +16,43 @@ namespace QLHocPhan_23TH0003.Areas.Admin.Controllers
             _context = context;
         }
         // GET: XemDiem_23TH0003Controller
-        public ActionResult Index()
+        public ActionResult Index(string? MSSV,int? idLopHoc,int? idLopHocPhan)
         {
-            var model = _context.DangKyHocPhan.Include(x => x.LopHocPhan)
-                                              .Include(x => x.SinhVien).ThenInclude(x => x.Lop)
-                                              .Include(x =>x.Diem).ToList();
+            var lopHocs = _context.Lop.Where(x => x.IsDeleted != true).ToList();
+            ViewBag.IdLopHoc = new SelectList(lopHocs, "Id", "TenLop", idLopHoc);
+            var lopHocphans = _context.LopHocPhan.Where(x => x.IsDeleted != true).ToList();
+            ViewBag.IdLopHocPhan = new SelectList(lopHocphans, "Id", "TenLopHocPhan", idLopHocPhan);
+            var query = _context.DangKyHocPhan
+                .Include(x => x.LopHocPhan)
+                .Include(x => x.SinhVien)
+                    .ThenInclude(x => x.Lop)
+                .Include(x => x.Diem)
+                .AsQueryable();
+
+            if (!string.IsNullOrEmpty(MSSV))
+            {
+                query = query.Where(x => x.SinhVien.MaSinhVien.Contains(MSSV));
+            }
+
+            if (idLopHoc.HasValue)
+            {
+                query = query.Where(
+                    x => x.SinhVien.Lop.Id == idLopHoc.Value);
+            }
+
+            if (idLopHocPhan.HasValue)
+            {
+                query = query.Where(
+                    x => x.LopHocPhan.Id == idLopHocPhan.Value);
+            }
+
+            var model = query.ToList();
+
             return View(model);
         }
-
         // GET: XemDiem_23TH0003Controller/Details/5
-       
-        
+
+
         // GET: XemDiem_23TH0003Controller/Delete/5
         public ActionResult Delete(int id)
         {
